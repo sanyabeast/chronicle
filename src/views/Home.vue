@@ -13,7 +13,8 @@
       beckons. </p>
     <p>Embrace the audacity of our quest, for within these realms, true coolness thrives in the pursuit of
       infinite possibilities. </p>
-  <p>Wanderer, let us embark on this enigmatic odyssey together, unraveling the enigma that lies
-    at the intersection of magic and technology.
-  </p>
-</div></template>
+    <p>Wanderer, let us embark on this enigmatic odyssey together, unraveling the enigma that lies
+      at the intersection of magic and technology.
+    </p>
+  </div>
+</template>

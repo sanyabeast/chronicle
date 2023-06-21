@@ -2,7 +2,8 @@
   <div id="app">
     <header>
       <form>
-        <input type="text" placeholder="Search">
+        <input ref="search_input" type="text" placeholder="Search" @focus="handle_searchbox_focus"
+          @input="handle_searchbox_input" @blur="handle_searchbox_blur">
       </form>
     </header>
     <main>
@@ -33,6 +34,11 @@ export default Vue.extend({
     }
   },
   components: { ImageLink },
+  computed: {
+    search_query() {
+      return this.$store.state.search_query
+    }
+  },
   mounted() {
     console.log(this)
   },
@@ -41,6 +47,19 @@ export default Vue.extend({
       var currentDate = new Date();
       var currentYear = currentDate.getFullYear();
       return currentYear;
+    },
+    handle_searchbox_focus(event: FocusEvent) {
+      console.log(`searchbox focus`)
+      this.$router.push({ name: "search-result", params: { query: this.search_query } })
+    },
+    handle_searchbox_blur(event: FocusEvent) {
+      console.log(`searchbox blur`)
+      this.$router.back()
+    },
+    handle_searchbox_input(event: Event) {
+      console.log(`searchbox input`)
+      let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
+      this.$store.commit('search_query', search_input.value)
     }
   }
 });
@@ -136,6 +155,7 @@ nav {
   color: #fff;
   font-family: monospace;
   text-align: left;
+  max-width: 960px;
 }
 
 footer {
