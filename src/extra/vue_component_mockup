@@ -1,0 +1,28 @@
+<template>
+    <div class="view mockup"></div>
+</template>
+<script lang="ts">
+    import Vue from 'vue';
+
+    export default Vue.extend({
+        name: "mockup",
+        mounted() {
+
+        },
+        beforeMount() {
+
+        },
+        methods: {},
+        computed: {},
+        props: {},
+        components: {},
+        data() {
+            return {}
+        }
+    })
+</script>
+<style lang="less">
+    .view.mockup {
+        color: red;
+    }
+</style>

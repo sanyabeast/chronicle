@@ -6,13 +6,13 @@
           @input="handle_searchbox_input" @blur="handle_searchbox_blur">
       </form>
     </header>
+    <div class="header-imposter"></div>
     <main>
       <router-view />
     </main>
-    <div style="flex-grow: 1"></div>
     <footer>
-      <p>&copy; <span v-html="getCurrentYear()"></span> | Ukraine | Created by @sanyabeast | <a :href="href"
-          v-html="href"></a></p>
+      <p>&copy; <span v-html="getCurrentYear()"></span> | Ukraine | Created by @sanyabeast | <a href="#" v-html="href"
+          @click="goto_home"></a></p>
     </footer>
     <!-- <nav>
       <image-link target="/" label="Home" />
@@ -49,17 +49,24 @@ export default Vue.extend({
       return currentYear;
     },
     handle_searchbox_focus(event: FocusEvent) {
-      console.log(`searchbox focus`)
-      this.$router.push({ name: "search-result", params: { query: this.search_query } })
+      this.$store.commit('route_replace', {
+        name: 'search-result',
+        props: { query: this.search_query }
+      })
     },
     handle_searchbox_blur(event: FocusEvent) {
       console.log(`searchbox blur`)
-      this.$router.back()
+      // this.$store.commit('route_back')
     },
     handle_searchbox_input(event: Event) {
       console.log(`searchbox input`)
       let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
       this.$store.commit('search_query', search_input.value)
+    },
+    goto_home() {
+      this.$store.commit('route_replace', {
+        name: 'home'
+      })
     }
   }
 });
@@ -106,15 +113,15 @@ input[type="text"] {
 }
 
 #app {
-  padding: 16px;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 48px 1fr 32px;
   min-height: 100%;
 }
 
@@ -124,21 +131,24 @@ header {
   left: 0;
   z-index: 999;
   width: 100%;
-  padding: 16px;
   background: #000;
   border-bottom: 1px solid #fff;
   line-height: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main {
-  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 nav {
-  padding: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   /* Adjust the minmax values as needed */
@@ -156,11 +166,19 @@ nav {
   font-family: monospace;
   text-align: left;
   max-width: 960px;
+  border-left: 1px solid #595959;
+  border-right: 1px solid #595959;
+  padding: 16px 32px;
+  height: 100%;
 }
 
 footer {
   font-size: 10px;
   color: #5c5c5c;
   line-height: 0;
+  border-top: 1px solid #2f2f2f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
