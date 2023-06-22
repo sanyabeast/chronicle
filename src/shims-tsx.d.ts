@@ -20,10 +20,9 @@ declare global {
 
   interface IAppletMetadata {
     route: RouteConfig,
-    name: string,
     tags: string[]
     noindex?: boolean,
-    title?: string,
+    title: string,
     preview?: string
     props?: {}
   }

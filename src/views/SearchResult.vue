@@ -3,9 +3,12 @@
         <h2 v-if="!($store.state.search_query.length > 0 && items_found > 0)" v-html="search_results_message"></h2>
         <div class="results-list">
             <div v-if="!item.noindex" class="result-preview" v-for="(item, index) in filtered_routes" :key="index" :style="{
-                backgroundColor: get_random_web_color(item.name)
+                backgroundColor: get_random_web_color(item.title)
             }" @click="handle_result_item_click(item)">
                 <img v-if="item.preview != undefined" :src="item.preview" />
+                <div class="fader" :style="{
+                    backgroundColor: get_random_web_color(item.title)
+                }"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </div>
         </div>
@@ -16,7 +19,6 @@ import Vue from 'vue';
 import { applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
 import { get_random_web_color } from "@/tools"
-import { isString } from "lodash"
 
 let searcher: FuzzySearch<IAppletMetadata>;
 
@@ -29,7 +31,7 @@ export default Vue.extend({
     },
     beforeMount() {
         console.log(applets)
-        searcher = searcher == null ? new FuzzySearch(applets, ['name', 'title', 'tags'], {
+        searcher = searcher == null ? new FuzzySearch(applets, ['router.name', 'title', 'tags'], {
             caseSensitive: false,
         }) : searcher;
     },
@@ -59,10 +61,10 @@ export default Vue.extend({
     methods: {
         get_random_web_color: get_random_web_color,
         get_item_title(item: IAppletMetadata) {
-            if (isString(item.title)) {
+            if (item.title.length > 0) {
                 return item.title;
             } else {
-                return item.name;
+                return item.route.name;
             }
         },
         handle_result_item_click(item: IAppletMetadata) {
@@ -91,7 +93,7 @@ export default Vue.extend({
             width: 160px;
             height: 120px;
             overflow: hidden;
-            background-color: rgb(128, 0, 128);
+            background-color: #000;
             border: 1px solid #fff;
             margin: 8px;
             padding: 8px;
@@ -99,6 +101,47 @@ export default Vue.extend({
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            position: relative;
+
+            img {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                height: auto;
+                z-index: 0;
+                transform-origin: center center;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+
+            .fader {
+                position: absolute;
+                z-index: 1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+            }
+
+            h3 {
+                z-index: 2;
+                background: #000;
+                text-transform: capitalize;
+            }
+        }
+
+        .result-preview:nth-child(2n) {
+            img {
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+        }
+
+        .result-preview:hover {
+            .fader {
+                opacity: 0.5;
+            }
         }
     }
 }

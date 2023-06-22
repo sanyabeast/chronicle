@@ -25,14 +25,14 @@ export const applets: IAppletMetadata[] = [
       name: 'home',
       component: Home
     },
-    name: 'home',
     tags: [],
+    title: "",
     noindex: true
   },
   {
     route: webframe_route,
-    name: 'web-frame',
     tags: [],
+    title: "",
     noindex: true
   },
   {
@@ -42,7 +42,7 @@ export const applets: IAppletMetadata[] = [
       component: SearchResult,
       props: true
     },
-    name: 'search-result',
+    title: "",
     tags: [],
     noindex: true
   },
@@ -53,8 +53,8 @@ export const applets: IAppletMetadata[] = [
       component: EmojiSelect,
       props: true
     },
-    name: 'emoji-select',
     tags: ['emoji'],
+    title: "",
     preview: 'assets/preview/emoji_selection_a1.png',
   },
   {
@@ -64,47 +64,57 @@ export const applets: IAppletMetadata[] = [
       component: EmojiSelect,
       props: true
     },
-    name: 'emoji-select2',
     tags: ['emoji'],
+    title: "",
+    preview: 'assets/preview/emoji_selection_a1.png',
     props: {
       category: "Smileys & Emotion"
-    }
+    },
   },
   // oldies
   {
     route: webframe_route,
-    name: 'applet/oldies/match3',
     tags: ['game', 'old'],
     title: 'Match3',
+    preview: 'assets/preview/match3_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/match3/'
     }
   },
   {
     route: webframe_route,
-    name: 'applet/oldies/hill_rider',
     tags: ['game', 'old'],
     title: 'Hill Rider',
+    preview: 'assets/preview/coderider_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/coderider/dist/index.html'
     }
   },
   {
     route: webframe_route,
-    name: 'applet/oldies/match3',
     tags: ['game', 'old'],
     title: 'Telechart',
+    preview: 'assets/preview/telechart_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/telechart/'
     }
   },
   {
     route: webframe_route,
-    name: 'applet/oldies/forest_lads',
     tags: ['game', 'old'],
     title: 'Forest Lads',
+    preview: 'assets/preview/forestlads_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
+    }
+  },
+  {
+    route: webframe_route,
+    tags: ['extras', 'game', 'engine'],
+    title: 'Retro Engine Demo',
+    preview: 'assets/preview/retro_engine_a1.png',
+    props: {
+      url: 'https://sanyabeast.github.io/retro/dist/demo_alt/'
     }
   }
 ]
