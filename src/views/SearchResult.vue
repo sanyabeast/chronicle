@@ -5,6 +5,7 @@
             <div v-if="!item.noindex" class="result-preview" v-for="(item, index) in filtered_routes" :key="index" :style="{
                 backgroundColor: get_random_web_color(item.name)
             }" @click="handle_result_item_click(item)">
+                <img v-if="item.preview != undefined" :src="item.preview" />
                 <h3 v-html="get_item_title(item)"></h3>
             </div>
         </div>
@@ -69,6 +70,9 @@ export default Vue.extend({
                 name: item.route.name,
                 props: item.props
             })
+        },
+        get_preview(uri: string) {
+            return require(uri)
         }
     }
 })
@@ -85,7 +89,7 @@ export default Vue.extend({
         .result-preview {
             user-select: none;
             width: 160px;
-            height: 90px;
+            height: 120px;
             overflow: hidden;
             background-color: rgb(128, 0, 128);
             border: 1px solid #fff;

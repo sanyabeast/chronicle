@@ -54,7 +54,8 @@ export const applets: IAppletMetadata[] = [
       props: true
     },
     name: 'emoji-select',
-    tags: ['emoji']
+    tags: ['emoji'],
+    preview: 'assets/preview/emoji_selection_a1.png',
   },
   {
     route: {

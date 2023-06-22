@@ -1,5 +1,14 @@
 import Vue, { VNode } from 'vue'
 
+// declare module '*.svg';
+// declare module '*.png';
+// declare module '*.jpg';
+
+declare module '*.png' {
+  const content: any
+  export default content
+}
+
 declare global {
   namespace JSX {
     interface Element extends VNode { }
@@ -11,10 +20,11 @@ declare global {
 
   interface IAppletMetadata {
     route: RouteConfig,
-    name: String,
-    tags: String[]
+    name: string,
+    tags: string[]
     noindex?: boolean,
-    title?: String,
+    title?: string,
+    preview?: string
     props?: {}
   }
 }
