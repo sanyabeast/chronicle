@@ -1,5 +1,7 @@
 # chronicle
 
+See [Chronicle](https://sanyabeast.github.io/chronicle/docs/index.html).
+
 ## Project setup
 ```
 npm install
