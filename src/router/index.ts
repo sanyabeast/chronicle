@@ -11,6 +11,13 @@ import EmojiSelect from '../views/applets/EmojiSelect.vue'
 
 Vue.use(VueRouter)
 
+let webframe_route = {
+  path: '/web-frame/:url',
+  name: 'web-frame',
+  component: WebFrame,
+  props: true
+};
+
 export const applets: IAppletMetadata[] = [
   {
     route: {
@@ -23,12 +30,7 @@ export const applets: IAppletMetadata[] = [
     noindex: true
   },
   {
-    route: {
-      path: '/web-frame',
-      name: 'web-frame',
-      component: WebFrame,
-      props: true
-    },
+    route: webframe_route,
     name: 'web-frame',
     tags: [],
     noindex: true
@@ -65,6 +67,43 @@ export const applets: IAppletMetadata[] = [
     tags: ['emoji'],
     props: {
       category: "Smileys & Emotion"
+    }
+  },
+  // oldies
+  {
+    route: webframe_route,
+    name: 'applet/oldies/match3',
+    tags: ['game', 'old'],
+    title: 'Match3',
+    props: {
+      url: 'https://sanyabeast.github.io/match3/'
+    }
+  },
+  {
+    route: webframe_route,
+    name: 'applet/oldies/match3',
+    tags: ['game', 'old'],
+    title: 'Hill Rider',
+    props: {
+      url: 'https://sanyabeast.github.io/coderider/dist/index.html'
+    }
+  },
+  {
+    route: webframe_route,
+    name: 'applet/oldies/match3',
+    tags: ['game', 'old'],
+    title: 'Telechart',
+    props: {
+      url: 'https://sanyabeast.github.io/telechart/'
+    }
+  },
+  {
+    route: webframe_route,
+    name: 'applet/oldies/match3',
+    tags: ['game', 'old'],
+    title: 'Forest Lads',
+    props: {
+      url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
     }
   }
 ]

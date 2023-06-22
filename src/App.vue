@@ -165,11 +165,13 @@ nav {
   color: #fff;
   font-family: monospace;
   text-align: left;
-  max-width: 960px;
+  max-width: 1280px;
   border-left: 1px solid #595959;
   border-right: 1px solid #595959;
   padding: 16px 32px;
   height: 100%;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 footer {
