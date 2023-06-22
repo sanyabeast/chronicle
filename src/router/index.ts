@@ -81,7 +81,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
-    name: 'applet/oldies/match3',
+    name: 'applet/oldies/hill_rider',
     tags: ['game', 'old'],
     title: 'Hill Rider',
     props: {
@@ -99,7 +99,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
-    name: 'applet/oldies/match3',
+    name: 'applet/oldies/forest_lads',
     tags: ['game', 'old'],
     title: 'Forest Lads',
     props: {

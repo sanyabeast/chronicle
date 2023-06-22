@@ -28,7 +28,7 @@ export default Vue.extend({
     },
     beforeMount() {
         console.log(applets)
-        searcher = searcher == null ? new FuzzySearch(applets, ['name', 'tags'], {
+        searcher = searcher == null ? new FuzzySearch(applets, ['name', 'title', 'tags'], {
             caseSensitive: false,
         }) : searcher;
     },
