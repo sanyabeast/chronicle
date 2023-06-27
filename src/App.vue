@@ -81,16 +81,22 @@ body {
   height: 100%;
 }
 
+
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: monospace;
-  font-family: "Courier New", monospace;
+  font-family: 'Hardpixel', sans-serif;
+  font-size: 14px;
+  font-weight: 100;
   /* Console-like font */
   background-color: #000;
   /* Black background */
   color: #fff;
   /* Green text color */
+}
+
+.monospace {
+  font-family: 'Determination Mono', monospace;
 }
 
 * {
@@ -105,7 +111,6 @@ input[type="text"] {
   background: #000;
   border: 1px solid #fff;
   outline: none;
-  font-family: monospace;
   padding: 4px;
   color: #fff;
   max-width: 100%;
@@ -113,9 +118,6 @@ input[type="text"] {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   width: 100%;
@@ -163,7 +165,6 @@ nav {
 
 .view {
   color: #fff;
-  font-family: monospace;
   text-align: left;
   max-width: 1124px;
   border-left: 1px solid #595959;
