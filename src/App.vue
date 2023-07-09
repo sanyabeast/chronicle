@@ -2,8 +2,8 @@
   <div id="app">
     <header>
       <form>
-        <input ref="search_input" type="text" placeholder="Search" @focus="handle_searchbox_focus"
-          @input="handle_searchbox_input" @blur="handle_searchbox_blur">
+        <input ref="search_input" type="search" placeholder="Search" id="search" autocomplete="off" spellcheck="false"
+          @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
       </form>
     </header>
     <div class="header-imposter"></div>
@@ -13,6 +13,7 @@
     <footer>
       <p>&copy; <span v-html="getCurrentYear()"></span> | Ukraine | Created by @sanyabeast | <a href="#" v-html="href"
           @click="goto_home"></a></p>
+      <i id="version" v-html="app_version"></i>
     </footer>
     <!-- <nav>
       <image-link target="/" label="Home" />
@@ -37,6 +38,9 @@ export default Vue.extend({
   computed: {
     search_query() {
       return this.$store.state.search_query
+    },
+    app_version() {
+      return `v${this.$store.state.package_data.version}`
     }
   },
   mounted() {
@@ -79,13 +83,14 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+  font-family: monospace;
 }
 
 
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: 'Hardpixel', sans-serif;
+  font-family: monospace;
   font-size: 14px;
   font-weight: 100;
   /* Console-like font */
@@ -96,7 +101,7 @@ body {
 }
 
 .monospace {
-  font-family: 'Determination Mono', monospace;
+  font-family: monospace;
 }
 
 * {
@@ -107,7 +112,7 @@ a {
   color: magenta;
 }
 
-input[type="text"] {
+input[type="search"] {
   background: #000;
   border: 1px solid #fff;
   outline: none;
@@ -115,7 +120,11 @@ input[type="text"] {
   color: #fff;
   max-width: 100%;
   text-align: center;
+  font-family: monospace;
+  font-size: 18px;
+
 }
+
 
 #app {
   text-align: center;
@@ -166,7 +175,7 @@ nav {
 .view {
   color: #fff;
   text-align: left;
-  max-width: 1124px;
+  max-width: 1360px;
   border-left: 1px solid #595959;
   border-right: 1px solid #595959;
   padding: 16px 32px;
@@ -176,12 +185,22 @@ nav {
 }
 
 footer {
-  font-size: 10px;
+  font-size: 12px;
   color: #5c5c5c;
   line-height: 0;
   border-top: 1px solid #2f2f2f;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+
+  i {
+    user-select: none;
+    pointer-events: none;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    color: #ffffff12;
+  }
 }
 </style>

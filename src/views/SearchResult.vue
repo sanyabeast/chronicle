@@ -84,9 +84,9 @@ export default Vue.extend({
     width: 100%;
 
     .results-list {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 10px;
 
         .result-preview {
             user-select: none;
@@ -95,7 +95,6 @@ export default Vue.extend({
             overflow: hidden;
             background-color: #000;
             border: 1px solid #fff;
-            margin: 8px;
             padding: 8px;
             display: flex;
             align-items: center;

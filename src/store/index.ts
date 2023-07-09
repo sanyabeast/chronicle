@@ -1,13 +1,16 @@
+
+import { package_data } from '@/extra/package_data'
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { router } from '@/router'
 
 Vue.use(Vuex)
 
-
 export default new Vuex.Store({
   state: {
-    search_query: ""
+    search_query: "",
+    package_data: package_data
   },
   getters: {
   },
@@ -17,7 +20,7 @@ export default new Vuex.Store({
     },
     route_push(store, params) {
       console.log(`routing to "${params.name}, props: ${JSON.stringify(params.props, null, '\t')}`)
-      if (router.currentRoute.name == params.name){
+      if (router.currentRoute.name == params.name) {
         console.log(`skipping redundant ndavigation to "${params.name}"`)
         return
       }
@@ -30,7 +33,7 @@ export default new Vuex.Store({
     },
     route_replace(store, params) {
       console.log(`routing (replace) to "${params.name}, props: ${JSON.stringify(params.props, null, '\t')}`)
-      if (router.currentRoute.name == params.name){
+      if (router.currentRoute.name == params.name) {
         console.log(`skipping redundant ndavigation to "${params.name}"`)
         return
       }
