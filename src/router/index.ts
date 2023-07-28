@@ -116,6 +116,15 @@ export const applets: IAppletMetadata[] = [
     props: {
       url: 'https://sanyabeast.github.io/retro/dist/demo_alt/'
     }
+  },
+  {
+    route: webframe_route,
+    tags: ['extras', 'experiment'],
+    title: 'Euphoria Demo',
+    preview: 'assets/preview/euphoria_da1.png',
+    props: {
+      url: 'https://sanyabeast.github.io/euphoria/dist/index.html'
+    }
   }
 ]
 
