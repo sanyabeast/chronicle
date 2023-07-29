@@ -35,6 +35,12 @@ export default Vue.extend({
             caseSensitive: false,
         }) : searcher;
     },
+    mounted() {
+        if (this.$refs.search_input) {
+            (this.$refs.search_input as HTMLInputElement).value = ""
+        }
+
+    },
     computed: {
         search_query() {
             return this.$store.state.search_query

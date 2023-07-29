@@ -1,18 +1,22 @@
 <template>
   <div id="app" @keydown="handle_keydown">
     <header>
-      <form>
-        <input ref="search_input" type="search" placeholder="Search" id="search" autocomplete="off" spellcheck="false"
-          @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
-      </form>
+      <div id="homepage" @click="goto_home()" title="homepage">
+        <h1>home</h1>
+      </div>
+      <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
+        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
+      <div id="wtf" @click="goto_home()" title="homepage">
+        <h1>wtf</h1>
+      </div>
     </header>
     <div class="header-imposter"></div>
     <main>
       <router-view />
     </main>
     <footer>
-      <p>&copy; <span v-html="getCurrentYear()"></span> | Ukraine | Created by @sanyabeast | <a href="#" v-html="href"
-          @click="goto_home"></a></p>
+      <p><span v-html="getCurrentYear()"></span> | Ukraine | prototyped & implemented by <span>@sanyabeast</span> | <a
+          href="#" v-html="href" @click="goto_home"></a></p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <!-- <nav>
@@ -107,6 +111,9 @@ body {
   /* Black background */
   color: #fff;
   /* Green text color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .monospace {
@@ -115,57 +122,115 @@ body {
 
 * {
   box-sizing: border-box;
+  color: #fff;
+  user-select: none;
 }
 
 a {
-  color: magenta;
+  color: rgb(255, 0, 111);
+  cursor: cell;
 }
 
 input[type="search"] {
   background: #000;
-  border: 1px solid #fff;
+  border: none;
   outline: none;
   padding: 4px;
   color: #fff;
   max-width: 100%;
   text-align: center;
   font-family: monospace;
-  font-size: 18px;
-
+  font-size: 24px;
+  font-style: italic;
+  align-self: flex-end;
 }
 
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Center-align the placeholder text */
+input[type="search"]::placeholder {
+  font-style: normal;
+  color: #999;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+div#homepage {
+  cursor: cell;
+  align-self: flex-end;
+  justify-self: flex-start;
+
+  h1 {
+    display: block;
+    text-align: left;
+    color: #999;
+  }
+}
+
+div#wtf {
+  cursor: cell;
+  align-self: flex-end;
+  justify-self: flex-end;
+
+  h1 {
+    text-align: right;
+    color: #999;
+  }
+}
+
+div#homepage:hover,
+div#wtf:hover {
+  h1 {
+    color: #eee;
+  }
+}
 
 #app {
   text-align: center;
   color: #2c3e50;
   width: 100%;
+  max-width: 1360px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 48px 1fr 32px;
-  min-height: 100%;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 header {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 999;
-  width: 100%;
   background: #000;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #333;
   line-height: 0;
   height: 48px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   justify-content: center;
+  width: 100%;
+
 }
 
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+
 }
 
 nav {
@@ -185,8 +250,6 @@ nav {
   color: #fff;
   text-align: left;
   max-width: 1360px;
-  border-left: 1px solid #595959;
-  border-right: 1px solid #595959;
   padding: 16px 32px;
   height: 100%;
   width: 100%;
@@ -197,11 +260,20 @@ footer {
   font-size: 12px;
   color: #5c5c5c;
   line-height: 0;
-  border-top: 1px solid #2f2f2f;
+  border-top: 1px solid #333;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+
+  p,
+  span {
+    color: #5c5c5c;
+  }
+
+  span {
+    font-weight: bold;
+  }
 
   i {
     user-select: none;
@@ -209,7 +281,7 @@ footer {
     position: absolute;
     right: 16px;
     top: 50%;
-    color: #ffffff12;
+    color: #333;
   }
 }
 </style>

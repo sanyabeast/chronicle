@@ -30,10 +30,17 @@
   p {
     margin: 0.5em;
     width: 100%;
+    max-width: 640px;
+    text-align: justify;
 
     span {
       font-style: italic;
       font-weight: 600;
+
+      &.oldbook {
+        font-style: normal;
+        font-size: 48px;
+      }
     }
   }
 }
