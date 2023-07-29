@@ -75,7 +75,8 @@ export default Vue.extend({
         },
         get_preview(uri: string) {
             return require(uri)
-        }
+        },
+
     }
 })
 </script>
@@ -86,7 +87,9 @@ export default Vue.extend({
     .results-list {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 10px;
+        column-gap: 16px;
+        row-gap: 32px;
+
 
         .result-preview {
             user-select: none;
@@ -101,6 +104,8 @@ export default Vue.extend({
             justify-content: center;
             cursor: pointer;
             position: relative;
+            justify-self: center;
+            align-self: center;
 
             img {
                 position: absolute;
@@ -142,6 +147,10 @@ export default Vue.extend({
                 opacity: 0.5;
             }
         }
+    }
+
+    h2 {
+        text-align: center;
     }
 }
 </style>

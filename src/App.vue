@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @keydown="handle_keydown">
     <header>
       <form>
         <input ref="search_input" type="search" placeholder="Search" id="search" autocomplete="off" spellcheck="false"
@@ -71,6 +71,15 @@ export default Vue.extend({
       this.$store.commit('route_replace', {
         name: 'home'
       })
+    },
+    handle_keydown() {
+      console.log(1);
+      if (this.$store.state.focus_search_on_keydown) {
+        if (this.$refs.search_input) {
+          console.log(1);
+          (this.$refs.search_input as HTMLInputElement).focus()
+        }
+      }
     }
   }
 });

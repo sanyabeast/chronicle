@@ -125,6 +125,15 @@ export const applets: IAppletMetadata[] = [
     props: {
       url: 'https://sanyabeast.github.io/euphoria/dist/index.html'
     }
+  },
+  {
+    route: webframe_route,
+    tags: ['extras', 'experiment'],
+    title: 'Voxel World Demo',
+    preview: 'assets/preview/hexworld_a1.png',
+    props: {
+      url: 'https://sanyabeast.github.io/hexworld/dist/index.html'
+    }
   }
 ]
 

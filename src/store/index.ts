@@ -10,7 +10,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     search_query: "",
-    package_data: package_data
+    package_data: package_data,
+    focus_search_on_keydown: true
   },
   getters: {
   },
