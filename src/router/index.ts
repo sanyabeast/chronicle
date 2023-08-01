@@ -128,11 +128,11 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
-    tags: ['extras', 'experiment'],
-    title: 'Voxel World Demo',
+    tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
+    title: 'Brickscape Demo',
     preview: 'assets/preview/hexworld_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/hexworld/dist/index.html'
+      url: 'https://sanyabeast.github.io/brickscape/dist/index.html'
     }
   }
 ]
