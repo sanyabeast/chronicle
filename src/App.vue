@@ -7,7 +7,7 @@
       <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
         @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
       <div id="wtf" @click="goto_home()" title="homepage">
-        <h1>wtf</h1>
+        <h1>wat?</h1>
       </div>
     </header>
     <div class="header-imposter"></div>
@@ -124,6 +124,8 @@ body {
   box-sizing: border-box;
   color: #fff;
   user-select: none;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 a {
@@ -219,8 +221,8 @@ header {
   align-items: center;
   justify-content: center;
   width: 100%;
-
 }
+
 
 main {
   display: flex;
@@ -284,4 +286,30 @@ footer {
     color: #333;
   }
 }
+
+
+/* Media query for screens less than 600px */
+@media screen and (max-width: 1360px) {
+  header {
+    padding: 0 16px;
+  }
+}
+
+/* Media query for screens less than 600px */
+@media screen and (max-width: 800px) {
+  #app {
+    grid-template-rows: 48px 1fr 32px;
+  }
+
+  #version {
+    display: none;
+  }
+
+  footer {
+    *  {
+      flex-shrink: 0;
+    }
+  }
+}
+
 </style>
