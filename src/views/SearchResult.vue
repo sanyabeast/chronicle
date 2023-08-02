@@ -93,13 +93,12 @@ export default Vue.extend({
     .results-list {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        column-gap: 16px;
-        row-gap: 32px;
-
+        column-gap: 24px;
+        row-gap: 24px;
 
         .result-preview {
             user-select: none;
-            width: 160px;
+            width: 100%;
             height: 120px;
             overflow: hidden;
             background-color: #000;
@@ -157,6 +156,42 @@ export default Vue.extend({
 
     h2 {
         text-align: center;
+        margin-bottom: 32px;
+    }
+}
+
+@media screen and (max-width: 1360px) {
+    .view.search-result {
+        .results-list {
+            padding: 0 16px;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .view.search-result {
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0 0;
+
+
+            .result-preview {
+                width: 100%;
+                height: 32px;
+            }
+
+            .result-preview:hover {
+                .fader {
+                    opacity: 0.5;
+                }
+            }
+        }
+
+        h2 {
+            font-size: 16px;
+            text-align: left;
+        }
     }
 }
 </style>

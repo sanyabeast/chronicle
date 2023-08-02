@@ -1,26 +1,61 @@
 <template>
   <div class="view home">
-    <p>
-      Step into the enigmatic realm of <span>@sanyabeast</span>, a guide through the mystical tapestry of digital wonders.
-    </p>
-    <p> As you
-      venture into this ethereal domain, prepare to unlock the secrets that lie beyond the ordinary.</p>
-    <p> Within the depths of
-      code, I navigate the winding corridors where creativity meets innovation. </p>
-    <p>With each line crafted, a subtle spell is
-      woven, transcending the boundaries of what is known. </p>
-    <p>Join me on a journey where the allure of limitless imagination
-      beckons. </p>
-    <p>Embrace the audacity of our quest, for within these realms, true coolness thrives in the pursuit of
-      infinite possibilities. </p>
-    <p>Wanderer, let us embark on this enigmatic odyssey together,</p>
-    <p>unraveling the enigma that lies
-    at the intersection of magic and technology.
-    </p>
+    <div class="content">
+      <img src="assets/foamy.png" class="avatar float-left" @click="toggleAvatar" />
+      <img src="assets/sanya.png" class="avatar float-left" @click="toggleAvatar" />
+      <p>Step into the enigmatic realm of <span>@sanyabeast</span>, a guide through the mystical tapestry of digital
+        wonders.</p>
+      <p>As you venture into this ethereal domain, prepare to unlock the secrets that lie beyond the ordinary.</p>
+      <p>Within the depths of code, I navigate the winding corridors where creativity meets innovation.</p>
+      <p>With each line crafted, a subtle spell is woven, transcending the boundaries of what is known.</p>
+      <p>Join me on a journey where the allure of limitless imagination beckons.</p>
+      <p>Embrace the audacity of our quest, for within these realms, true coolness thrives in the pursuit of infinite
+        possibilities.</p>
+      <p>Wanderer, let us embark on this enigmatic odyssey together,</p>
+      <p>unraveling the enigma that lies at the intersection of magic and technology.</p>
+    </div>
+
+
+
   </div>
 </template>
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
+  name: 'Home',
+  data() {
+    return {
+      avatarIndex: -1
+    }
+  },
+  mounted() {
+    this.toggleAvatar()
+  },
+  methods: {
+    toggleAvatar() {
+      let avatars = this.$el.querySelectorAll('.avatar')
+      this.avatarIndex = (this.avatarIndex + 1) % avatars.length;
+
+      avatars.forEach((el, index) => {
+        let image = el as HTMLElement
+        image.style.display = index === this.avatarIndex ? 'flex' : 'none'
+      })
+
+    }
+  }
+})
+
+</script>
 <style lang="less">
 .view.home {
+  img.float-left {
+    float: left;
+    margin-right: 16px;
+    margin-top: 4px;
+    /* Adjust the margin as per your preference */
+  }
+
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -28,7 +63,8 @@
   justify-content: center;
 
   p {
-    margin: 0.5em;
+    margin: 0;
+    line-height: 2em;
     width: 100%;
     max-width: 640px;
     text-align: justify;
@@ -42,6 +78,13 @@
         font-size: 48px;
       }
     }
+  }
+}
+
+/* Media query for screens less than 600px */
+@media screen and (max-width: 600px) {
+  .view.home {
+    justify-content: flex-start;
   }
 }
 </style>

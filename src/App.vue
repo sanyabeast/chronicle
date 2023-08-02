@@ -7,7 +7,7 @@
       <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
         @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
       <div id="wtf" @click="goto_home()" title="homepage">
-        <h1>wat?</h1>
+        <h1 @click="exit_app">quit</h1>
       </div>
     </header>
     <div class="header-imposter"></div>
@@ -15,9 +15,15 @@
       <router-view />
     </main>
     <footer>
-      <p><span v-html="getCurrentYear()"></span> | Ukraine | prototyped & implemented by <span>@sanyabeast</span> | <a
-          href="#" v-html="href" @click="goto_home"></a></p>
+      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
+        implemented by <a href="https://github.com/sanyabeast" title="github">@sanyabeast</a> | <a href="#" v-html="href"
+          title="home" @click="goto_home"></a></p>
       <i id="version" v-html="app_version"></i>
+    </footer>
+    <footer class="mobile">
+      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | <a href="https://github.com/sanyabeast"
+          title="github">@sanyabeast</a> | <a href="#" v-html="href" @click="goto_home" title="home"></a></p>
+
     </footer>
     <!-- <nav>
       <image-link target="/" label="Home" />
@@ -77,13 +83,14 @@ export default Vue.extend({
       })
     },
     handle_keydown() {
-      console.log(1);
       if (this.$store.state.focus_search_on_keydown) {
         if (this.$refs.search_input) {
-          console.log(1);
           (this.$refs.search_input as HTMLInputElement).focus()
         }
       }
+    },
+    exit_app() {
+      window.open('https://google.com', '_self')
     }
   }
 });
@@ -129,8 +136,16 @@ body {
 }
 
 a {
-  color: rgb(255, 0, 111);
+  color: red;
   cursor: cell;
+
+  &[title="github"] {
+    color: grey;
+  }
+}
+
+img {
+  image-rendering: pixelated;
 }
 
 input[type="search"] {
@@ -145,6 +160,7 @@ input[type="search"] {
   font-size: 24px;
   font-style: italic;
   align-self: flex-end;
+  height: 100%;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -159,14 +175,21 @@ input[type="search"]::placeholder {
   font-weight: bold;
 }
 
+input[type="search"]:hover::placeholder {
+  color: red;
+}
+
 h1 {
   font-size: 24px;
 }
 
-div#homepage {
+#homepage,
+#wtf {
+  height: 100%;
+  align-items: center;
+  display: flex;
   cursor: cell;
   align-self: flex-end;
-  justify-self: flex-start;
 
   h1 {
     display: block;
@@ -175,21 +198,22 @@ div#homepage {
   }
 }
 
+div#homepage {
+  justify-self: flex-start;
+}
+
 div#wtf {
-  cursor: cell;
-  align-self: flex-end;
   justify-self: flex-end;
 
   h1 {
     text-align: right;
-    color: #999;
   }
 }
 
 div#homepage:hover,
 div#wtf:hover {
   h1 {
-    color: #eee;
+    color: red;
   }
 }
 
@@ -252,7 +276,7 @@ nav {
   color: #fff;
   text-align: left;
   max-width: 1360px;
-  padding: 16px 32px;
+  padding: 16px 0;
   height: 100%;
   width: 100%;
   overflow-x: hidden;
@@ -267,6 +291,10 @@ footer {
   align-items: center;
   justify-content: center;
   position: relative;
+
+  &.mobile {
+    display: none;
+  }
 
   p,
   span {
@@ -285,6 +313,16 @@ footer {
     top: 50%;
     color: #333;
   }
+
+  b {
+    position: relative;
+    background: cornflowerblue;
+    background: -webkit-linear-gradient(to bottom, cornflowerblue 50%, gold 50%);
+    background: -moz-linear-gradient(to bottom, cornflowerblue 50%, gold 50%);
+    background: linear-gradient(to bottom, cornflowerblue 50%, gold 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 
@@ -296,20 +334,63 @@ footer {
 }
 
 /* Media query for screens less than 600px */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
   #app {
     grid-template-rows: 48px 1fr 32px;
   }
 
-  #version {
-    display: none;
+  header {
+    padding: 0 16px;
+    grid-template-columns: 1fr 64px;
+
+    #wtf {
+      display: none;
+    }
+
+    #homepage {
+      grid-column: 2;
+      grid-row: 1;
+      width: 100%;
+
+      h1 {
+        width: 100%;
+        text-align: right;
+      }
+    }
+
+    input#search {
+      text-align: left;
+      width: 100%;
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+
+  .view {
+    padding: 16px;
   }
 
   footer {
-    *  {
+    display: none;
+
+    p,
+    span,
+    a {
+      font-size: 10px;
+    }
+
+    &.mobile {
+      display: flex;
+      flex-direction: column;
+    }
+
+    * {
       flex-shrink: 0;
     }
   }
-}
 
+  h2 {
+    font-size: 16px;
+  }
+}
 </style>
