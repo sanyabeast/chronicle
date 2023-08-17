@@ -46,45 +46,45 @@ export const applets: IAppletMetadata[] = [
     tags: [],
     noindex: true
   },
-  {
-    route: {
-      path: '/applet/emoji-select',
-      name: 'applet/emoji-select',
-      component: EmojiSelect,
-      props: true
-    },
-    tags: ['emoji'],
-    title: "",
-    preview: 'assets/preview/emoji_selection_a1.png',
-  },
-  {
-    route: {
-      path: '/applet/emoji-select',
-      name: 'applet/emoji-select',
-      component: EmojiSelect,
-      props: true
-    },
-    tags: ['emoji'],
-    title: "",
-    preview: 'assets/preview/emoji_selection_a1.png',
-    props: {
-      category: "Smileys & Emotion"
-    },
-  },
+  // {
+  //   route: {
+  //     path: '/applet/emoji-select',
+  //     name: 'applet/emoji-select',
+  //     component: EmojiSelect,
+  //     props: true
+  //   },
+  //   tags: ['emoji'],
+  //   title: "",
+  //   preview: 'assets/preview/emoji_selection_a1.png',
+  // },
+  // {
+  //   route: {
+  //     path: '/applet/emoji-select',
+  //     name: 'applet/emoji-select',
+  //     component: EmojiSelect,
+  //     props: true
+  //   },
+  //   tags: ['emoji'],
+  //   title: "",
+  //   preview: 'assets/preview/emoji_selection_a1.png',
+  //   props: {
+  //     category: "Smileys & Emotion"
+  //   },
+  // },
   // oldies
   {
     route: webframe_route,
     tags: ['game', 'old'],
-    title: 'Match3',
-    preview: 'assets/preview/match3_a1.png',
+    title: 'Forest Lads [Demo]',
+    preview: 'assets/preview/forestlads_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/match3/'
+      url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
     }
   },
   {
     route: webframe_route,
     tags: ['game', 'old'],
-    title: 'Hill Rider',
+    title: 'Hill Rider [Demo]',
     preview: 'assets/preview/coderider_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/coderider/dist/index.html'
@@ -102,16 +102,17 @@ export const applets: IAppletMetadata[] = [
   {
     route: webframe_route,
     tags: ['game', 'old'],
-    title: 'Forest Lads',
-    preview: 'assets/preview/forestlads_a1.png',
+    title: 'Match3',
+    preview: 'assets/preview/match3_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
+      url: 'https://sanyabeast.github.io/match3/'
     }
   },
+
   {
     route: webframe_route,
     tags: ['extras', 'game', 'engine'],
-    title: 'Retro Engine Demo',
+    title: 'Retro Engine [Demo]',
     preview: 'assets/preview/retro_engine_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/retro/dist/demo_alt/'
@@ -120,7 +121,7 @@ export const applets: IAppletMetadata[] = [
   {
     route: webframe_route,
     tags: ['extras', 'experiment'],
-    title: 'Euphoria Demo',
+    title: 'Euphoria [Demo]',
     preview: 'assets/preview/euphoria_da1.png',
     props: {
       url: 'https://sanyabeast.github.io/euphoria/dist/index.html'
@@ -129,10 +130,19 @@ export const applets: IAppletMetadata[] = [
   {
     route: webframe_route,
     tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
-    title: 'Brickscape Demo',
+    title: 'Brickscape [Demo]',
     preview: 'assets/preview/hexworld_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/brickscape/dist/index.html'
+    }
+  },
+  {
+    route: webframe_route,
+    tags: ['extras', 'commercial', 'chart', 'plot', 'three', 'gl'],
+    title: 'Plot3 [Demo]',
+    preview: 'assets/preview/plot_a1.png',
+    props: {
+      url: 'projects/plot/index.html'
     }
   }
 ]

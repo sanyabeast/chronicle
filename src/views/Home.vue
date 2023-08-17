@@ -4,19 +4,22 @@
       <img src="assets/foamy.png" class="avatar float-left" @click="toggleAvatar" />
       <img src="assets/sanya.png" class="avatar float-left" @click="toggleAvatar" />
       <p>Step into the enigmatic realm of <span>@sanyabeast</span>, a guide through the mystical tapestry of digital
-        wonders.</p>
-      <p>As you venture into this ethereal domain, prepare to unlock the secrets that lie beyond the ordinary.</p>
-      <p>Within the depths of code, I navigate the winding corridors where creativity meets innovation.</p>
-      <p>With each line crafted, a subtle spell is woven, transcending the boundaries of what is known.</p>
-      <p>Join me on a journey where the allure of limitless imagination beckons.</p>
+        wonders. Hailing from the heart of Ukraine, I am a seasoned TypeScript and Three.js guru, mastering the realms of
+        the virtual and the real.</p>
+      <p>As you venture into this ethereal domain, prepare to unlock the secrets that lie beyond the ordinary. Through the
+        landscapes of TypeScript's strict typings and the immersive 3D worlds of Three.js, I beckon you to a reality that
+        few have ventured.</p>
+      <p>Within the depths of code, I navigate the winding corridors where creativity meets innovation. Where static types
+        coalesce with dynamic visualizations, I am at the crossroads.</p>
+      <p>With each line crafted, a subtle spell is woven, transcending the boundaries of what is known. It's not just
+        code, but a symphony of logic and artistry.</p>
+      <p>Join me on a journey where the allure of limitless imagination beckons. From the flat planes of a screen to the
+        3D realms, our expedition knows no bounds.</p>
       <p>Embrace the audacity of our quest, for within these realms, true coolness thrives in the pursuit of infinite
-        possibilities.</p>
+        possibilities. The union of TypeScript's precision and Three.js's canvas is the artistry I bring forth.</p>
       <p>Wanderer, let us embark on this enigmatic odyssey together,</p>
       <p>unraveling the enigma that lies at the intersection of magic and technology.</p>
     </div>
-
-
-
   </div>
 </template>
 <script lang="ts">
@@ -86,5 +89,4 @@ export default Vue.extend({
   .view.home {
     justify-content: flex-start;
   }
-}
-</style>
+}</style>
