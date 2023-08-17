@@ -3,7 +3,9 @@
     <div class="content">
       <img src="assets/foamy.png" class="avatar float-left" @click="toggleAvatar" />
       <img src="assets/sanya.png" class="avatar float-left" @click="toggleAvatar" />
-      <p>Step into the enigmatic realm of <span>@sanyabeast</span>, a guide through the mystical tapestry of digital
+      <p>Step into the enigmatic realm of <a title="mailto" :href="sanyabeast_link">@sanyabeast</a>, a guide through the
+        mystical
+        tapestry of digital
         wonders. Hailing from the heart of Ukraine, I am a seasoned TypeScript and Three.js guru, mastering the realms of
         the virtual and the real.</p>
       <p>As you venture into this ethereal domain, prepare to unlock the secrets that lie beyond the ordinary. Through the
@@ -29,7 +31,8 @@ export default Vue.extend({
   name: 'Home',
   data() {
     return {
-      avatarIndex: -1
+      avatarIndex: -1,
+      sanyabeast_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     }
   },
   mounted() {
@@ -65,6 +68,15 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
 
+  .content a {
+    color: #fff;
+
+    &:hover {
+      color: red;
+    }
+  }
+
+
   p {
     margin: 0;
     line-height: 2em;
@@ -89,4 +101,5 @@ export default Vue.extend({
   .view.home {
     justify-content: flex-start;
   }
-}</style>
+}
+</style>

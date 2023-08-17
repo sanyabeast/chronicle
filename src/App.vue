@@ -16,12 +16,12 @@
     </main>
     <footer>
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
-        implemented by <a href="https://github.com/sanyabeast" title="github">@sanyabeast</a> | <a href="#" v-html="href"
-          title="home" @click="goto_home"></a></p>
+        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github" href="https://github.com/sanyabeast
+https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a></p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
-      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | <a href="https://github.com/sanyabeast"
+      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | <a :href="sanyabeast_link"
           title="github">@sanyabeast</a> | <a href="#" v-html="href" @click="goto_home" title="home"></a></p>
 
     </footer>
@@ -41,7 +41,8 @@ export default Vue.extend({
   name: 'App',
   data() {
     return {
-      href: location.host
+      href: location.host,
+      sanyabeast_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     }
   },
   components: { ImageLink },
