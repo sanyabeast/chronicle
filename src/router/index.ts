@@ -143,6 +143,15 @@ export const applets: IAppletMetadata[] = [
     props: {
       url: 'projects/plot/index.html'
     }
+  },
+  {
+    route: webframe_route,
+    tags: ['extras', 'retro', 'unity', 'game'],
+    title: 'Middlenight [Demo]',
+    preview: 'assets/preview/middlenight_a1.png',
+    props: {
+      url: 'projects/middlenight/index.html'
+    }
   }
 ]
 
