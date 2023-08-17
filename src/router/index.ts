@@ -74,20 +74,29 @@ export const applets: IAppletMetadata[] = [
   // oldies
   {
     route: webframe_route,
-    tags: ['game', 'old'],
-    title: 'Forest Lads [Demo]',
-    preview: 'assets/preview/forestlads_a1.png',
+    tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
+    title: 'Brickscape [Demo]',
+    preview: 'assets/preview/hexworld_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
+      url: 'https://sanyabeast.github.io/brickscape/dist/index.html'
     }
   },
   {
     route: webframe_route,
     tags: ['game', 'old'],
-    title: 'Hill Rider [Demo]',
-    preview: 'assets/preview/coderider_a1.png',
+    title: 'Match3',
+    preview: 'assets/preview/match3_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/coderider/dist/index.html'
+      url: 'https://sanyabeast.github.io/match3/'
+    }
+  },
+  {
+    route: webframe_route,
+    tags: ['game', 'old'],
+    title: 'Forest Lads [Demo]',
+    preview: 'assets/preview/forestlads_a1.png',
+    props: {
+      url: 'https://sanyabeast.github.io/forestlads/dist/index.html'
     }
   },
   {
@@ -102,13 +111,12 @@ export const applets: IAppletMetadata[] = [
   {
     route: webframe_route,
     tags: ['game', 'old'],
-    title: 'Match3',
-    preview: 'assets/preview/match3_a1.png',
+    title: 'Hill Rider [Demo]',
+    preview: 'assets/preview/coderider_a1.png',
     props: {
-      url: 'https://sanyabeast.github.io/match3/'
+      url: 'https://sanyabeast.github.io/coderider/dist/index.html'
     }
   },
-
   {
     route: webframe_route,
     tags: ['extras', 'game', 'engine'],
@@ -125,15 +133,6 @@ export const applets: IAppletMetadata[] = [
     preview: 'assets/preview/euphoria_da1.png',
     props: {
       url: 'https://sanyabeast.github.io/euphoria/dist/index.html'
-    }
-  },
-  {
-    route: webframe_route,
-    tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
-    title: 'Brickscape [Demo]',
-    preview: 'assets/preview/hexworld_a1.png',
-    props: {
-      url: 'https://sanyabeast.github.io/brickscape/dist/index.html'
     }
   },
   {
