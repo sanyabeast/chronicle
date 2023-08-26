@@ -13,6 +13,7 @@
     <div class="header-imposter"></div>
     <main>
       <router-view />
+      <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
@@ -36,6 +37,7 @@ https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="hom
 <script lang="ts">
 import Vue from 'vue';
 import ImageLink from './components/ImageLink.vue'
+import Cookies from './components/Cookies.vue';
 
 export default Vue.extend({
   name: 'App',
@@ -45,7 +47,7 @@ export default Vue.extend({
       sanyabeast_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     }
   },
-  components: { ImageLink },
+  components: { ImageLink, Cookies },
   computed: {
     search_query() {
       return this.$store.state.search_query
@@ -257,7 +259,7 @@ main {
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-
+  position: relative;
 }
 
 nav {
