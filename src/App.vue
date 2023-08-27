@@ -17,8 +17,7 @@
     </main>
     <footer>
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
-        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github" href="https://github.com/sanyabeast
-https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a></p>
+        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github" href="https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a></p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
