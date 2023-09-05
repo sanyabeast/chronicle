@@ -1,7 +1,8 @@
 <template>
     <div class="renderer_container" ref="renderer_container">
         <div class="controls" v-if="show_controls">
-            <p class="button" @click="saveAsImage">💾 Download</p>
+            <p class="button" @click="saveAsImage">download as image</p>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -160,20 +161,23 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
+    overflow: hidden;
 
     .controls {
         position: absolute;
-        top: 16px;
-        right: 16px;
+        bottom: 16px;
+        left: 16px;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start;
+        pointer-events: all;
 
         .button {
             cursor: cell;
-            pointer-events: all;
             z-index: 100;
             display: flex;
+            background-color: #000;
+            margin: 1px 0;
 
             &:hover {
                 color: #ff0000;

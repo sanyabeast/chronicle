@@ -7,6 +7,10 @@ import { router } from '@/router'
 
 Vue.use(Vuex)
 
+function is_mobile_device() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function need_show_cookie() {
   if (!window.localStorage) {
     return false;
@@ -25,7 +29,8 @@ export default new Vuex.Store({
     search_query: "",
     package_data: package_data,
     focus_search_on_keydown: true,
-    show_cookie: need_show_cookie()
+    show_cookie: need_show_cookie(),
+    is_mobile_device: is_mobile_device()
   },
   getters: {
   },

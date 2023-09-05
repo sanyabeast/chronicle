@@ -178,8 +178,8 @@ export const applets: IAppletMetadata[] = [
       props: true
     },
     tags: ['experiment', 'tool', 'image', 'polar', 'math', 'three', 'gl'],
-    title: 'Polar Image',
-    preview: 'assets/preview/middlenight_a1.png',
+    title: 'Polar Picture Tool',
+    preview: 'assets/preview/polar_image_a1.png',
     props: {}
   }
 ]
