@@ -5,7 +5,7 @@ import Home from '../views/Home.vue'
 import WebFrame from '../views/WebFrame.vue'
 import SearchResult from '../views/SearchResult.vue'
 import AsciiGif from "../components/AsciiGif.vue"
-import PolarImage from "../views/applets/PolarImage.vue"
+import PolarPictureTool from "../views/applets/PolarPictureTool.vue"
 import { map, uniqBy } from "lodash"
 
 
@@ -156,31 +156,19 @@ export const applets: IAppletMetadata[] = [
       url: 'projects/middlenight/index.html'
     }
   },
-  // {
-  //   route: {
-  //     path: 'ascii-gif-renderer',
-  //     name: 'ascii-gif-renderer',
-  //     component: AsciiGif,
-  //     props: true
-  //   },
-  //   tags: ['service'],
-  //   title: 'Ascii Gif Renderer',
-  //   preview: 'assets/preview/middlenight_a1.png',
-  //   props: {
-
-  //   }
-  // }
   {
     route: {
-      path: '/applet/polar-image',
-      name: 'applet/polar-image',
-      component: PolarImage,
+      path: '/applet/polar-picture-tool/:image',
+      name: 'applet/polar-picture-tool',
+      component: PolarPictureTool,
       props: true
     },
     tags: ['experiment', 'tool', 'image', 'polar', 'math', 'three', 'gl'],
     title: 'Polar Picture Tool',
     preview: 'assets/preview/polar_image_a1.png',
-    props: {}
+    props: {
+      image: 'assets/image/planet.png'
+    }
   }
 ]
 
@@ -191,11 +179,3 @@ function get_routes_config(): Array<RouteConfig> {
 export const router = new VueRouter({
   routes: get_routes_config()
 })
-
-// router.afterEach((to, from) => {
-//   console.log(to, from)
-//   const toDepth = to.path.split('/').length
-//   const fromDepth = from.path.split('/').length
-//   to.meta!.transition = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-// })
-

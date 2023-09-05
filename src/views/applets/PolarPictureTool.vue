@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ mobile: is_mobile }" class="view polar-image" @mousemove="handle_mousemove" @mousedown="handle_mousedown"
+    <div :class="{ mobile: is_mobile }" class="view polar-picture-tool" @mousemove="handle_mousemove" @mousedown="handle_mousedown"
         @mouseup="handle_mouseup" @contextmenu.prevent="">
         <ThreeRenderer ref="three_renderer" :helpers="true" orbit_controls>
             <p class="button open-file" @click="open_file">open file</p>
@@ -9,8 +9,10 @@
             <div class="separator"></div>
             <p class="button mode" :class="{ active: mode === 0 }" @click="set_mode(0)">original</p>
             <p class="button mode" :class="{ active: mode === 1 }" @click="set_mode(1)">polar to carthesian</p>
-            <p class="button mode" :class="{ active: mode === 2 }" @click="set_mode(2)">carthesian to polar</p>
-            <p class="button mode" :class="{ active: mode === 3 }" @click="set_mode(3)">carthesian to polar [b]</p>
+            <p class="button mode" :class="{ active: mode === 2 }" @click="set_mode(2)">polar flip</p>
+            <p class="button mode" :class="{ active: mode === 3 }" @click="set_mode(3)">carthesian to polar</p>
+            <p class="button mode" :class="{ active: mode === 4 }" @click="set_mode(4)">carthesian to polar [b]</p>
+
         </ThreeRenderer>
         <!-- Add file input for drag and drop -->
         <input type="file" accept="image/*" @change="handle_image_upload" style="display: none" ref="fileInput" />
@@ -52,7 +54,7 @@ import * as THREE from 'three';
 import ThreeRenderer from '../../components/ThreeRenderer.vue';
 
 export default {
-    name: 'PolarImage',
+    name: 'PolarPictureTool',
     components: {
         ThreeRenderer,
     },
@@ -64,7 +66,7 @@ export default {
             grid: true,
             texture_offset: new THREE.Vector2(0, 0),
             texture_scale: new THREE.Vector2(1, 1),
-            tiling: true
+            tiling: false
         };
     },
     computed: {
@@ -75,9 +77,7 @@ export default {
     props: {
         image: {
             type: String,
-            default: 'assets/image/planet.png',
-            // default: 'assets/image/2.png',
-            // default: 'assets/image/earth.jpg',
+            default: '',
         },
     },
     mounted() {
@@ -145,6 +145,14 @@ export default {
                     vec2 center = vec2(0.5, 0.5) + u_offset;
                     return (center + vec2(x, y)) * u_scale;
                 }
+
+                vec2 polar_flip(vec2 coords) {
+                    vec2 center = vec2(0.5);
+                    vec2 polarCoords = square_to_polar(coords);
+                    polarCoords.x = 1.0 - polarCoords.x;  // Flip the angle
+                    polarCoords.y = 1.0 - polarCoords.y;  // Flip the radius
+                    return polar_to_square(polarCoords);
+                }
                 
                 void main() {
                     vec4 map = vec4(0.0);
@@ -153,12 +161,13 @@ export default {
                         map = texture2D(u_map, (vUv + u_offset) * u_scale);
                     }  else if (u_mode == 1) {
                         map = texture2D(u_map, polar_to_square(vUv));
-                    } else if (u_mode == 2) {
+                    }  else if (u_mode == 2) {
+                        map = texture2D(u_map, polar_flip(vUv));
+                    }   else if (u_mode == 3) {
                         map = texture2D(u_map, square_to_polar(vUv));
-                    } else if (u_mode == 3) {
+                    } else if (u_mode == 4) {
                         map = texture2D(u_map, square_to_polar_b(vUv));
                     }
-
                     gl_FragColor = vec4(map);
                 }
             `,
@@ -289,7 +298,7 @@ export default {
 };
 </script>
 <style lang="less">
-.view.polar-image {
+.view.polar-picture-tool {
     padding: 0;
 
     .renderer_container {
