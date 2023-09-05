@@ -4,7 +4,10 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
 import WebFrame from '../views/WebFrame.vue'
 import SearchResult from '../views/SearchResult.vue'
+import AsciiGif from "../components/AsciiGif.vue"
+import PolarImage from "../views/applets/PolarImage.vue"
 import { map, uniqBy } from "lodash"
+
 
 // applets
 import EmojiSelect from '../views/applets/EmojiSelect.vue'
@@ -152,6 +155,32 @@ export const applets: IAppletMetadata[] = [
     props: {
       url: 'projects/middlenight/index.html'
     }
+  },
+  // {
+  //   route: {
+  //     path: 'ascii-gif-renderer',
+  //     name: 'ascii-gif-renderer',
+  //     component: AsciiGif,
+  //     props: true
+  //   },
+  //   tags: ['service'],
+  //   title: 'Ascii Gif Renderer',
+  //   preview: 'assets/preview/middlenight_a1.png',
+  //   props: {
+
+  //   }
+  // }
+  {
+    route: {
+      path: '/applet/polar-image',
+      name: 'applet/polar-image',
+      component: PolarImage,
+      props: true
+    },
+    tags: ['experiment', 'tool', 'image', 'polar', 'math', 'three', 'gl'],
+    title: 'Polar Image',
+    preview: 'assets/preview/middlenight_a1.png',
+    props: {}
   }
 ]
 
