@@ -1,7 +1,8 @@
 <template>
     <div :class="{ mobile: is_mobile }" class="view polar-picture-tool" @mousemove="handle_mousemove"
-        @mousedown="handle_mousedown" @mouseup="handle_mouseup" @contextmenu.prevent="">
-        <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name">
+        @mousedown="handle_mousedown" @mouseup="handle_mouseup" @contextmenu.prevent=""
+        @dragenter.prevent="handle_dragenter" @dragover.prevent="handle_dragover" @drop.prevent="handle_drop">
+        <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name" :show_controls="!dragging">
             <p class="button open-file" @click="open_file">open file</p>
             <div class="separator"></div>
             <p class="button toggle-grid" :class="{ active: grid }" @click="grid = !grid">grid</p>
@@ -15,6 +16,11 @@
             <p class="button mode" :class="{ active: mode === 4 }" @click="set_mode(4)">carthesian to polar [b]</p>
 
         </ThreeRenderer>
+        <!-- Add a drop target -->
+        <div class="drop-target" v-if="!is_mobile" :class="{ dragging: dragging }">
+            <p v-if="dragging">Drag and drop an image here</p>
+        </div>
+
         <!-- Add file input for drag and drop -->
         <input type="file" accept="image/*" @change="handle_image_upload" style="display: none" ref="fileInput" />
         <div class="grid" v-if="grid">
@@ -23,7 +29,7 @@
             <div>
             </div>
         </div>
-        <div class="info">
+        <div class="info" v-if="!dragging">
             <p v-if="!is_mobile">offset: {{ round_to(texture_offset.x, 4) }}, {{ round_to(texture_offset.y, 4) }}</p>
             <p v-if="!is_mobile">scale: {{ round_to(texture_scale.x, 4) }}, {{ round_to(texture_scale.y, 3) }}</p>
             <div v-if="!is_mobile" class="separator"></div>
@@ -68,6 +74,7 @@ export default {
     },
     data() {
         return {
+            dragging: false,
             download_image_name: 'rendered_frame',
             mouse_mode: -1,
             prev_pointer_position: { x: 0, y: 0 },
@@ -342,6 +349,30 @@ export default {
                 this.reset_transformations()
             }
         },
+        // New method to handle dropped files
+        async handle_drop(event) {
+            event.preventDefault();
+            this.dragging = false;
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0]; // Assuming you only handle one file
+                const image_src = await this.get_image_src(file);
+                let image = await this.load_image(image_src);
+                this.download_image_name = this.remove_extension(file.name)
+                this.set_texture(new THREE.Texture(image))
+            }
+        },
+
+        // New method to handle dragenter event
+        handle_dragenter(event) {
+            this.dragging = true;
+            event.preventDefault();
+        },
+
+        // New method to handle dragover event
+        handle_dragover(event) {
+            event.preventDefault();
+        },
         round_to(number, decimalPlaces) {
             if (isNaN(number) || isNaN(decimalPlaces)) {
                 return NaN; // Return NaN if either the number or decimalPlaces is not a number
@@ -368,6 +399,51 @@ export default {
 <style lang="less">
 .view.polar-picture-tool {
     padding: 0;
+
+    .drop-target {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.2);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        cursor: pointer;
+        z-index: 2;
+
+        transition: all 0.2s ease-in-out;
+
+        &:after {
+            content: "";
+            position: absolute;
+            opacity: 0;
+            top: 32px;
+            left: 32px;
+            transition: all 0.2s ease-in-out;
+            border-radius: 16px;
+            width: calc(100% - 64px);
+            height: calc(100% - 64px);
+            background-color: black;
+            border: 2px dotted #fff;
+        }
+
+        &.dragging {
+            &:after {
+                opacity: 0.4;
+                transition: all 0.2s ease-in-out;
+            }
+        }
+
+        p {
+            font-size: 20px;
+            color: white;
+            z-index: 1;
+        }
+    }
 
     .renderer_container {
         width: 100%;
