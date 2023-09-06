@@ -25,5 +25,8 @@ declare global {
     title: string,
     preview?: string
     props?: {}
+    index?: number
+    document?: string
+    summary?: string
   }
 }

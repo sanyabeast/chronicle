@@ -17,7 +17,9 @@
     </main>
     <footer>
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
-        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github" href="https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a></p>
+        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github"
+          href="https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a>
+      </p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
@@ -100,6 +102,28 @@ export default Vue.extend({
 </script>
 
 <style lang="less">
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #ff0000 #000000;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 2px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ff0000;
+  border-radius: 0px;
+  border: 0px none #000000;
+}
+
 html,
 body {
   margin: 0;

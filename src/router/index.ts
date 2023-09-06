@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from 'vue-router'
 
 import Home from '../views/Home.vue'
 import WebFrame from '../views/WebFrame.vue'
+import AppletLauncher from '../views/AppletLauncher.vue'
 import SearchResult from '../views/SearchResult.vue'
 import AsciiGif from "../components/AsciiGif.vue"
 import PolarPictureTool from "../views/applets/PolarPictureTool.vue"
@@ -22,6 +23,13 @@ let webframe_route = {
   props: true
 };
 
+let applet_launcher_route = {
+  path: '/applet/applet-launcher/:applet',
+  name: 'applet/applet-launcher',
+  component: AppletLauncher,
+  props: true
+}
+
 export const applets: IAppletMetadata[] = [
   {
     route: {
@@ -29,6 +37,7 @@ export const applets: IAppletMetadata[] = [
       name: 'home',
       component: Home
     },
+    // document: 'assets/md/showdown.md',
     tags: [],
     title: "",
     noindex: true
@@ -46,6 +55,7 @@ export const applets: IAppletMetadata[] = [
       component: SearchResult,
       props: true
     },
+    // document: 'assets/md/showdown.md',
     title: "",
     tags: [],
     noindex: true
@@ -78,6 +88,7 @@ export const applets: IAppletMetadata[] = [
   // oldies
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
     title: 'Brickscape [Demo]',
     preview: 'assets/preview/hexworld_a1.png',
@@ -87,6 +98,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Match3',
     preview: 'assets/preview/match3_a1.png',
@@ -96,6 +108,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Forest Lads [Demo]',
     preview: 'assets/preview/forestlads_a1.png',
@@ -105,6 +118,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Telechart',
     preview: 'assets/preview/telechart_a1.png',
@@ -114,6 +128,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Hill Rider [Demo]',
     preview: 'assets/preview/coderider_a1.png',
@@ -123,6 +138,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['extras', 'game', 'engine'],
     title: 'Retro Engine [Demo]',
     preview: 'assets/preview/retro_engine_a1.png',
@@ -132,6 +148,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['extras', 'experiment'],
     title: 'Euphoria [Demo]',
     preview: 'assets/preview/euphoria_da1.png',
@@ -141,6 +158,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['extras', 'commercial', 'chart', 'plot', 'three', 'gl'],
     title: 'Plot3 [Demo]',
     preview: 'assets/preview/plot_a1.png',
@@ -150,6 +168,7 @@ export const applets: IAppletMetadata[] = [
   },
   {
     route: webframe_route,
+    // document: 'assets/md/showdown.md',
     tags: ['extras', 'retro', 'unity', 'game'],
     title: 'Middlenight [Demo]',
     preview: 'assets/preview/middlenight_a1.png',
@@ -164,6 +183,7 @@ export const applets: IAppletMetadata[] = [
       component: PolarPictureTool,
       props: true
     },
+    document: 'assets/md/showdown.md',
     tags: ['experiment', 'tool', 'image', 'polar', 'math', 'three', 'gl'],
     title: 'Polar Picture Tool',
     preview: 'assets/preview/polar_image_a1.png',
@@ -171,20 +191,35 @@ export const applets: IAppletMetadata[] = [
       image: 'random'
     }
   },
+  // {
+  //   route: {
+  //     path: '/applet/sololearn-conways-game-of-life/',
+  //     name: 'applet/sololearn-conways-game-of-life',
+  //     component: SoloCGOL,
+  //     props: true
+  //   },
+  //   tags: ['experiment'],
+  //   title: 'Conways Game of Life [SoloLearn]',
+  //   preview: 'assets/preview/polar_image_a1.png',
+  //   props: {
+  //   }
+  // }
   {
-    route: {
-      path: '/applet/sololearn-conways-game-of-life/',
-      name: 'applet/sololearn-conways-game-of-life',
-      component: SoloCGOL,
-      props: true
-    },
-    tags: ['experiment'],
-    title: 'Conways Game of Life [SoloLearn]',
-    preview: 'assets/preview/polar_image_a1.png',
+    route: applet_launcher_route,
+    
+    tags: ['service'],
+    title: 'Applet Launcher',
+    preview: 'assets/preview/applet_launcher_a1.png',
     props: {
-    }
+
+    },
+    noindex: true
   }
 ]
+
+applets.forEach((d, i) => {
+  d.index = i
+})
 
 function get_routes_config(): Array<RouteConfig> {
   return map(uniqBy(applets, it => it.route.name), (d) => d.route)

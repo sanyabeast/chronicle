@@ -74,9 +74,13 @@ export default Vue.extend({
             }
         },
         handle_result_item_click(item: IAppletMetadata) {
+           
+
             this.$store.commit('route_replace', {
-                name: item.route.name,
-                props: item.props
+                name: 'applet/applet-launcher',
+                props: {
+                    applet: item.index!.toString()
+                }
             })
         },
         get_preview(uri: string) {
