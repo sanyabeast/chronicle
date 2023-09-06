@@ -1,11 +1,12 @@
 <template>
-    <div :class="{ mobile: is_mobile }" class="view polar-picture-tool" @mousemove="handle_mousemove" @mousedown="handle_mousedown"
-        @mouseup="handle_mouseup" @contextmenu.prevent="">
-        <ThreeRenderer ref="three_renderer" :helpers="true" orbit_controls>
+    <div :class="{ mobile: is_mobile }" class="view polar-picture-tool" @mousemove="handle_mousemove"
+        @mousedown="handle_mousedown" @mouseup="handle_mouseup" @contextmenu.prevent="">
+        <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name">
             <p class="button open-file" @click="open_file">open file</p>
             <div class="separator"></div>
             <p class="button toggle-grid" :class="{ active: grid }" @click="grid = !grid">grid</p>
-            <p class="button toggle-tiling" :class="{ active: tiling }" @click="set_tiling(!tiling)">tiling</p>
+            <p class="button toggle-tiling" :class="{ active: tiling > 0 }" @click="set_tiling(tiling + 1)"
+                v-html="tiling_label"></p>
             <div class="separator"></div>
             <p class="button mode" :class="{ active: mode === 0 }" @click="set_mode(0)">original</p>
             <p class="button mode" :class="{ active: mode === 1 }" @click="set_mode(1)">polar to carthesian</p>
@@ -23,8 +24,8 @@
             </div>
         </div>
         <div class="info">
-            <p v-if="!is_mobile">offset: {{ texture_offset.x }}, {{ texture_offset.y }}</p>
-            <p v-if="!is_mobile">scale: {{ texture_scale.x }}, {{ texture_scale.y }}</p>
+            <p v-if="!is_mobile">offset: {{ round_to(texture_offset.x, 4) }}, {{ round_to(texture_offset.y, 4) }}</p>
+            <p v-if="!is_mobile">scale: {{ round_to(texture_scale.x, 4) }}, {{ round_to(texture_scale.y, 3) }}</p>
             <div v-if="!is_mobile" class="separator"></div>
             <p v-if="!is_mobile" class="instructions">
                 This applet allows you to transform the content of an image with radial symmetry into a tileable pattern.
@@ -53,6 +54,13 @@
 import * as THREE from 'three';
 import ThreeRenderer from '../../components/ThreeRenderer.vue';
 
+const samples = [
+    'assets/image/planet.png',
+    'assets/image/moon.png',
+    'assets/image/clock.png',
+    'assets/image/pattern.png',
+]
+
 export default {
     name: 'PolarPictureTool',
     components: {
@@ -60,19 +68,33 @@ export default {
     },
     data() {
         return {
+            download_image_name: 'rendered_frame',
             mouse_mode: -1,
             prev_pointer_position: { x: 0, y: 0 },
             mode: 1,
             grid: true,
             texture_offset: new THREE.Vector2(0, 0),
             texture_scale: new THREE.Vector2(1, 1),
-            tiling: false
+            tiling: 2
         };
     },
     computed: {
         is_mobile() {
             return this.$store.state.is_mobile_device;
         },
+        tiling_label() {
+            switch (this.tiling) {
+                case 0: {
+                    return 'tiling [disabled]';
+                }
+                case 1: {
+                    return 'tiling [repeated]';
+                }
+                case 2: {
+                    return 'tiling [mirrored]';
+                }
+            }
+        }
     },
     props: {
         image: {
@@ -81,7 +103,6 @@ export default {
         },
     },
     mounted() {
-        console.log(this.$refs.three_renderer)
         let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         let plane_material = new THREE.ShaderMaterial({
             uniforms: {
@@ -176,7 +197,13 @@ export default {
         let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
         this.$refs.three_renderer.scene.add(plane);
 
-        this.load_texture(this.image)
+        let image = this.image
+
+        if (image === 'random') {
+            image = samples[Math.floor(Math.random() * samples.length)]
+        }
+
+        this.load_texture(image)
         document.addEventListener('keydown', this.handle_keydown);
     },
     beforeDestroy() {
@@ -195,6 +222,7 @@ export default {
             this.$refs.fileInput.click();
         },
         load_texture(src, on_load) {
+            this.download_image_name = this.remove_extension(src)
             return new Promise((resolve, reject) => {
                 let loader = new THREE.TextureLoader();
                 loader.load(src, (texture) => {
@@ -228,11 +256,30 @@ export default {
             texture.needsUpdate = true
             this.plane.material.uniforms.u_map.value = texture;
         },
-        set_tiling(enabled) {
-            this.tiling = enabled
+        set_tiling(value) {
+            value = value % 3
+            this.tiling = value
+
+
             if (this.texture) {
-                this.texture.wrapS = enabled ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping
-                this.texture.wrapT = enabled ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping
+                switch (value) {
+                    case 0: {
+                        this.texture.wrapS = THREE.ClampToEdgeWrapping
+                        this.texture.wrapT = THREE.ClampToEdgeWrapping
+                        break;
+                    }
+                    case 1: {
+                        this.texture.wrapS = THREE.RepeatWrapping
+                        this.texture.wrapT = THREE.RepeatWrapping
+                        break;
+                    }
+                    case 2: {
+                        this.texture.wrapS = THREE.MirroredRepeatWrapping
+                        this.texture.wrapT = THREE.MirroredRepeatWrapping
+                        break;
+                    }
+                }
+
                 this.texture.needsUpdate = true
             }
         },
@@ -241,6 +288,7 @@ export default {
             if (file) {
                 const image_src = await this.get_image_src(file);
                 let image = await this.load_image(image_src);
+                this.download_image_name = this.remove_extension(file.name)
                 this.set_texture(new THREE.Texture(image))
             }
         },
@@ -293,6 +341,26 @@ export default {
             if (event.keyCode === 27 || event.keyCode === 32) {
                 this.reset_transformations()
             }
+        },
+        round_to(number, decimalPlaces) {
+            if (isNaN(number) || isNaN(decimalPlaces)) {
+                return NaN; // Return NaN if either the number or decimalPlaces is not a number
+            }
+
+            const multiplier = Math.pow(10, decimalPlaces);
+            return Math.round(number * multiplier) / multiplier;
+        },
+        remove_extension(file_name) {
+            if (typeof file_name !== 'string') {
+                throw new Error('Input must be a string');
+            }
+
+            const last_dot_index = file_name.lastIndexOf('.');
+            if (last_dot_index === -1) {
+                return file_name; // No file extension found
+            }
+
+            return file_name.slice(0, last_dot_index);
         }
     },
 };
@@ -349,9 +417,13 @@ export default {
         p {
             margin: 0;
             font-size: 12px;
+
+            width: auto;
+            display: table;
             background-color: #00000040;
 
             &.instructions {
+                display: inline;
                 color: #d7d7d7;
                 opacity: 0;
 

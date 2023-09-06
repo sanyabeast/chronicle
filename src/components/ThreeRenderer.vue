@@ -51,6 +51,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        download_image_name: {
+            type: String,
+            default: 'rendered_frame',
+        },
     },
     mounted() {
         this.init_three();
@@ -144,7 +148,7 @@ export default {
             // Create an anchor element to trigger the download
             const a = document.createElement('a');
             a.href = dataURL;
-            a.download = 'rendered_image.png';
+            a.download = `${this.download_image_name}.png`;
 
             // Programmatically trigger a click event on the anchor element
             const event = new MouseEvent('click');

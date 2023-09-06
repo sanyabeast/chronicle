@@ -167,7 +167,7 @@ export const applets: IAppletMetadata[] = [
     title: 'Polar Picture Tool',
     preview: 'assets/preview/polar_image_a1.png',
     props: {
-      image: 'assets/image/planet.png'
+      image: 'random'
     }
   }
 ]
