@@ -6,6 +6,7 @@ import WebFrame from '../views/WebFrame.vue'
 import SearchResult from '../views/SearchResult.vue'
 import AsciiGif from "../components/AsciiGif.vue"
 import PolarPictureTool from "../views/applets/PolarPictureTool.vue"
+import SoloCGOL from "../views/applets/SoloCGOL.vue"
 import { map, uniqBy } from "lodash"
 
 
@@ -168,6 +169,19 @@ export const applets: IAppletMetadata[] = [
     preview: 'assets/preview/polar_image_a1.png',
     props: {
       image: 'random'
+    }
+  },
+  {
+    route: {
+      path: '/applet/sololearn-conways-game-of-life/',
+      name: 'applet/sololearn-conways-game-of-life',
+      component: SoloCGOL,
+      props: true
+    },
+    tags: ['experiment'],
+    title: 'Conways Game of Life [SoloLearn]',
+    preview: 'assets/preview/polar_image_a1.png',
+    props: {
     }
   }
 ]
