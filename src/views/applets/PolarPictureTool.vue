@@ -55,7 +55,7 @@
     <!-- Other components and UI elements -->
 </div></template>
   
-<script lang="ts" >
+<script >
 
 import * as THREE from 'three';
 import mixins from 'vue-typed-mixins'
@@ -69,25 +69,25 @@ const samples = [
     'assets/image/pattern.png',
 ]
 
-export interface IPolarPictureToolData {
-    dragging: boolean;
-    download_image_name: string;
-    mouse_mode: number;
-    prev_pointer_position: { x: number, y: number };
-    mode: number;
-    grid: boolean;
-    texture_offset: THREE.Vector2;
-    texture_scale: THREE.Vector2;
-    tiling: number;
+// export interface IPolarPictureToolData {
+//     dragging: boolean;
+//     download_image_name: string;
+//     mouse_mode: number;
+//     prev_pointer_position: { x: number, y: number };
+//     mode: number;
+//     grid: boolean;
+//     texture_offset: THREE.Vector2;
+//     texture_scale: THREE.Vector2;
+//     tiling: number;
 
-}
+// }
 
 export default mixins(BaseComponent).extend({
     name: 'PolarPictureTool',
     components: {
         ThreeRenderer,
     },
-    data(): IPolarPictureToolData {
+    data() {
         return {
             dragging: false,
             download_image_name: 'rendered_frame',
@@ -154,7 +154,7 @@ export default mixins(BaseComponent).extend({
             });
 
             let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
-            this.$refs.three_renderer!.scene.add(plane);
+            this.$refs.three_renderer.scene.add(plane);
 
             let image = this.image
 
