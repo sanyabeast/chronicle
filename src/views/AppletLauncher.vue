@@ -14,7 +14,7 @@
                 </div>
                 <div class="avatar">
                     <img :src="applet_data.preview" />
-                    <div class="button launch" :class="{ sticky: scroll_top > 200 }" :style="{ top: `${scroll_top}px` }"
+                    <div class="button launch" :class="{ sticky: scroll_top > 200 }" :style="{ top: `${scroll_top}px`, backgroundColor: `${get_random_web_color(applet_data.title)}` }"
                         @click="launch">
                         <p>Launch</p>
                     </div>
@@ -22,13 +22,13 @@
             </div>
             <div class="tags">
                 <div class="tag-thumb" v-for="(item, index) in applet_data.tags" :key="index">
-                    <p v-html="`/ ${item} /`"></p>
+                    <p v-html="`${item}`" :style="{ color: `${get_bright_web_color(item)}` }"></p>
                 </div>
             </div>
 
             <Showdown v-if="applet_data.document" :src="applet_data.document" />
 
-            <div v-if="!applet_data.document" class="document-placeholder">
+            <div v-if="false" class="document-placeholder">
                 <i></i>
                 <i></i>
                 <i></i>
@@ -42,6 +42,10 @@
 import Vue from 'vue';
 import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
+import BaseComponent from '@/components/BaseComponent.vue';
+import { get_random_web_color, get_bright_web_color } from '@/tools';
+
+
 
 interface IAppletLauncherData {
     applet_data?: IAppletMetadata,
@@ -52,6 +56,7 @@ interface IAppletLauncherData {
 export default Vue.extend({
     name: "AppletLauncher",
     components: { Showdown },
+    mixins: [BaseComponent],
     data(): IAppletLauncherData {
         return {
             applet_data: undefined,
@@ -62,11 +67,12 @@ export default Vue.extend({
     mounted() {
         let index = parseInt(this.applet);
         this.applet_data = applets[index];
-        console.log(index, this.applet_data);
     },
     beforeMount() {
     },
     methods: {
+        get_random_web_color: get_random_web_color,
+        get_bright_web_color: get_bright_web_color,
         handle_scroll(event) {
             this.scroll_height = (this.$refs.root as any)!.scrollHeight;
             this.scroll_top = (this.$refs.root as any)!.scrollTop;
@@ -76,7 +82,7 @@ export default Vue.extend({
                 name: this.applet_data!.route.name,
                 props: this.applet_data!.props
             });
-        }
+        },
     },
     computed: {},
     props: {
@@ -118,23 +124,21 @@ export default Vue.extend({
 
         .brief {
             display: grid;
-            grid-template-columns: 1fr 256px;
+            grid-template-columns: 256px 1fr;
             grid-template-rows: 96px minmax(272px, 1fr);
             width: 100%;
 
             >p {
                 grid-row: 1;
-                grid-column: 1;
+                grid-column: 2;
                 grid-column-end: 2;
                 font-size: 64px;
                 color: #fff;
                 font-weight: 800;
                 margin: 0;
-                margin-top: 32px;
+                margin-left: 32px;
                 align-self: center;
                 padding-right: 32px;
-
-
             }
 
             .placeholder {
@@ -146,12 +150,17 @@ export default Vue.extend({
                 padding-right: 32px;
 
                 i {
-                    background-color: #ffffff05;
+                    background-color: #ffffff06;
+                    transition: background-color 1s ease-in-out;
                     border-radius: 8px;
                     display: flex;
                     height: 16px;
                     width: 100%;
                     margin: 4px 0;
+
+                    &:hover {
+                        background-color: #ffffff09;
+                    }
 
                     &+i {
                         width: 78%;
@@ -169,13 +178,14 @@ export default Vue.extend({
 
             .brief-info {
                 grid-row: 2;
-                grid-column: 1;
+                grid-column: 2;
                 width: 100%;
                 height: 100%;
                 flex-grow: 1;
                 background-color: #000;
                 color: #fff;
-                padding: 0 16px 0 0;
+                margin-left: 32px;
+                padding-right: 32px;
                 display: flex;
                 text-align: left;
                 flex-direction: column;
@@ -185,7 +195,7 @@ export default Vue.extend({
             .avatar {
                 grid-row-start: 1;
                 grid-row-end: 2;
-                grid-column: 2;
+                grid-column: 1;
                 width: 100%;
                 height: 100%;
                 flex-grow: 1;
@@ -210,20 +220,28 @@ export default Vue.extend({
                         font-weight: 800;
                         border: 1px solid #fff;
 
-                        &:hover {
+                        p {
                             background-color: #000;
+                            color: #fff;
+                        }
+
+                        &:hover {
+                            background-color: #000!important;
                         }
 
                         &.sticky {
                             margin: 0;
                             position: absolute;
-                            left: 0;
+                            left: 50%;
+                            transform: translateX(-50%);
                             height: 32px;
-                            width: 100%;
-                            font-size: 16px;
+                            width: auto;
+                            padding: 0 32px;
+                            font-size: 24px;
                             z-index: 999;
                         }
                     }
+                    
                 }
 
                 img {
@@ -248,18 +266,26 @@ export default Vue.extend({
 
             .tag-thumb {
                 // border: 1px solid #fff;
-                min-width: 64px;
                 display: flex;
-                height: 32px;
                 flex-direction: column;
                 align-items: center;
-                // border-radius: 32px;
                 justify-content: center;
                 margin-left: 8px;
+                background-color: #2d2d2d;
+                border-radius: 16px;
+
+                &:hover {
+                    background-color: #fff;
+
+                    p {
+                        color: #000 !important;
+                    }
+                }
 
                 p {
                     color: #ddd;
                     font-weight: 800;
+                    margin: 0;
                 }
             }
         }
@@ -307,12 +333,13 @@ export default Vue.extend({
 @media screen and (max-width: 1360px) {
 
     .view.applet-launcher .launcher .brief {
-        grid-template-columns: 1fr 288px;
+        grid-template-columns: 288px 1fr;
     }
 
     .view.applet-launcher .launcher .brief>p {
         padding: 0 16px;
         margin-top: 0;
+        margin-left: 0;
         font-size: 48px;
     }
 
@@ -325,7 +352,8 @@ export default Vue.extend({
     }
 
     .view.applet-launcher .launcher .brief .brief-info {
-        padding: 16px;
+        padding: 0 16px;
+        margin-left: 0;
     }
 
     .view.applet-launcher .launcher .tags {
@@ -334,6 +362,20 @@ export default Vue.extend({
 
     .view.applet-launcher .launcher .showdown-viewer {
         padding: 16px;
+    }
+
+}
+
+@media screen and (max-width: 1024px) {
+    .view.applet-launcher .launcher .brief>p {
+        font-size: 32px;
+    }
+
+}
+
+@media screen and (max-width: 800px) {
+    .view.applet-launcher .launcher .brief>p {
+        font-size: 32px;
     }
 
 }

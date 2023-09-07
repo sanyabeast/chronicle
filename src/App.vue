@@ -58,7 +58,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    console.log(this)
+    
   },
   methods: {
     getCurrentYear() {

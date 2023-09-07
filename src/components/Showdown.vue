@@ -47,7 +47,6 @@ export default Vue.extend({
     methods: {
         set_markdown(markdown: string) {
             let dom = converter.makeHtml(markdown);
-            console.log(dom);
             this.markdown_text = markdown;
             (this.$refs.content as HTMLElement).innerHTML = dom;
         },
@@ -56,7 +55,6 @@ export default Vue.extend({
                 fetch(this.src).then((res) => {
                     return res.text();
                 }).then((text) => {
-                    console.log(text);
                     this.set_markdown(text);
                 });
             }
@@ -80,19 +78,21 @@ export default Vue.extend({
         list-style: none;
         padding: 0;
     }
-    
+
     li a {
         color: #4caf50;
     }
 
     li li {
         padding-left: 16px;
+
         a {
             color: #009688;
         }
     }
 
-    a, a strong {
+    a,
+    a strong {
         color: #f44336;
     }
 

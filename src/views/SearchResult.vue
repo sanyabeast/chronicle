@@ -30,7 +30,6 @@ export default Vue.extend({
         }
     },
     beforeMount() {
-        console.log(applets)
         searcher = searcher == null ? new FuzzySearch(applets, ['router.name', 'title', 'tags'], {
             caseSensitive: false,
         }) : searcher;
@@ -40,6 +39,12 @@ export default Vue.extend({
             (this.$refs.search_input as HTMLInputElement).value = ""
         }
 
+    },
+    props: {
+        skip_launcher: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         search_query() {
@@ -74,14 +79,21 @@ export default Vue.extend({
             }
         },
         handle_result_item_click(item: IAppletMetadata) {
-           
+            if (this.skip_launcher === false || item.summary || item.document) {
+                this.$store.commit('route_replace', {
+                    name: 'applet/applet-launcher',
+                    props: {
+                        applet: item.index!.toString()
+                    }
+                })
+            } else {
+                this.$store.commit('route_replace', {
+                    name: item.route.name,
+                    props: item.props
+                });
+            }
 
-            this.$store.commit('route_replace', {
-                name: 'applet/applet-launcher',
-                props: {
-                    applet: item.index!.toString()
-                }
-            })
+
         },
         get_preview(uri: string) {
             return require(uri)

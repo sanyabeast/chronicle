@@ -23,3 +23,53 @@ export function get_random_web_color(seed: String) {
     // Return the color at the random index
     return colors[random_index];
 }
+
+export function djb2(str) {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash * 33) ^ str.charCodeAt(i);
+    }
+    return hash >>> 0;
+}
+export function get_web_color(seed: string): string {
+    const seedValue = djb2(seed);
+
+    // Generate random RGB values
+    const r = (seedValue & 0xFF) % 256;
+    const g = ((seedValue >> 8) & 0xFF) % 256;
+    const b = ((seedValue >> 16) & 0xFF) % 256;
+
+    // Convert RGB to hexadecimal color
+    const color = `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+
+    return color;
+}
+
+export function get_bright_web_color(seed) {
+    const seedValue = djb2(seed);
+
+    // Generate bright RGB values in the higher range (200-255)
+    const r = (seedValue & 0xFF) % 56 + 200;
+    const g = ((seedValue >> 8) & 0xFF) % 56 + 200;
+    const b = ((seedValue >> 16) & 0xFF) % 56 + 200;
+
+    // Convert RGB to hexadecimal color
+    const color = `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+
+    return color;
+}
+
+
+export function get_dark_web_color(seed) {
+    const seedValue = djb2(seed);
+
+    // Generate dark RGB values in the lower range (0-100)
+    const r = (seedValue & 0xFF) % 101;
+    const g = ((seedValue >> 8) & 0xFF) % 101;
+    const b = ((seedValue >> 16) & 0xFF) % 101;
+
+    // Convert RGB to hexadecimal color
+    const color = `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+
+    return color;
+}

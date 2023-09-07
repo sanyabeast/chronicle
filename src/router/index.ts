@@ -92,6 +92,9 @@ export const applets: IAppletMetadata[] = [
     tags: ['extras', 'experiment', 'voxels', 'procedural', 'three'],
     title: 'Brickscape [Demo]',
     preview: 'assets/preview/hexworld_a1.png',
+    summary: `
+    The "Minecraft Clone" project, developed with TypeScript and Three.js, is a technical endeavor. It employs instanced mesh rendering and shader code injection to handle a large variety of textured blocks efficiently. The project also features a basic day-night cycle and offers two exploration modes: bird-flight view and first-person view, providing an engaging experience for users interested in 3D graphics and game development.
+    `,
     props: {
       url: 'https://sanyabeast.github.io/brickscape/dist/index.html'
     }
@@ -102,6 +105,9 @@ export const applets: IAppletMetadata[] = [
     tags: ['game', 'old'],
     title: 'Match3',
     preview: 'assets/preview/match3_a1.png',
+    summary: `
+    Around a decade ago, I embarked on a JavaScript experiment - the "Match-3 Game" project. This early project, though admittedly with messy code, holds immense value in my journey. It was my first step into the world of game development, faithfully recreating the classic match-3 puzzle genre. It symbolizes my initial skills and passion, laying the foundation for my future projects and growth.
+    `,
     props: {
       url: 'https://sanyabeast.github.io/match3/'
     }
@@ -121,6 +127,9 @@ export const applets: IAppletMetadata[] = [
     // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Telechart',
+    summary: `
+    The project developed for the "Telegram Charts JavaScript Contest" is a noteworthy technical effort. It introduces a custom rendering engine with abstractions similar to Three.js, including Node, Mesh, Geometry, and Material (ShaderMaterial). The project also integrates rendering loops and the manipulation of DOM objects. Additionally, it includes a developer launcher for creating multiple charts, each with predefined datasets. This project demonstrates advanced technical capabilities in the field of web-based charting and visualization.
+    `,
     preview: 'assets/preview/telechart_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/telechart/'
@@ -131,6 +140,9 @@ export const applets: IAppletMetadata[] = [
     // document: 'assets/md/showdown.md',
     tags: ['game', 'old'],
     title: 'Hill Rider [Demo]',
+    summary: `
+    This project seamlessly combines Three.js for rendering and Matter.js for 2D physics to create a side-view driving experience. It features an infinite, procedurally generated road and allows users to navigate a basic vehicle along this path. This technical achievement showcases the integration of graphics and physics for an engaging, interactive, and dynamic experience.
+    `,
     preview: 'assets/preview/coderider_a1.png',
     props: {
       url: 'https://sanyabeast.github.io/coderider/dist/index.html'
@@ -171,6 +183,9 @@ export const applets: IAppletMetadata[] = [
     // document: 'assets/md/showdown.md',
     tags: ['extras', 'retro', 'unity', 'game'],
     title: 'Middlenight [Demo]',
+    summary: `
+    The Unity project is a retro-style top-down game that combines classic gameplay elements with modern features. Players can move, shoot, and collect perks and loot in an immersive environment. The game employs enemy AI with visibility checks and pathfinding using the A-star algorithm, adding depth to the gameplay. The project also showcases advanced GUI development with complex nested mechanisms for an engaging and user-friendly experience.
+    `,
     preview: 'assets/preview/middlenight_a1.png',
     props: {
       url: 'projects/middlenight/index.html'
@@ -184,6 +199,9 @@ export const applets: IAppletMetadata[] = [
       props: true
     },
     document: 'assets/md/showdown.md',
+    summary: `
+    This applet enables users to apply polar-to-cartesian coordinate transformations to images and vice-versa, with options for downloading the results. 
+    `,
     tags: ['experiment', 'tool', 'image', 'polar', 'math', 'three', 'gl'],
     title: 'Polar Picture Tool',
     preview: 'assets/preview/polar_image_a1.png',
@@ -206,10 +224,11 @@ export const applets: IAppletMetadata[] = [
   // }
   {
     route: applet_launcher_route,
-    
+
     tags: ['service'],
     title: 'Applet Launcher',
     preview: 'assets/preview/applet_launcher_a1.png',
+
     props: {
 
     },
