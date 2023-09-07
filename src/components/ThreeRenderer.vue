@@ -1,16 +1,19 @@
 <template>
     <div class="renderer_container" ref="renderer_container">
         <div class="controls" v-if="show_controls">
-            <p class="button" @click="saveAsImage">download as image</p>
+            <p class="button" @click="save_as_image">download as image</p>
             <slot></slot>
         </div>
     </div>
 </template>
   
-<script>
+<script lang="ts">
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MapControls } from 'three/examples/jsm/controls/MapControls.js'
+import BaseComponent from './BaseComponent.vue';
+import { Component } from 'vue';
 
 let renderer0 = new THREE.WebGLRenderer({
     antialias: true,
@@ -22,16 +25,38 @@ let renderer1 = new THREE.WebGLRenderer({
     preserveDrawingBuffer: false,
 });
 
+export interface IThreeRendererProps {
+    helpers?: boolean;
+    orbit_controls?: boolean;
+    map_controls?: boolean;
+    show_controls?: boolean;
+    download_image_name?: string;
+}
+
+export interface IThreeRendererData {
+    width?: number;
+    height?: number;
+    raf_id?: number | null;
+    scene?: THREE.Scene;
+    camera?: THREE.PerspectiveCamera;
+    renderer?: THREE.WebGLRenderer;
+    controls?: OrbitControls | MapControls | null;
+}
+
+export interface IThreeRendererMethods {
+    init_three(): void;
+    animate(): void;
+    save_as_image(): void;
+}
+
 export default {
     name: 'ThreeRenderer',
-    data() {
+    mixins: [BaseComponent],
+    data(): IThreeRendererData {
         return {
             width: 100,
             height: 100,
             raf_id: null
-            // scene: new THREE.Scene(),
-            // camera: new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000),
-            // renderer: new THREE.WebGLRenderer(),
         };
     },
     props: {
@@ -66,7 +91,7 @@ export default {
         if (this.controls) {
             this.controls.dispose()
         }
-        this.$refs.renderer_container.removeChild(this.renderer.domElement);
+        this.$refs.renderer_container!.removeChild(this.renderer.domElement);
     },
     methods: {
         init_three() {
@@ -141,7 +166,7 @@ export default {
 
             animate();
         },
-        saveAsImage() {
+        save_as_image() {
             // Create a data URL representing the rendered frame
             const dataURL = this.renderer.domElement.toDataURL('image/png');
 
