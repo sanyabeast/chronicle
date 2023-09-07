@@ -6,14 +6,16 @@
   
 <script lang="ts">
 import Vue from 'vue';
+import mixins from 'vue-typed-mixins'
+
 import BaseComponent from './BaseComponent.vue';
 import showdown from 'showdown'
 
+
 const converter = new showdown.Converter()
 
-export default Vue.extend({
+export default mixins(BaseComponent).extend({
     name: 'Showdown',
-    mixins: [BaseComponent],
     data() {
         return {
             markdown_text: '',
@@ -50,13 +52,12 @@ export default Vue.extend({
             this.markdown_text = markdown;
             (this.$refs.content as HTMLElement).innerHTML = dom;
         },
-        load() {
-            if (this.src) {
-                fetch(this.src).then((res) => {
-                    return res.text();
-                }).then((text) => {
-                    this.set_markdown(text);
-                });
+        async load() {
+            try {
+                let text = await this.load_text(this.src)
+                this.set_markdown(text);
+            } catch (err) {
+                console.error(err)
             }
         }
     },
@@ -110,6 +111,7 @@ export default Vue.extend({
         border: 1px dotted #fff;
         margin-bottom: 16px;
         padding: 16px;
+        font-family: 'Ubuntu Mono', monospace;
     }
 }
 </style>

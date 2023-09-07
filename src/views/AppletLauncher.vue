@@ -2,9 +2,9 @@
     <div class="view applet-launcher" ref="root" @scroll="handle_scroll">
         <div class="launcher" v-if="applet_data !== undefined">
             <div class="brief">
-                <p v-html="applet_data.title"></p>
+                <p v-html="applet_data.title.toUpperCase()"></p>
                 <div class="brief-info">
-                    <p v-if="applet_data.summary" v-html="applet_data.summary"></p>
+                    <p v-if="applet_data.summary" v-html="summary"></p>
                     <div class="placeholder" v-if="!applet_data.summary">
                         <i></i>
                         <i></i>
@@ -14,7 +14,8 @@
                 </div>
                 <div class="avatar">
                     <img :src="applet_data.preview" />
-                    <div class="button launch" :class="{ sticky: scroll_top > 200 }" :style="{ top: `${scroll_top}px`, backgroundColor: `${get_random_web_color(applet_data.title)}` }"
+                    <div class="button launch" :class="{ sticky: scroll_top > 200 }"
+                        :style="{ top: `${scroll_top}px` }"
                         @click="launch">
                         <p>Launch</p>
                     </div>
@@ -40,6 +41,7 @@
   
 <script lang="ts">
 import Vue from 'vue';
+import mixins from 'vue-typed-mixins'
 import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
@@ -50,10 +52,11 @@ import { get_random_web_color, get_bright_web_color } from '@/tools';
 interface IAppletLauncherData {
     applet_data?: IAppletMetadata,
     scroll_height: 0,
-    scroll_top: 0
+    scroll_top: 0,
+    summary: string
 }
 
-export default Vue.extend({
+export default mixins(BaseComponent).extend({
     name: "AppletLauncher",
     components: { Showdown },
     mixins: [BaseComponent],
@@ -61,18 +64,26 @@ export default Vue.extend({
         return {
             applet_data: undefined,
             scroll_height: 0,
-            scroll_top: 0
+            scroll_top: 0,
+            summary: ''
         };
     },
     mounted() {
         let index = parseInt(this.applet);
         this.applet_data = applets[index];
+
+        if (this.applet_data && this.applet_data.summary) {
+            this.update_summary()
+        }
     },
     beforeMount() {
     },
     methods: {
         get_random_web_color: get_random_web_color,
         get_bright_web_color: get_bright_web_color,
+        async update_summary() {
+            this.summary = await this.load_text(this.applet_data!.summary!)
+        },
         handle_scroll(event) {
             this.scroll_height = (this.$refs.root as any)!.scrollHeight;
             this.scroll_top = (this.$refs.root as any)!.scrollTop;
@@ -226,7 +237,7 @@ export default Vue.extend({
                         }
 
                         &:hover {
-                            background-color: #000!important;
+                            background-color: #000 !important;
                         }
 
                         &.sticky {
@@ -241,7 +252,7 @@ export default Vue.extend({
                             z-index: 999;
                         }
                     }
-                    
+
                 }
 
                 img {
@@ -286,6 +297,7 @@ export default Vue.extend({
                     color: #ddd;
                     font-weight: 800;
                     margin: 0;
+                    font-family: 'Ubuntu Mono', monospace;
                 }
             }
         }

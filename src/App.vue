@@ -58,7 +58,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    
+
   },
   methods: {
     getCurrentYear() {
@@ -129,14 +129,15 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
-  font-family: monospace;
+  ;
 }
 
 
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: monospace;
+  font-family: 'Ubuntu', sans-serif;
+  ;
   font-size: 14px;
   font-weight: 100;
   /* Console-like font */
@@ -150,7 +151,8 @@ body {
 }
 
 .monospace {
-  font-family: monospace;
+  font-family: 'Ubuntu Mono', monospace;
+  ;
 }
 
 * {
@@ -182,7 +184,8 @@ input[type="search"] {
   color: #fff;
   max-width: 100%;
   text-align: center;
-  font-family: monospace;
+  font-family: 'Ubuntu', sans-serif;
+  ;
   font-size: 24px;
   font-style: italic;
   align-self: flex-end;

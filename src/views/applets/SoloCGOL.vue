@@ -170,7 +170,7 @@ export default Vue.extend({
     h3,
     h4 {
         color: white;
-        font-family: monospace;
+        font-family: 'Ubuntu Mono', monospace;;
         text-align: center;
     }
 
@@ -206,7 +206,7 @@ export default Vue.extend({
 
     #menu-trigger {
         color: white;
-        font-family: monospace;
+        font-family: 'Ubuntu Mono', monospace;;
         /* font-weight: bold; */
         font-size: 16px;
         position: absolute;

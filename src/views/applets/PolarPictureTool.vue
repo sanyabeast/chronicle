@@ -55,10 +55,12 @@
     <!-- Other components and UI elements -->
 </div></template>
   
-<script>
+<script lang="ts" >
 
 import * as THREE from 'three';
+import mixins from 'vue-typed-mixins'
 import ThreeRenderer from '../../components/ThreeRenderer.vue';
+import BaseComponent from '@/components/BaseComponent.vue';
 
 const samples = [
     'assets/image/planet.png',
@@ -67,12 +69,25 @@ const samples = [
     'assets/image/pattern.png',
 ]
 
-export default {
+export interface IPolarPictureToolData {
+    dragging: boolean;
+    download_image_name: string;
+    mouse_mode: number;
+    prev_pointer_position: { x: number, y: number };
+    mode: number;
+    grid: boolean;
+    texture_offset: THREE.Vector2;
+    texture_scale: THREE.Vector2;
+    tiling: number;
+
+}
+
+export default mixins(BaseComponent).extend({
     name: 'PolarPictureTool',
     components: {
         ThreeRenderer,
     },
-    data() {
+    data(): IPolarPictureToolData {
         return {
             dragging: false,
             download_image_name: 'rendered_frame',
@@ -110,113 +125,45 @@ export default {
         },
     },
     mounted() {
-        let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-        let plane_material = new THREE.ShaderMaterial({
-            uniforms: {
-                u_time: { value: 0.0 },
-                u_mouse: { value: new THREE.Vector2() },
-                u_map: { value: null },
-                u_mode: { value: this.mode },
-                u_offset: { value: this.texture_offset },
-                u_scale: { value: this.texture_scale },
-            },
-            vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = vec4(position * 2., 1.0 );
-                }
-            `,
-            fragmentShader: `
-                uniform vec2 u_resolution;
-                uniform vec2 u_mouse;
-                uniform float u_time;
-                uniform sampler2D u_map;
-                uniform int u_mode;
-                uniform vec2 u_offset;
-                uniform vec2 u_scale;
-
-                varying vec2 vUv;
-
-                vec2 square_to_polar(vec2 coords){
-                    vec2 center = vec2(0.5);
-                    vec2 delta = coords - center;
-                    float radius = length(delta);
-                    float angle = atan(delta.y, delta.x);
-                    // Convert the angle to a normalized value between 0 and 1
-                    angle = (angle + 3.14159265359) / (2.0 * 3.14159265359);
-
-                    return (vec2(angle, radius * 2.)  + u_offset) * u_scale;
-                }
-
-                vec2 square_to_polar_b(vec2 coords){
-                    
-                    vec2 center = vec2(0.5);
-                    vec2 delta = coords - center;
-                    float radius = length(delta);
-                    float angle = atan(delta.y, delta.x);
-                    // Convert the angle to a normalized value between 0 and 1
-                    angle = (angle + 3.14159265359) / (2.0 * 3.14159265359);
-
-                    return (vec2(angle, 1.-(radius * 2.))  + u_offset) * u_scale;
-                }
-
-                vec2 polar_to_square(vec2 coords) {
-                    float angle = coords.x * (2.0 * 3.14159265359) - 3.14159265359;
-                    float radius = coords.y;
-                    
-                    // Calculate the corresponding Cartesian coordinates
-                    float x = radius * cos(angle);
-                    float y = radius * sin(angle);
-
-                    // Offset the coordinates by the center
-                    vec2 center = vec2(0.5, 0.5) + u_offset;
-                    return (center + vec2(x, y)) * u_scale;
-                }
-
-                vec2 polar_flip(vec2 coords) {
-                    vec2 center = vec2(0.5);
-                    vec2 polarCoords = square_to_polar(coords);
-                    polarCoords.x = 1.0 - polarCoords.x;  // Flip the angle
-                    polarCoords.y = 1.0 - polarCoords.y;  // Flip the radius
-                    return polar_to_square(polarCoords);
-                }
-                
-                void main() {
-                    vec4 map = vec4(0.0);
-
-                    if (u_mode == 0) {
-                        map = texture2D(u_map, (vUv + u_offset) * u_scale);
-                    }  else if (u_mode == 1) {
-                        map = texture2D(u_map, polar_to_square(vUv));
-                    }  else if (u_mode == 2) {
-                        map = texture2D(u_map, polar_flip(vUv));
-                    }   else if (u_mode == 3) {
-                        map = texture2D(u_map, square_to_polar(vUv));
-                    } else if (u_mode == 4) {
-                        map = texture2D(u_map, square_to_polar_b(vUv));
-                    }
-                    gl_FragColor = vec4(map);
-                }
-            `,
-        });
-
-        let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
-        this.$refs.three_renderer.scene.add(plane);
-
-        let image = this.image
-
-        if (image === 'random') {
-            image = samples[Math.floor(Math.random() * samples.length)]
-        }
-
-        this.load_texture(image)
+        this.init()
         document.addEventListener('keydown', this.handle_keydown);
     },
     beforeDestroy() {
         document.removeEventListener('keydown', this.handle_keydown);
     },
     methods: {
+        async init() {
+            let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+            let plane_material = new THREE.ShaderMaterial({
+                uniforms: {
+                    u_time: { value: 0.0 },
+                    u_mouse: { value: new THREE.Vector2() },
+                    u_map: { value: null },
+                    u_mode: { value: this.mode },
+                    u_offset: { value: this.texture_offset },
+                    u_scale: { value: this.texture_scale },
+                },
+                vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position * 2., 1.0 );
+                }
+            `,
+                fragmentShader: await this.load_text('assets/shader/polar_picture_tool.frag'),
+            });
+
+            let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
+            this.$refs.three_renderer!.scene.add(plane);
+
+            let image = this.image
+
+            if (image === 'random') {
+                image = samples[Math.floor(Math.random() * samples.length)]
+            }
+
+            this.load_texture(image)
+        },
         set_mode(mode) {
             this.mode = mode;
             this.$refs.three_renderer.scene.children.forEach((child) => {
@@ -394,7 +341,7 @@ export default {
             return file_name.slice(0, last_dot_index);
         }
     },
-};
+});
 </script>
 <style lang="less">
 .view.polar-picture-tool {

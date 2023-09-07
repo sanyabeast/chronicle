@@ -1,5 +1,6 @@
 
 <script lang="ts">
+import { load_text_file } from '@/tools';
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -13,7 +14,10 @@ export default Vue.extend({
         },
         route_back() {
             this.$router.back()
-        }
+        },
+        async load_text(src: string): Promise<string> {
+            return await load_text_file(src);
+        },
     }
 })
 </script>

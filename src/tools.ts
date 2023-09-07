@@ -73,3 +73,15 @@ export function get_dark_web_color(seed) {
 
     return color;
 }
+
+export function load_text_file(file_path: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        fetch(file_path).then((res) => {
+            return res.text();
+        }).then((text) => {
+            resolve(text);
+        }).catch((err) => {
+            reject(err);
+        })
+    })
+}

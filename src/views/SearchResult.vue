@@ -154,6 +154,7 @@ export default Vue.extend({
                 z-index: 2;
                 background: #000;
                 text-transform: capitalize;
+                font-family: 'Ubuntu Condensed', sans-serif;
             }
         }
 
