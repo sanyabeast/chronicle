@@ -1,1 +1,1 @@
-launch [Chronicle](https://sanyabeast.github.io/chronicle/dist/index.html).
+[run](https://sanyabeast.github.io/chronicle/dist/index.html).
