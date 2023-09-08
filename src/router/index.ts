@@ -33,7 +33,7 @@ let applet_launcher_route = {
 
 
 let model_viewer_route = {
-  path: '/applet/model_viewer/:src',
+  path: '/applet/model_viewer/:model_src?/:hdr_src?',
   name: 'applet/model_viewer',
   component: ModelViewer,
   props: true
@@ -193,7 +193,9 @@ export const applets: IAppletMetadata[] = [
     tags: ['service'],
     title: 'Model Viewer',
     preview: 'assets/preview/applet_launcher_a1.png',
-    props: {},
+    props: {
+      hdri_src: 'assets/hdri/studio.hdr'
+    },
     hidden: true
   }
 ]

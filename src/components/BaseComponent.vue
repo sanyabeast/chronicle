@@ -12,13 +12,26 @@ export default Vue.extend({
     },
     methods: {
         route_push(name: string, params: {}) {
+            console.log("route_push", name, params);
             this.$router.push({
                 name,
                 params
             })
         },
+        route_replace(name: string, params: {}) {
+            console.log("route_replace", name, params);
+            this.$router.replace({
+                name,
+                params
+            })
+        },
         route_back() {
+            console.log("route_back");
             this.$router.back()
+        },
+        update_route(params) {
+            // override this method to update the route
+            throw new Error("update_route not implemented");
         },
         async load_text(src: string): Promise<string> {
             return await load_text_file(src);

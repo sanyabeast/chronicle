@@ -5,7 +5,8 @@
         <h1>home</h1>
       </div>
       <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
-        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur" :value="$store.state.search_query">
+        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur"
+        :value="$store.state.search_query">
       <div id="wtf" @click="goto_home()" title="homepage">
         <h1 @click="exit_app">quit</h1>
       </div>
@@ -39,8 +40,10 @@
 import Vue from 'vue';
 import ImageLink from './components/ImageLink.vue'
 import Cookies from './components/Cookies.vue';
+import mixins from 'vue-typed-mixins';
+import BaseComponent from './components/BaseComponent.vue';
 
-export default Vue.extend({
+export default mixins(BaseComponent).extend({
   name: 'App',
   data() {
     return {

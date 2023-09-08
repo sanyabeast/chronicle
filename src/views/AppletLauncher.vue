@@ -89,10 +89,7 @@ export default mixins(BaseComponent).extend({
             this.scroll_top = (this.$refs.root as any)!.scrollTop;
         },
         launch() {
-            this.$store.commit('route_replace', {
-                name: this.applet_data!.route.name,
-                props: this.applet_data!.props
-            });
+            this.route_replace(this.applet_data!.route.name, this.applet_data!.props)
         },
     },
     computed: {},

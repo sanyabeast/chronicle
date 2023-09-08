@@ -9,6 +9,11 @@ declare module '*.png' {
   export default content
 }
 
+declare module '*.yaml' {
+  const data: any
+  export default data
+}
+
 declare global {
   namespace JSX {
     interface Element extends VNode { }

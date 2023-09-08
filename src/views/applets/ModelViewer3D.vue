@@ -31,6 +31,7 @@ import ThreeRenderer, { EThreeSceneRenderinMode } from '../../components/ThreeRe
 import Preloader from '../../components/Preloader.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import { debounce, isArray } from 'lodash';
+import { get_file_extension } from '@/tools';
 
 const samples = [
     'assets/image/planet.png',
@@ -81,7 +82,7 @@ export default mixins(BaseComponent).extend({
     props: {
         hdri_src: {
             type: String,
-            default: () => 'assets/hdri/studio.hdr'
+            default: null
         },
         model_src: {
             type: String,
@@ -136,7 +137,6 @@ export default mixins(BaseComponent).extend({
                 center.z + max_dim
             )
             this.$refs.three_renderer.camera.lookAt(center);
-
         },
         // New method to handle dragenter event
         handle_dragenter(event) {
@@ -156,7 +156,7 @@ export default mixins(BaseComponent).extend({
             this.load_file(file)
         },
         async load_file(file): Promise<any> {
-            let extension = this.get_file_extension(file.name);
+            let extension = get_file_extension(file.name);
             console.log(`File extension: ${extension}`)
             switch (extension) {
                 case 'hdr':
@@ -257,16 +257,13 @@ export default mixins(BaseComponent).extend({
                 );
             })
         },
-        get_file_extension(filename) {
-            return filename.split('.').pop();
-        },
         clear_scene() {
             this.dispose_model(this.model)
             this.model = null
             this.$refs.three_renderer.scene.environment = null;
             this.$refs.three_renderer.scene.background = null;
-        },
-    },
+        }
+    }
 });
 </script>
 <style lang="less">

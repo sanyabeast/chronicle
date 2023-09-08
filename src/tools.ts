@@ -85,3 +85,7 @@ export function load_text_file(file_path: string): Promise<string> {
         })
     })
 }
+
+export function get_file_extension(filename) {
+    return filename.split('.').pop();
+}
