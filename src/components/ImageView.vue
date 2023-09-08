@@ -1,16 +1,14 @@
 <template>
     <div class="image-view">
         <img :class="{ loading: is_loading, fit_width: image_aspect_ratio < 1 }" :src="src" @load="handle_image_load" />
-        <div class="loader-container" v-if="is_loading">
-            <Preloader />
-        </div>
+        <Preloader v-if="is_loading" full fill :loader_type="loader_type" />
     </div>
 </template>
   
 <script lang="ts">
 import Vue from 'vue';
 import mixins from 'vue-typed-mixins';
-import Preloader from './Preloader.vue';
+import Preloader, { ELoaderType } from './Preloader.vue';
 import BaseComponent from './BaseComponent.vue';
 import { debounce } from 'lodash';
 
@@ -30,6 +28,10 @@ export default mixins(BaseComponent).extend({
         src: {
             type: String,
             required: true
+        },
+        loader_type: {
+            type: String,
+            default: ELoaderType.DefaultInner
         }
     },
     mounted() {

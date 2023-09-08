@@ -26,7 +26,6 @@ declare global {
   interface IAppletMetadata {
     route: RouteConfig,
     tags: string[]
-    hidden?: boolean,
     title: string,
     preview?: string
     props?: {}
@@ -34,5 +33,7 @@ declare global {
     document?: string
     summary?: string
     show_in_search?: boolean
+    service?: boolean
+    is_extra?: boolean
   }
 }

@@ -1,16 +1,36 @@
 <template>
-    <div class="view search-result">
-        <h2 v-if="!($store.state.search_query.length > 0 && items_found > 0)" v-html="search_results_message"></h2>
+    <div class="search-result">
+        <h2 v-html="search_results_message"></h2>
         <div class="results-list">
-            <div v-if="!item.hidden || $store.state.search_query.length > 0" class="result-preview"
-                v-for="(item, index) in filtered_routes" :key="index" :style="{
-                    backgroundColor: get_random_web_color(item.title)
-                }" @click="handle_result_item_click(item)">
+            <div v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0" class="result-preview"
+                v-for="(item, index) in filtered_routes" :key="index" @click="handle_result_item_click(item)">
                 <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
                 <ImageView v-if="item.preview != undefined" :src="item.preview" />
-                <div class="fader" :style="{
-                    backgroundColor: get_random_web_color(item.title)
-                }"></div>
+                <div class="fader"></div>
+                <h3 v-html="get_item_title(item)"></h3>
+            </div>
+            <h2 v-if="show_all_applets">all applets</h2>
+            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in all_applets" :key="`all_${index}`"
+                @click="handle_result_item_click(item)">
+                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <div class="fader"></div>
+                <h3 v-html="get_item_title(item)"></h3>
+            </div>
+            <h2 v-if="show_all_applets">extra applets</h2>
+            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in extra_applets"
+                :key="`extra_${index}`" @click="handle_result_item_click(item)">
+                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <div class="fader"></div>
+                <h3 v-html="get_item_title(item)"></h3>
+            </div>
+            <h2 v-if="show_all_applets">service applets</h2>
+            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in service_applets"
+                :key="`service_${index}`" @click="handle_result_item_click(item)">
+                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </div>
         </div>
@@ -25,6 +45,7 @@ import { get_random_web_color } from "@/tools"
 import ImageView from '@/components/ImageView.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
+import { filter } from 'lodash';
 
 let searcher: FuzzySearch<IAppletMetadata>;
 
@@ -40,7 +61,7 @@ export default mixins(BaseComponent).extend({
             caseSensitive: false,
         }) : searcher;
     },
-    beforeDestroy(){
+    beforeDestroy() {
         this.$store.state.search_query = "";
     },
     mounted() {
@@ -55,6 +76,9 @@ export default mixins(BaseComponent).extend({
         }
     },
     computed: {
+        applets() {
+            return applets;
+        },
         search_query() {
             return this.$store.state.search_query;
         },
@@ -69,12 +93,34 @@ export default mixins(BaseComponent).extend({
                 return applets;
             }
         },
+        all_applets() {
+            return filter(applets, (item: IAppletMetadata) => {
+                return !item.service && !item.is_extra;
+            });
+        },
+        service_applets() {
+            return filter(applets, (item: IAppletMetadata) => {
+                return item.service;
+            });
+        },
+        extra_applets() {
+            return filter(applets, (item: IAppletMetadata) => {
+                return item.is_extra;
+            });
+        },
+        show_all_applets() {
+            return this.$store.state.search_query.length > 0;
+        },
         search_results_message() {
             if (this.$store.state.search_query.length == 0) {
-                return "C'mon, type something and let's find what you're looking for!";
-            }
-            else {
-                return "Aw, no matches found :( But hey, don't give up!";
+                return "c'mon, type something and let's find what you're looking for!";
+            } else {
+                if (this.$store.state.search_query.length > 0 && this.items_found > 0) {
+                    return `found ${this.items_found} ${this.items_found > 1 ? 'matches' : 'match'} for "${this.$store.state.search_query}"`;
+                } else {
+                    return "aw, no matches found :( But hey, don't give up!";
+                }
+
             }
         }
     },
@@ -132,7 +178,7 @@ export default mixins(BaseComponent).extend({
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            cursor: cell;
             position: relative;
             justify-self: center;
             align-self: center;
@@ -157,6 +203,7 @@ export default mixins(BaseComponent).extend({
                 width: 100%;
                 height: 100%;
                 opacity: 0;
+                background-color: red;
             }
 
             h3 {
@@ -165,6 +212,13 @@ export default mixins(BaseComponent).extend({
                 text-transform: capitalize;
                 font-family: 'Ubuntu Condensed', sans-serif;
             }
+        }
+
+        >h2 {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 32px;
+            text-align: left;
         }
 
         .result-preview:nth-child(2n) {

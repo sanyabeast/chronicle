@@ -1,5 +1,5 @@
 <template>
-  <div class="view home">
+  <div class="home">
     <div class="content">
       <img src="assets/foamy.png" class="avatar float-left" @click="toggleAvatar" />
       <img src="assets/sanya.png" class="avatar float-left" @click="toggleAvatar" />

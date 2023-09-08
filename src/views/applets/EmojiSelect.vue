@@ -1,5 +1,5 @@
 <template>
-    <div class="view emoji-select">
+    <div class="emoji-select">
         <div class="emoji-list">
             <i v-if="category == undefined || category.length == 0 || category == item.category"
                 v-for="(item, index) in emoji_data" :key="index" v-html="item.emoji"></i>
@@ -34,7 +34,7 @@ export default Vue.extend({
 })
 </script>
 <style lang="less">
-.view.emoji-select {
+.emoji-select {
     color: red;
 }
 </style>

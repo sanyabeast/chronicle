@@ -1,5 +1,5 @@
 <template>
-    <div class="view applet-launcher" ref="root" @scroll="handle_scroll">
+    <div class="applet-launcher" ref="root" @scroll="handle_scroll">
         <div class="launcher" v-if="applet_data !== undefined">
             <div class="brief">
                 <p v-html="applet_data.title.toUpperCase()"></p>
@@ -105,8 +105,7 @@ export default mixins(BaseComponent).extend({
 })
 </script>
 <style lang="less">
-.view.applet-launcher {
-    padding: 0;
+.applet-launcher {
     overflow: hidden;
     position: relative;
     overflow-x: hidden;

@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ mobile: is_mobile }" class="view polar-picture-tool" @mousemove="handle_mousemove"
+    <div :class="{ mobile: is_mobile }" class="polar-picture-tool" @mousemove="handle_mousemove"
         @mousedown="handle_mousedown" @mouseup="handle_mouseup" @contextmenu.prevent=""
         @dragenter.prevent="handle_dragenter" @dragover.prevent="handle_dragover" @drop.prevent="handle_drop">
         <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name" :show_controls="!dragging">

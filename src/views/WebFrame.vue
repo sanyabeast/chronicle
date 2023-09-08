@@ -1,15 +1,13 @@
 <template>
-    <div class="view web-frame">
+    <div class="web-frame">
         <iframe v-if="url != undefined" :src="url" @load="handle_iframe_loaded" />
-        <div class="loader-container" v-if="!iframe_loaded">
-            <Preloader />
-        </div>
+        <Preloader v-if="!iframe_loaded" full fill :loader_type="loader_type" />
     </div>
 </template>
   
 <script lang="ts">
 import Vue from 'vue';
-import Preloader from '@/components/Preloader.vue';
+import Preloader, { ELoaderType } from '@/components/Preloader.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
 
@@ -38,7 +36,8 @@ export default mixins(BaseComponent).extend({
     data() {
         return {
             iframe_loaded: false,
-            loading_word_chars: "loading...".split("")
+            loading_word_chars: "loading...".split(""),
+            loader_type: ELoaderType.Alternate01
         }
     }
 })
