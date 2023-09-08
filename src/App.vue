@@ -5,14 +5,14 @@
         <h1>home</h1>
       </div>
       <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
-        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur">
+        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur" :value="$store.state.search_query">
       <div id="wtf" @click="goto_home()" title="homepage">
         <h1 @click="exit_app">quit</h1>
       </div>
     </header>
     <div class="header-imposter"></div>
     <main>
-      <router-view />
+      <router-view class="view" />
       <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
@@ -82,6 +82,8 @@ export default Vue.extend({
       this.$store.commit('search_query', search_input.value)
     },
     goto_home() {
+
+      this.$store.state.search_query = "";
       this.$store.commit('route_replace', {
         name: 'home'
       })

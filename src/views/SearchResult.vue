@@ -2,10 +2,12 @@
     <div class="view search-result">
         <h2 v-if="!($store.state.search_query.length > 0 && items_found > 0)" v-html="search_results_message"></h2>
         <div class="results-list">
-            <div v-if="!item.noindex" class="result-preview" v-for="(item, index) in filtered_routes" :key="index" :style="{
-                backgroundColor: get_random_web_color(item.title)
-            }" @click="handle_result_item_click(item)">
-                <img v-if="item.preview != undefined" :src="item.preview" />
+            <div v-if="!item.hidden || $store.state.search_query.length > 0" class="result-preview"
+                v-for="(item, index) in filtered_routes" :key="index" :style="{
+                    backgroundColor: get_random_web_color(item.title)
+                }" @click="handle_result_item_click(item)">
+                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+                <ImageView v-if="item.preview != undefined" :src="item.preview" />
                 <div class="fader" :style="{
                     backgroundColor: get_random_web_color(item.title)
                 }"></div>
@@ -15,30 +17,36 @@
     </div>
 </template>
 <script lang="ts">
+
 import Vue from 'vue';
 import { applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
 import { get_random_web_color } from "@/tools"
+import ImageView from '@/components/ImageView.vue';
+import BaseComponent from '@/components/BaseComponent.vue';
+import mixins from 'vue-typed-mixins';
 
 let searcher: FuzzySearch<IAppletMetadata>;
 
-export default Vue.extend({
+export default mixins(BaseComponent).extend({
     name: "SearchResults",
     data() {
         return {
             items_found: 0
-        }
+        };
     },
     beforeMount() {
         searcher = searcher == null ? new FuzzySearch(applets, ['router.name', 'title', 'tags'], {
             caseSensitive: false,
         }) : searcher;
     },
+    beforeDestroy(){
+        this.$store.state.search_query = "";
+    },
     mounted() {
         if (this.$refs.search_input) {
-            (this.$refs.search_input as HTMLInputElement).value = ""
+            (this.$refs.search_input as HTMLInputElement).value = "";
         }
-
     },
     props: {
         skip_launcher: {
@@ -48,24 +56,25 @@ export default Vue.extend({
     },
     computed: {
         search_query() {
-            return this.$store.state.search_query
+            return this.$store.state.search_query;
         },
         filtered_routes() {
             if (this.$store.state.search_query.length > 0) {
                 const result = searcher.search(this.$store.state.search_query);
-                this.items_found = result.length
+                this.items_found = result.length;
                 return result;
-            } else {
-                this.items_found = applets.length
-                return applets
             }
-
+            else {
+                this.items_found = applets.length;
+                return applets;
+            }
         },
         search_results_message() {
             if (this.$store.state.search_query.length == 0) {
-                return "C'mon, type something and let's find what you're looking for!"
-            } else {
-                return "Aw, no matches found :( But hey, don't give up!"
+                return "C'mon, type something and let's find what you're looking for!";
+            }
+            else {
+                return "Aw, no matches found :( But hey, don't give up!";
             }
         }
     },
@@ -74,7 +83,8 @@ export default Vue.extend({
         get_item_title(item: IAppletMetadata) {
             if (item.title.length > 0) {
                 return item.title;
-            } else {
+            }
+            else {
                 return item.route.name;
             }
         },
@@ -85,21 +95,20 @@ export default Vue.extend({
                     props: {
                         applet: item.index!.toString()
                     }
-                })
-            } else {
+                });
+            }
+            else {
                 this.$store.commit('route_replace', {
                     name: item.route.name,
                     props: item.props
                 });
             }
-
-
         },
         get_preview(uri: string) {
-            return require(uri)
+            return require(uri);
         },
-
-    }
+    },
+    components: { ImageView }
 })
 </script>
 <style lang="less">
@@ -128,12 +137,12 @@ export default Vue.extend({
             justify-self: center;
             align-self: center;
 
-            img {
+            .image-view {
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 width: 100%;
-                height: auto;
+                height: 100%;
                 z-index: 0;
                 transform-origin: center center;
                 transform: translate(-50%, -50%) scale(1.5);
@@ -159,7 +168,7 @@ export default Vue.extend({
         }
 
         .result-preview:nth-child(2n) {
-            img {
+            .image-view {
                 transform: translate(-50%, -50%) scale(1.5);
             }
         }

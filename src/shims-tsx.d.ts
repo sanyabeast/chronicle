@@ -21,12 +21,13 @@ declare global {
   interface IAppletMetadata {
     route: RouteConfig,
     tags: string[]
-    noindex?: boolean,
+    hidden?: boolean,
     title: string,
     preview?: string
     props?: {}
     index?: number
     document?: string
     summary?: string
+    show_in_search?: boolean
   }
 }

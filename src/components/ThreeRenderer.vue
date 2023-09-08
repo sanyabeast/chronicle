@@ -10,20 +10,12 @@
 <script lang="ts">
 
 import * as THREE from 'three';
+import mixins from 'vue-typed-mixins';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MapControls } from 'three/examples/jsm/controls/MapControls.js'
 import BaseComponent from './BaseComponent.vue';
 import { Component } from 'vue';
 
-let renderer0 = new THREE.WebGLRenderer({
-    antialias: true,
-    preserveDrawingBuffer: true,
-});
-
-let renderer1 = new THREE.WebGLRenderer({
-    antialias: false,
-    preserveDrawingBuffer: false,
-});
 
 export interface IThreeRendererProps {
     helpers?: boolean;
@@ -49,7 +41,21 @@ export interface IThreeRendererMethods {
     save_as_image(): void;
 }
 
-export default {
+export enum EThreeSceneRenderinMode {
+    None,
+    Basic,
+    Normal,
+    Wireframe,
+}
+
+const scene_rendering_mode_materials = {
+    [EThreeSceneRenderinMode.None]: null,
+    [EThreeSceneRenderinMode.Basic]: new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false }),
+    [EThreeSceneRenderinMode.Normal]: new THREE.MeshNormalMaterial({ wireframe: false }),
+    [EThreeSceneRenderinMode.Wireframe]: new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
+}
+
+export default mixins(BaseComponent).extend({
     name: 'ThreeRenderer',
     mixins: [BaseComponent],
     data(): IThreeRendererData {
@@ -80,12 +86,33 @@ export default {
             type: String,
             default: 'rendered_frame',
         },
+        rendering_mode: {
+            type: Number,
+            default: EThreeSceneRenderinMode.None,
+        },
+        preserve_drawing_buffer: {
+            type: Boolean,
+            default: true,
+        },
+        logarithmic_depth_buffer: {
+            type: Boolean,
+            default: false,
+        },
     },
     mounted() {
         this.init_three();
         this.animate();
     },
+    watch: {
+        rendering_mode: {
+            handler: function (val: EThreeSceneRenderinMode) {
+                this.set_rendering_mode(val)
+            },
+            immediate: true
+        }
+    },
     beforeDestroy() {
+        this.renderer.dispose();
         cancelAnimationFrame(this.raf_id);
         // Unmount the renderer when the component is destroyed
         if (this.controls) {
@@ -94,10 +121,23 @@ export default {
         this.$refs.renderer_container!.removeChild(this.renderer.domElement);
     },
     methods: {
+        set_rendering_mode(mode: EThreeSceneRenderinMode) {
+            this.set_scene_material_override(scene_rendering_mode_materials[mode])
+        },
+        set_scene_material_override(material: THREE.Material) {
+            console.log(material)
+            if (this.$refs.three_renderer) {
+                this.$refs.three_renderer.scene.overrideMaterial = material;
+            }
+        },
         init_three() {
             this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 10000);
-            this.renderer = renderer0;
+            this.renderer = new THREE.WebGLRenderer({
+                antialias: !this.is_mobile,
+                preserveDrawingBuffer: this.preserve_drawing_buffer,
+                logarithmicDepthBuffer: this.logarithmic_depth_buffer,
+            });
             // Set up the camera position
             this.camera.position.set(10, 10, 10)
             this.camera.lookAt(0, 0, 0)
@@ -105,14 +145,6 @@ export default {
             // Append the Three.js renderer to the container
             this.renderer.setSize(this.width, this.height);
             this.$refs.renderer_container.appendChild(this.renderer.domElement);
-
-            // Add some basic lighting
-            const ambient_light = new THREE.AmbientLight(0xffffff, 0.5);
-            this.scene.add(ambient_light);
-
-            const directional_light = new THREE.DirectionalLight(0xffffff, 0.5);
-            directional_light.position.set(0, 1, 0);
-            this.scene.add(directional_light);
 
             if (this.helpers) {
                 // Add a grid to the scene
@@ -137,7 +169,6 @@ export default {
             }
         },
         animate() {
-
             // Animation loop
             const animate = () => {
                 this.raf_id = requestAnimationFrame(animate);
@@ -180,7 +211,7 @@ export default {
             a.dispatchEvent(event);
         },
     },
-};
+});
 </script>
   
 <style scoped>

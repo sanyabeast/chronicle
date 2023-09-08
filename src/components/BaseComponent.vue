@@ -5,6 +5,11 @@ import Vue from 'vue';
 
 export default Vue.extend({
     name: "BaseComponent",
+    computed: {
+        is_mobile() {
+            return this.$store.state.is_mobile_device;
+        }
+    },
     methods: {
         route_push(name: string, params: {}) {
             this.$router.push({

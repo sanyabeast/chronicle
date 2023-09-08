@@ -1,20 +1,23 @@
 <template>
     <div class="view web-frame">
-        <div v-if="!iframe_loaded" class="loader">
-            <p>
-                <span v-for="item, index in loading_word_chars" :key="index" :style="{ animationDuration: `${index % 4}s` }"
-                    v-html="item"></span>
-            </p>
-        </div>
         <iframe v-if="url != undefined" :src="url" @load="handle_iframe_loaded" />
+        <div class="loader-container" v-if="!iframe_loaded">
+            <Preloader />
+        </div>
     </div>
 </template>
   
 <script lang="ts">
 import Vue from 'vue';
+import Preloader from '@/components/Preloader.vue';
+import BaseComponent from '@/components/BaseComponent.vue';
+import mixins from 'vue-typed-mixins';
 
-export default Vue.extend({
+export default mixins(BaseComponent).extend({
     name: "WebFrame",
+    components: {
+        Preloader
+    },
     mounted() {
 
     },
@@ -32,7 +35,6 @@ export default Vue.extend({
     props: {
         url: String
     },
-    components: {},
     data() {
         return {
             iframe_loaded: false,
@@ -47,52 +49,24 @@ export default Vue.extend({
     overflow: hidden;
     position: relative;
 
-    @keyframes letter-animation {
-        25% {
-            color: #ff0;
-        }
-
-        50% {
-            color: #0ff;
-        }
-
-        75% {
-            color: #f0f;
-        }
-
-        0%,
-        100% {
-            color: #fff;
-        }
-    }
-
-    .loader {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        background-color: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        p {
-            font-size: 18px;
-
-            span {
-                display: inline-block;
-                animation: letter-animation 1s steps(5) infinite;
-            }
-        }
-    }
-
     iframe {
         width: 100%;
         height: 100%;
         border: none;
         outline: none;
     }
+
+    .loader-container {
+        display: flex;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        background-color: #000;
+    }
+
 }
 </style>

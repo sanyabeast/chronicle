@@ -6,6 +6,7 @@ import WebFrame from '../views/WebFrame.vue'
 import AppletLauncher from '../views/AppletLauncher.vue'
 import SearchResult from '../views/SearchResult.vue'
 import AsciiGif from "../components/AsciiGif.vue"
+import ModelViewer from "../views/applets/ModelViewer3D.vue"
 import PolarPictureTool from "../views/applets/PolarPictureTool.vue"
 import SoloCGOL from "../views/applets/SoloCGOL.vue"
 import { map, uniqBy } from "lodash"
@@ -30,6 +31,14 @@ let applet_launcher_route = {
   props: true
 }
 
+
+let model_viewer_route = {
+  path: '/applet/model_viewer/:src',
+  name: 'applet/model_viewer',
+  component: ModelViewer,
+  props: true
+}
+
 export const applets: IAppletMetadata[] = [
   {
     route: {
@@ -40,13 +49,13 @@ export const applets: IAppletMetadata[] = [
     // document: 'assets/docs/showdown.md',
     tags: [],
     title: "",
-    noindex: true
+    hidden: true
   },
   {
     route: webframe_route,
     tags: [],
     title: "",
-    noindex: true
+    hidden: true
   },
   {
     route: {
@@ -58,7 +67,7 @@ export const applets: IAppletMetadata[] = [
     // document: 'assets/docs/showdown.md',
     title: "",
     tags: [],
-    noindex: true
+    hidden: true
   },
   {
     route: webframe_route,
@@ -177,7 +186,15 @@ export const applets: IAppletMetadata[] = [
     title: 'Applet Launcher',
     preview: 'assets/preview/applet_launcher_a1.png',
     props: {},
-    noindex: true
+    hidden: true
+  },
+  {
+    route: model_viewer_route,
+    tags: ['service'],
+    title: 'Model Viewer',
+    preview: 'assets/preview/applet_launcher_a1.png',
+    props: {},
+    hidden: true
   }
 ]
 

@@ -13,9 +13,8 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img :src="applet_data.preview" />
-                    <div class="button launch" :class="{ sticky: scroll_top > 200 }"
-                        :style="{ top: `${scroll_top}px` }"
+                    <ImageView :src="applet_data.preview" />
+                    <div class="button launch" :class="{ sticky: scroll_top > 200 }" :style="{ top: `${scroll_top}px` }"
                         @click="launch">
                         <p>Launch</p>
                     </div>
@@ -46,6 +45,7 @@ import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import { get_random_web_color, get_bright_web_color } from '@/tools';
+import ImageView from '@/components/ImageView.vue';
 
 
 
@@ -58,7 +58,7 @@ interface IAppletLauncherData {
 
 export default mixins(BaseComponent).extend({
     name: "AppletLauncher",
-    components: { Showdown },
+    components: { Showdown, ImageView },
     mixins: [BaseComponent],
     data(): IAppletLauncherData {
         return {
@@ -255,8 +255,9 @@ export default mixins(BaseComponent).extend({
 
                 }
 
-                img {
+                .image-view {
                     flex-shrink: 1;
+                    min-height: 200px;
                     width: auto;
                     margin-bottom: 16px;
                     border: 1px dotted #fff;
