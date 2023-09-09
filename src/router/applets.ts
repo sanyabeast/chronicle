@@ -23,7 +23,7 @@ export const applets: IAppletMetadata[] = [
     },
     {
         route: {
-            path: '/search-result/:query',
+            path: '/search-result/:query?',
             name: 'search-result',
             component: SearchResult,
             props: true

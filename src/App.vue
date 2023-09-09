@@ -1,15 +1,18 @@
 <template>
-  <div id="app" @keydown="handle_keydown">
+  <div id="app" @keydown="handle_keydown" :class="{ home: $route.name === 'home' }">
     <header>
-      <div id="homepage" @click="goto_home()" title="homepage">
+      <router-link id="homepage" to="/" title="homepage">
         <h1>home</h1>
-      </div>
-      <input ref="search_input" type="search" placeholder="menu" id="search" autocomplete="off" spellcheck="false"
-        @focus="handle_searchbox_focus" @input="handle_searchbox_input" @blur="handle_searchbox_blur"
-        :value="$store.state.search_query">
-      <div id="wtf" @click="goto_home()" title="homepage">
-        <h1 @click="exit_app">quit</h1>
-      </div>
+      </router-link>
+      <router-link id="search" v-if="$route.name !== `search-result`" to="/search-result" title="menu">
+        <h1>menu</h1>
+      </router-link>
+      <input v-if="$route.name === `search-result`" ref="search_input" type="search" placeholder="menu" id="search-input"
+        autocomplete="off" spellcheck="false" @focus="handle_searchbox_focus" @input="handle_searchbox_input"
+        @blur="handle_searchbox_blur" :value="$store.state.search_query">
+      <a id="quit-link" href="https://google.com" title="quit">
+        <h1>quit</h1>
+      </a>
     </header>
     <div class="header-imposter"></div>
     <main>
@@ -19,13 +22,14 @@
     <footer>
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
         implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github"
-          href="https://github.com/sanyabeast">github</a> | <a href="#" v-html="href" title="home" @click="goto_home"></a>
+          href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/" v-html="href"
+          title="home"></router-link>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
       <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | <a :href="sanyabeast_link"
-          title="github">@sanyabeast</a> | <a href="#" v-html="href" @click="goto_home" title="home"></a></p>
+          title="github">@sanyabeast</a> | <router-link v-html="href" to="/" title="home"></router-link></p>
 
     </footer>
     <!-- <nav>
@@ -52,7 +56,33 @@ export default mixins(BaseComponent).extend({
     }
   },
   components: { ImageLink, Cookies },
+  watch: {
+    '$route'(to, from) {
+      console.log("route changed", to, from);
+      if (to.name === 'search-result') {
+        let timeout = 2000;
+        let start_data = Date.now();
+        let search_focus_interval = setInterval(() => {
+          if (this.$refs.search_input) {
+            clearInterval(search_focus_interval)
+            let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
+            search_input.focus()
+          }
+
+          if (Date.now() - start_data > timeout) {
+            clearInterval(search_focus_interval)
+          }
+        }, 100)
+      }
+    }
+  },
   computed: {
+    search_link_label() {
+      return this.$store.state.search_query.length > 0 ? this.$store.state.search_query : 'menu'
+    },
+    show_search_link() {
+      return this.$route.name !== 'search-result'
+    },
     search_query() {
       return this.$store.state.search_query
     },
@@ -61,7 +91,7 @@ export default mixins(BaseComponent).extend({
     }
   },
   mounted() {
-
+    (window as any).vue_app = this;
   },
   methods: {
     getCurrentYear() {
@@ -70,10 +100,7 @@ export default mixins(BaseComponent).extend({
       return currentYear;
     },
     handle_searchbox_focus(event: FocusEvent) {
-      this.$store.commit('route_replace', {
-        name: 'search-result',
-        props: { query: this.search_query }
-      })
+      // this.route_push('search-result', { query: this.search_query })
     },
     handle_searchbox_blur(event: FocusEvent) {
       console.log(`searchbox blur`)
@@ -83,13 +110,13 @@ export default mixins(BaseComponent).extend({
       console.log(`searchbox input`)
       let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
       this.$store.commit('search_query', search_input.value)
+      this.$router.replace({
+        name: 'search-result', query: { query: this.search_query }
+      })
     },
     goto_home() {
-
       this.$store.state.search_query = "";
-      this.$store.commit('route_replace', {
-        name: 'home'
-      })
+      // this.route_push('home', {})
     },
     handle_keydown() {
       if (this.$store.state.focus_search_on_keydown) {
@@ -124,7 +151,7 @@ export default mixins(BaseComponent).extend({
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #ff0000;
+  background-color: #050505;
   border-radius: 0px;
   border: 0px none #000000;
 }
@@ -195,6 +222,7 @@ input[type="search"] {
   font-style: italic;
   align-self: flex-end;
   height: 100%;
+  padding-bottom: 2px;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
@@ -218,7 +246,8 @@ h1 {
 }
 
 #homepage,
-#wtf {
+#quit-link,
+#search {
   height: 100%;
   align-items: center;
   display: flex;
@@ -232,20 +261,21 @@ h1 {
   }
 }
 
-div#homepage {
-  justify-self: flex-start;
+a#homepage {
+  align-items: flex-start;
 }
 
-div#wtf {
-  justify-self: flex-end;
+a#quit-link {
+  align-items: flex-end;
 
   h1 {
     text-align: right;
   }
 }
 
-div#homepage:hover,
-div#wtf:hover {
+a#homepage:hover,
+a#quit-link:hover,
+a#search:hover {
   h1 {
     color: red;
   }
@@ -279,6 +309,15 @@ header {
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 
@@ -377,11 +416,15 @@ footer {
     padding: 0 16px;
     grid-template-columns: 1fr 64px;
 
-    #wtf {
+    a#quit-link {
       display: none;
     }
 
-    #homepage {
+    a#search {
+      align-items: flex-start;
+    }
+
+    a#homepage {
       grid-column: 2;
       grid-row: 1;
       width: 100%;
@@ -392,11 +435,33 @@ footer {
       }
     }
 
-    input#search {
+    input#search-input {
       text-align: left;
       width: 100%;
       grid-column: 1;
       grid-row: 1;
+      padding-left: 0;
+    }
+  }
+
+  &.home {
+    header {
+      a#quit-link {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100%;
+        display: flex;
+
+        h1 {
+          width: 100%;
+          text-align: right;
+        }
+      }
+
+      a#homepage {
+        display: none;
+      }
+
     }
   }
 

@@ -27,18 +27,12 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import mixins from 'vue-typed-mixins'
-import ThreeRenderer, { EThreeSceneRenderinMode } from '../../components/ThreeRenderer.vue';
-import Preloader from '../../components/Preloader.vue';
+import ThreeRenderer, { EThreeSceneRenderinMode } from '@/components/ThreeRenderer.vue';
+import Preloader from '@/components/Preloader.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import { debounce, isArray } from 'lodash';
 import { get_file_extension } from '@/tools';
 
-const samples = [
-    'assets/image/planet.png',
-    'assets/image/moon.png',
-    'assets/image/clock.png',
-    'assets/image/pattern.png',
-]
 
 const draco_loader = new DRACOLoader();
 draco_loader.setDecoderPath('assets/bin/draco/gltf/');
@@ -86,7 +80,7 @@ export default mixins(BaseComponent).extend({
         },
         model_src: {
             type: String,
-            default: null
+            default: null,
         },
     },
     mounted() {

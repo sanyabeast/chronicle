@@ -89,3 +89,9 @@ export function load_text_file(file_path: string): Promise<string> {
 export function get_file_extension(filename) {
     return filename.split('.').pop();
 }
+
+export function url_encode(str: string) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+        return '%' + c.charCodeAt(0).toString(16);
+    });
+}

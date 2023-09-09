@@ -2,43 +2,42 @@
     <div class="search-result">
         <h2 v-html="search_results_message"></h2>
         <div class="results-list">
-            <div v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0" class="result-preview"
-                v-for="(item, index) in filtered_routes" :key="index" @click="handle_result_item_click(item)">
+            <router-link v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0"
+                class="result-preview" v-for="(item, index) in filtered_routes" :key="index" :to="get_route_link(item)">
                 <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
                 <ImageView v-if="item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
-            </div>
+            </router-link>
             <h2 v-if="show_all_applets">all applets</h2>
-            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in all_applets" :key="`all_${index}`"
-                @click="handle_result_item_click(item)">
-                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in all_applets"
+                :key="`all_${index}`" :to="get_route_link(item)">
+                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
                 <ImageView v-if="item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
-            </div>
+            </router-link>
             <h2 v-if="show_all_applets">extra applets</h2>
-            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in extra_applets"
-                :key="`extra_${index}`" @click="handle_result_item_click(item)">
-                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in extra_applets"
+                :key="`extra_${index}`" :to="get_route_link(item)">
+                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
                 <ImageView v-if="item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
-            </div>
+            </router-link>
             <h2 v-if="show_all_applets">service applets</h2>
-            <div v-if="show_all_applets" class="result-preview" v-for="(item, index) in service_applets"
-                :key="`service_${index}`" @click="handle_result_item_click(item)">
-                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
+            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in service_applets"
+                :key="`service_${index}`" :to="get_route_link(item)">
+                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
                 <ImageView v-if="item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>
 <script lang="ts">
 
-import Vue from 'vue';
 import { applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
 import { get_random_web_color } from "@/tools"
@@ -62,7 +61,7 @@ export default mixins(BaseComponent).extend({
         }) : searcher;
     },
     beforeDestroy() {
-        this.$store.state.search_query = "";
+        // this.$store.state.search_query = "";
     },
     mounted() {
         if (this.$refs.search_input) {
@@ -126,6 +125,21 @@ export default mixins(BaseComponent).extend({
     },
     methods: {
         get_random_web_color: get_random_web_color,
+        get_route_link(item: IAppletMetadata): string {
+            let result = "";
+            if (this.skip_launcher === false || item.summary || item.document) {
+                result = `/applet-launcher/${item.index}`;
+            }
+            else {
+                result = this.$router.resolve({
+                    name: item.route.name,
+                    props: item.props
+                }).route.path;
+            }
+
+            console.log("get_route_link", item, result, this.$router.resolve(item.route, item.props));
+            return result;
+        },
         get_item_title(item: IAppletMetadata) {
             if (item.title.length > 0) {
                 return item.title;
@@ -182,6 +196,7 @@ export default mixins(BaseComponent).extend({
             position: relative;
             justify-self: center;
             align-self: center;
+            text-decoration: none;
 
             .image-view {
                 position: absolute;
@@ -257,8 +272,15 @@ export default mixins(BaseComponent).extend({
 
 
             .result-preview {
+                display: flex;
                 width: 100%;
                 height: 32px;
+                justify-content: flex-start;
+
+                h3 {
+                    font-family: 'Ubuntu', sans-serif;
+                    font-size: 18px;
+                }
             }
 
             .result-preview:hover {

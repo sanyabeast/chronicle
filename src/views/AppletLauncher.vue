@@ -14,10 +14,9 @@
                 </div>
                 <div class="avatar">
                     <ImageView :src="applet_data.preview" />
-                    <div class="button launch" :class="{ sticky: scroll_top > 200 }" :style="{ top: `${scroll_top}px` }"
-                        @click="launch">
+                    <router-link class="button launch" :to="applet_route_link">
                         <p>Launch</p>
-                    </div>
+                    </router-link>
                 </div>
             </div>
             <div class="tags">
@@ -92,7 +91,14 @@ export default mixins(BaseComponent).extend({
             this.route_replace(this.applet_data!.route.name, this.applet_data!.props)
         },
     },
-    computed: {},
+    computed: {
+        applet_route_link() {
+            return this.$router.resolve({
+                name: this.applet_data!.route.name,
+                params: this.applet_data!.props
+            }).route.path
+        }
+    },
     props: {
         applet: {
             type: String,
@@ -234,18 +240,6 @@ export default mixins(BaseComponent).extend({
 
                         &:hover {
                             background-color: #000 !important;
-                        }
-
-                        &.sticky {
-                            margin: 0;
-                            position: absolute;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            height: 32px;
-                            width: auto;
-                            padding: 0 32px;
-                            font-size: 24px;
-                            z-index: 999;
                         }
                     }
 
