@@ -58,7 +58,6 @@ export default mixins(BaseComponent).extend({
   components: { ImageLink, Cookies },
   watch: {
     '$route'(to, from) {
-      console.log("route changed", to, from);
       if (to.name === 'search-result') {
         let timeout = 2000;
         let start_data = Date.now();
@@ -103,11 +102,9 @@ export default mixins(BaseComponent).extend({
       // this.route_push('search-result', { query: this.search_query })
     },
     handle_searchbox_blur(event: FocusEvent) {
-      console.log(`searchbox blur`)
       // this.$store.commit('route_back')
     },
     handle_searchbox_input(event: Event) {
-      console.log(`searchbox input`)
       let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
       this.$store.commit('search_query', search_input.value)
       this.$router.replace({

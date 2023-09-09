@@ -136,8 +136,6 @@ export default mixins(BaseComponent).extend({
                     props: item.props
                 }).route.path;
             }
-
-            console.log("get_route_link", item, result, this.$router.resolve(item.route, item.props));
             return result;
         },
         get_item_title(item: IAppletMetadata) {
