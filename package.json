@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node scripts/generate_sitemap.js && vue-cli-service build",
     "start": "npm run serve"
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "fs": "^0.0.1-security",
     "fuzzy-search": "^3.2.1",
     "gif.js.optimized": "^1.0.1",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",

@@ -6,6 +6,12 @@ declare module 'gif.js.optimized' {
         load(src: string)
     };
 
+
     // If the module is a function or class, use this syntax:
     // export = SomeLibFunctionOrClass;
+}
+
+declare module "*.yaml" {
+    const value: any;
+    export default value;
 }

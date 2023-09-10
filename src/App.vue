@@ -84,7 +84,7 @@ export default mixins(BaseComponent).extend({
   },
   computed: {
     sitemap_url(){
-      return `assets/sitemap_generated.html`
+      return `sitemap.html`
     },
     search_link_label() {
       if (this.$route.name !== 'search-result') {
