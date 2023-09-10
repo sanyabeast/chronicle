@@ -11,6 +11,13 @@ export default Vue.extend({
         }
     },
     methods: {
+        resolve_route(name: string, params: {}) {
+            console.log("resolve_route", name, params);
+            return this.$router.resolve({
+                name: this.applet_data!.route.name,
+                params: this.applet_data!.props
+            }).route.path
+        },
         route_push(name: string, params: {}) {
             console.log("route_push", name, params);
             this.$router.push({

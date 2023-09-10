@@ -6,12 +6,12 @@
 </template>
   
 <script lang="ts">
+
 import Vue from 'vue';
 import mixins from 'vue-typed-mixins';
 import Preloader, { ELoaderType } from './Preloader.vue';
 import BaseComponent from './BaseComponent.vue';
 import { debounce } from 'lodash';
-
 
 export default mixins(BaseComponent).extend({
     name: 'ImageView',

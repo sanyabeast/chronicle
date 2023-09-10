@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @keydown="handle_keydown" :class="{ home: $route.name === 'home' }">
+  <div id="vue_app" @keydown="handle_keydown" :class="{ home: $route.name === 'home' }">
     <header>
       <router-link id="homepage" to="/" title="homepage">
         <h1>home</h1>
@@ -23,10 +23,12 @@
       <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
-      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | prototyped &
-        implemented by <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> | <a title="github"
-          href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/" v-html="href"
-          title="home"></router-link>
+      <p><span v-html="getCurrentYear()"></span> |
+        <b>Ukraine</b> |
+        prototyped &
+        implemented by <a :href="sanyabeast_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github"
+          title="github" href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/"
+          v-html="href" title="home"></router-link> | <a href="/sitemap.html" id="sitemap" title="sitemap">sitemap</a>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
@@ -213,7 +215,15 @@ a {
   cursor: cell;
 
   &[title="github"] {
+    color: #4caf50;
+  }
+
+  &[title="sitemap"] {
     color: grey;
+  }
+
+  &[title="mailto"] {
+    color: #999999;
   }
 }
 
@@ -293,7 +303,7 @@ a#search:hover {
   }
 }
 
-#app {
+#vue_app {
   text-align: center;
   color: #2c3e50;
   width: 100%;
@@ -489,7 +499,7 @@ footer {
 
 /* Media query for screens less than 600px */
 @media screen and (max-width: 600px) {
-  #app {
+  #vue_app {
     grid-template-rows: 48px 1fr 32px;
   }
 
