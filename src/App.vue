@@ -4,12 +4,15 @@
       <router-link id="homepage" to="/" title="homepage">
         <h1>home</h1>
       </router-link>
-      <router-link id="search" v-if="$route.name !== `search-result`" to="/search-result" title="menu">
-        <h1>menu</h1>
-      </router-link>
-      <input v-if="$route.name === `search-result`" ref="search_input" type="search" placeholder="menu" id="search-input"
-        autocomplete="off" spellcheck="false" @focus="handle_searchbox_focus" @input="handle_searchbox_input"
-        @blur="handle_searchbox_blur" :value="$store.state.search_query">
+      <div class="menu">
+        <router-link id="search" to="/search-result" title="menu">
+          <h1 v-html="search_link_label"></h1>
+        </router-link>
+        <input v-if="$route.name === `search-result`" ref="search_input" type="search" id="search-input"
+          autocomplete="off" spellcheck="false" @focus="handle_searchbox_focus" @input="handle_searchbox_input"
+          @blur="handle_searchbox_blur" :value="$store.state.search_query">
+        <a href="#" title="clear search" v-if="show_clear_search" class="clear_search" @click="clear_search"></a>
+      </div>
       <a id="quit-link" href="https://google.com" title="quit">
         <h1>quit</h1>
       </a>
@@ -77,10 +80,17 @@ export default mixins(BaseComponent).extend({
   },
   computed: {
     search_link_label() {
-      return this.$store.state.search_query.length > 0 ? this.$store.state.search_query : 'menu'
+      if (this.$route.name !== 'search-result') {
+        return 'menu';
+      } else {
+        return this.$store.state.search_query.length > 0 ? '' : 'menu'
+      }
     },
     show_search_link() {
       return this.$route.name !== 'search-result'
+    },
+    show_clear_search() {
+      return this.$route.name === 'search-result' && this.$store.state.search_query.length > 0
     },
     search_query() {
       return this.$store.state.search_query
@@ -107,6 +117,12 @@ export default mixins(BaseComponent).extend({
     handle_searchbox_input(event: Event) {
       let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
       this.$store.commit('search_query', search_input.value)
+      this.$router.replace({
+        name: 'search-result', query: { query: this.search_query }
+      })
+    },
+    clear_search() {
+      this.$store.commit('search_query', '')
       this.$router.replace({
         name: 'search-result', query: { query: this.search_query }
       })
@@ -206,36 +222,24 @@ img {
 }
 
 input[type="search"] {
-  background: #000;
+  background: transparent;
   border: none;
   outline: none;
-  padding: 4px;
   color: #fff;
   max-width: 100%;
   text-align: center;
   font-family: 'Ubuntu', sans-serif;
-  ;
   font-size: 24px;
   font-style: italic;
   align-self: flex-end;
   height: 100%;
-  padding-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 input[type="search"]::-webkit-search-cancel-button {
   display: none;
-}
-
-/* Center-align the placeholder text */
-input[type="search"]::placeholder {
-  font-style: normal;
-  color: #999;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-input[type="search"]:hover::placeholder {
-  color: red;
 }
 
 h1 {
@@ -246,24 +250,35 @@ h1 {
 #quit-link,
 #search {
   height: 100%;
-  align-items: center;
   display: flex;
   cursor: cell;
-  align-self: flex-end;
+  align-items: center;
+  justify-content: center;
 
   h1 {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: left;
-    color: #999;
+    color: #eee;
+    height: 100%;
+    margin: 0;
+    // margin-bottom: 1px;
   }
 }
 
 a#homepage {
   align-items: flex-start;
+  justify-self: flex-start;
+}
+
+a#search {
+  width: 100%;
 }
 
 a#quit-link {
   align-items: flex-end;
+  justify-self: flex-end;
 
   h1 {
     text-align: right;
@@ -302,7 +317,7 @@ header {
   line-height: 0;
   height: 48px;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -311,9 +326,77 @@ header {
     text-decoration: none;
     display: flex;
     height: 100%;
-    width: 100%;
+    width: auto;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+  }
+
+  .menu {
+    height: 100%;
+    width: auto;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    position: relative;
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+    }
+
+    .clear_search {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 48px;
+      height: 100%;
+      cursor: cell;
+
+      &:after {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 18px;
+        top: calc(50% + 2px);
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%) rotate(45deg);
+        background: #eee;
+      }
+
+      &:before {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 18px;
+        top: calc(50% + 2px);
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%) rotate(-45deg);
+        background: #eee;
+      }
+
+      &:hover {
+        &:after {
+          background: red;
+        }
+
+        &:before {
+          background: red;
+        }
+      }
+    }
+
+  }
+}
+
+&.home {
+  header .menu input {
+    pointer-events: none;
   }
 }
 
@@ -400,6 +483,7 @@ footer {
 @media screen and (max-width: 1360px) {
   header {
     padding: 0 16px;
+    grid-template-columns: 1fr 2fr 1fr;
   }
 }
 
@@ -419,6 +503,7 @@ footer {
 
     a#search {
       align-items: flex-start;
+      width: auto;
     }
 
     a#homepage {
@@ -434,7 +519,7 @@ footer {
 
     input#search-input {
       text-align: left;
-      width: 100%;
+      width: auto;
       grid-column: 1;
       grid-row: 1;
       padding-left: 0;

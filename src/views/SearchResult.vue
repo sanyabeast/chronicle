@@ -2,34 +2,44 @@
     <div class="search-result">
         <h2 v-html="search_results_message"></h2>
         <div class="results-list">
-            <router-link v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0"
-                class="result-preview" v-for="(item, index) in filtered_routes" :key="index" :to="get_route_link(item)">
+            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }"
+                v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0" class="result-preview"
+                v-for="(item, index) in filtered_routes" :key="index" :to="get_route_link(item)">
                 <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
-                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </router-link>
-            <h2 v-if="show_all_applets">all applets</h2>
-            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in all_applets"
-                :key="`all_${index}`" :to="get_route_link(item)">
+            <div class="search-section">
+                <h2 v-if="show_all_applets">all applets</h2>
+            </div>
+            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
+                class="result-preview" v-for="(item, index) in all_applets" :key="`all_${index}`"
+                :to="get_route_link(item)">
                 <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </router-link>
-            <h2 v-if="show_all_applets">extra applets</h2>
-            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in extra_applets"
-                :key="`extra_${index}`" :to="get_route_link(item)">
+            <div class="search-section">
+                <h2 v-if="show_all_applets">extra applets</h2>
+            </div>
+            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
+                class="result-preview" v-for="(item, index) in extra_applets" :key="`extra_${index}`"
+                :to="get_route_link(item)">
                 <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </router-link>
-            <h2 v-if="show_all_applets">service applets</h2>
-            <router-link v-if="show_all_applets" class="result-preview" v-for="(item, index) in service_applets"
-                :key="`service_${index}`" :to="get_route_link(item)">
+            <div class="search-section">
+                <h2 v-if="show_all_applets">service applets</h2>
+            </div>
+            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
+                class="result-preview" v-for="(item, index) in service_applets" :key="`service_${index}`"
+                :to="get_route_link(item)">
                 <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="item.preview != undefined" :src="item.preview" />
+                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
                 <div class="fader"></div>
                 <h3 v-html="get_item_title(item)"></h3>
             </router-link>
@@ -40,7 +50,7 @@
 
 import { applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
-import { get_random_web_color } from "@/tools"
+import { get_dark_web_color, get_random_web_color } from "@/tools"
 import ImageView from '@/components/ImageView.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
@@ -125,6 +135,13 @@ export default mixins(BaseComponent).extend({
     },
     methods: {
         get_random_web_color: get_random_web_color,
+        get_thumb_bg_color(item: IAppletMetadata) {
+            if (!this.is_mobile) {
+                return '#000';
+            } else {
+                return get_dark_web_color(item.title)
+            }
+        },
         get_route_link(item: IAppletMetadata): string {
             let result = "";
             if (this.skip_launcher === false || item.summary || item.document) {
@@ -220,6 +237,7 @@ export default mixins(BaseComponent).extend({
             }
 
             h3 {
+                font-size: 18px;
                 z-index: 2;
                 background: #000;
                 text-transform: capitalize;
@@ -227,11 +245,18 @@ export default mixins(BaseComponent).extend({
             }
         }
 
-        >h2 {
+        .search-section {
             grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 32px;
-            text-align: left;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            h2 {
+                margin: 0;
+                text-align: left;
+                background-color: #ff0000;
+                color: #000;
+            }
         }
 
         .result-preview:nth-child(2n) {
@@ -288,9 +313,12 @@ export default mixins(BaseComponent).extend({
             }
         }
 
-        h2 {
-            font-size: 16px;
-            text-align: left;
+        .search-section {
+            h2 {
+                margin: 0;
+                font-size: 18px;
+                text-align: left;
+            }
         }
     }
 }

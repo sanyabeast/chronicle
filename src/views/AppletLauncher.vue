@@ -335,79 +335,82 @@ export default mixins(BaseComponent).extend({
 
 @media screen and (max-width: 1360px) {
 
-    .view.applet-launcher .launcher .brief {
+    .applet-launcher .launcher .brief {
         grid-template-columns: 288px 1fr;
     }
 
-    .view.applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>p {
         padding: 0 16px;
         margin-top: 0;
         margin-left: 0;
         font-size: 48px;
     }
 
-    .view.applet-launcher .launcher .brief .placeholder {
+    .applet-launcher .launcher .brief .placeholder {
         margin-top: 0;
     }
 
-    .view.applet-launcher .launcher .brief .avatar {
+    .applet-launcher .launcher .brief .avatar {
         padding: 16px;
     }
 
-    .view.applet-launcher .launcher .brief .brief-info {
+    .applet-launcher .launcher .brief .brief-info {
         padding: 0 16px;
         margin-left: 0;
     }
 
-    .view.applet-launcher .launcher .tags {
+    .applet-launcher .launcher .tags {
         padding: 0 16px;
     }
 
-    .view.applet-launcher .launcher .showdown-viewer {
+    .applet-launcher .launcher .showdown-viewer {
         padding: 16px;
     }
 
 }
 
 @media screen and (max-width: 1024px) {
-    .view.applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>p {
         font-size: 32px;
     }
 
 }
 
 @media screen and (max-width: 800px) {
-    .view.applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>p {
         font-size: 32px;
     }
 
 }
 
 @media screen and (max-width: 600px) {
-    .view.applet-launcher .launcher .brief {
+    .applet-launcher {
+        padding: 0;
+    }
+    .applet-launcher .launcher .brief {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
 
-    .view.applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>p {
         margin-top: 16px;
         grid-row: 1;
         grid-column: 1;
         font-size: 32px;
     }
 
-    .view.applet-launcher .launcher .brief .placeholder {
+    .applet-launcher .launcher .brief .placeholder {
         display: none;
     }
 
-    .view.applet-launcher .launcher .brief .brief-info {
+    .applet-launcher .launcher .brief .brief-info {
         padding-top: 0;
         grid-row: 3;
         grid-column: 1;
         text-align: justify;
     }
 
-    .view.applet-launcher .launcher .brief .avatar {
+    .applet-launcher .launcher .brief .avatar {
         grid-row-start: 2;
         grid-row-end: 2;
         grid-column: 1;
@@ -418,7 +421,7 @@ export default mixins(BaseComponent).extend({
         }
     }
 
-    .view.applet-launcher .launcher .document-placeholder {
+    .applet-launcher .launcher .document-placeholder {
         display: none;
     }
 
