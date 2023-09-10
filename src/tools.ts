@@ -95,3 +95,43 @@ export function url_encode(str: string) {
         return '%' + c.charCodeAt(0).toString(16);
     });
 }
+
+export function download_text_as_file(filename, text) {
+    // Create a blob from the text data
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a new anchor element
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+
+    // Trigger the download by simulating a click
+    a.click();
+
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+export function get_body_html(tags_to_remove) {
+    // Clone the current document's body (to not alter the original content)
+    const cloned_node = document.body.cloneNode(true) as HTMLElement;
+
+    // Iterate through the tags to remove and delete them from the cloned body
+    tags_to_remove.forEach(tag => {
+        const elements = cloned_node.querySelectorAll(tag);
+        elements.forEach(el => el.remove());
+    });
+
+    // Return the outerHTML of the cloned body
+    return cloned_node.outerHTML;
+}
+
+export function get_current_year() {
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    return currentYear;
+}

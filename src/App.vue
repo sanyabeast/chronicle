@@ -23,18 +23,19 @@
       <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
-      <p><span v-html="getCurrentYear()"></span> |
+      <p><span v-html="get_current_year()"></span> |
         <b>Ukraine</b> |
         prototyped &
         implemented by <a :href="sanyabeast_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github"
           title="github" href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/"
-          v-html="href" title="home"></router-link> | <a href="/sitemap.html" id="sitemap" title="sitemap">sitemap</a>
+          v-html="href" title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
-      <p><span v-html="getCurrentYear()"></span> | <b>Ukraine</b> | <a :href="sanyabeast_link"
-          title="github">@sanyabeast</a> | <router-link v-html="href" to="/" title="home"></router-link></p>
+      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="sanyabeast_link"
+          title="github">@sanyabeast</a> | <router-link v-html="href" to="/" title="home"></router-link> | <a
+          :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a></p>
 
     </footer>
     <!-- <nav>
@@ -51,6 +52,7 @@ import ImageLink from './components/ImageLink.vue'
 import Cookies from './components/Cookies.vue';
 import mixins from 'vue-typed-mixins';
 import BaseComponent from './components/BaseComponent.vue';
+import { get_current_year } from './tools';
 
 export default mixins(BaseComponent).extend({
   name: 'App',
@@ -81,6 +83,9 @@ export default mixins(BaseComponent).extend({
     }
   },
   computed: {
+    sitemap_url(){
+      return `assets/sitemap_generated.html`
+    },
     search_link_label() {
       if (this.$route.name !== 'search-result') {
         return 'menu';
@@ -105,11 +110,7 @@ export default mixins(BaseComponent).extend({
     (window as any).vue_app = this;
   },
   methods: {
-    getCurrentYear() {
-      var currentDate = new Date();
-      var currentYear = currentDate.getFullYear();
-      return currentYear;
-    },
+    get_current_year: get_current_year,
     handle_searchbox_focus(event: FocusEvent) {
       // this.route_push('search-result', { query: this.search_query })
     },

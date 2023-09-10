@@ -5,12 +5,24 @@
             <div><a href="/" title="home">Home</a></div>
             <div><a :href="sanyabeast_link" title="mailto">@sanyabeast</a></div>
             <div><a title="github" href="https://github.com/sanyabeast" target="_blank">github</a></div>
+            <div>
+                <a id="download" href="#" @click="download_as_html">download as html</a>
+            </div>
             <h2>Places</h2>
             <div class="route" v-for="(item, index) in applets" :key="index">
                 <a :href="get_route_url(item)" v-html="item.title || item.route.name"></a>
                 <TextView v-if="item.summary" :src="item.summary" />
             </div>
         </div>
+        <footer>
+            <p>
+                <a :href="sanyabeast_link" title="mailto">@sanyabeast</a> |
+                <a href="/" title="home">home</a> |
+                <i v-html="get_current_year()"></i> |
+                <i id="version" v-html="app_version"></i>
+
+            </p>
+        </footer>
     </div>
 </template>
   
@@ -22,6 +34,7 @@ import mixins from 'vue-typed-mixins';
 import BaseComponent from './components/BaseComponent.vue';
 import TextView from './components/TextView.vue';
 import { applets } from './router';
+import { download_text_as_file, get_body_html, get_current_year } from './tools';
 
 export default mixins(BaseComponent).extend({
     name: 'Sitemap',
@@ -37,17 +50,25 @@ export default mixins(BaseComponent).extend({
         applets() {
             return applets
         },
-
+        app_version() {
+            return `v${this.$store.state.package_data.version}`
+        }
     },
     mounted() {
         (window as any).vue_app = this;
     },
     methods: {
+        get_current_year: get_current_year,
+        download_as_html() {
+            let html = get_body_html(["script"])
+            download_text_as_file("sitemap_generated.html", html)
+        },
         get_route_url(item: IAppletMetadata) {
-            return this.$router.resolve({
+            let route_path = this.$router.resolve({
                 name: item.route.name,
                 params: item.props
             }).route.path
+            return `/#${route_path}`
         }
     }
 });
@@ -56,23 +77,13 @@ export default mixins(BaseComponent).extend({
   
 <style lang="less">
 html {
-    background-color: black;
-    color: #fff;
-    font-family: monospace;
-    line-height: 2em;
-
-    a {
-        display: inline-block;
-        color: red;
-        font-weight: bold;
-        text-transform: capitalize;
-
-        &:hover {
-            background-color: #fff;
-            color: #000;
+    #sitemap {
+        a#download {
+            display: flex;
+            color: #fff;
+            background-color: blue;
         }
     }
-
 }
 </style>
   

@@ -43,7 +43,6 @@ export default mixins(BaseComponent).extend({
             if (this.src) {
                 this.set_loading(true)
                 this.text_content = await this.load_text(this.src)
-                console.log(this.text_content   )
                 this.set_loading(false)
             } else if (this.text) {
                 this.text_content = this.text

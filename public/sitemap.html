@@ -11,11 +11,53 @@
 </head>
 
 <body>
-    <noscript>
-        <strong>Experience the web in all its glory! Enable JavaScript to enjoy smooth page transitions, intuitive
-            forms,
-            and a dynamic user experience like never before!</strong>
-    </noscript>
+    <style id="static">
+        html {
+            background-color: black;
+            color: #fff;
+            font-family: monospace;
+            line-height: 2em;
+        }
+
+        h2 {
+            background-color: #fff;
+            display: inline-block;
+            color: #000;
+        }
+
+        a {
+            display: inline-block;
+            color: red;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        a#download {
+            display: none;
+        }
+
+        a:hover {
+            background-color: red;
+            color: #000;
+        }
+
+        footer {
+            padding: 4px 0;
+            margin-top: 32px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer p>* {
+            margin: 0 4px;
+        }
+
+        footer a {
+            margin: 0;
+        }
+    </style>
     <div id="app">
     </div>
     <!-- built files will be auto injected -->
