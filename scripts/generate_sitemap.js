@@ -2,6 +2,8 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
+const baseUrl = '/chronicle/dist/'
+
 function readFileContent(filePath) {
     try {
         const content = fs.readFileSync(filePath, 'utf8');
@@ -48,7 +50,7 @@ async function generateSitemap(yamlPath, templatePath, outputPath) {
 
     // Create the links based on the routes
     const links = applets.map(applet => {
-        let html = `<a href="/#${get_applet_url(applet)}">${applet.title || applet.route.name}</a><br/>`;
+        let html = `<a href="${baseUrl}#${get_applet_url(applet)}">${applet.title || applet.route.name}</a><br/>`;
         if (applet.summary) {
             let summary = readFileContent(`public/${applet.summary}`);
             html += `<p>${summary}</a><br/>`;

@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "node scripts/generate_sitemap.js && vue-cli-service build",
-    "start": "npm run serve"
+    "build": "npm run generate && vue-cli-service build",
+    "start": "npm run serve",
+    "generate": "node scripts/generate_sitemap.js",
+    "serve-dist": "php -S localhost:8090"
   },
   "dependencies": {
     "core-js": "^3.8.3",
