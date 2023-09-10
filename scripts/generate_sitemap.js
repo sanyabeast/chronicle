@@ -53,7 +53,7 @@ async function generateSitemap(yamlPath, templatePath, outputPath) {
         let html = `<a href="${baseUrl}#${get_applet_url(applet)}">${applet.title || applet.route.name}</a><br/>`;
         if (applet.summary) {
             let summary = readFileContent(`public/${applet.summary}`);
-            html += `<p>${summary}</a><br/>`;
+            html += `<p>${summary}</p><br/>`;
         }
         return html;
     }).join('\n');

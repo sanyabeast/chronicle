@@ -11,6 +11,12 @@
       margin: 0;
     }
 
+    strong {
+      color: #fff;
+      position: absolute;
+      padding: 16px;
+    }
+
     #app {
       display: grid;
       grid-template-columns: 100%;
@@ -62,11 +68,11 @@
       grid-column: 1;
       align-self: flex-end;
       justify-self: flex-end;
-      margin: 8px;
+      margin: 16px;
     }
 
     .temp .sitemap-temp {
-      color: #626262;
+      color: #777777;
       text-transform: lowercase;
       font-family: monospace;
       z-index: 1;
@@ -80,4 +86,8 @@
       100% {
         transform: rotate(360deg);
       }
-    }</style><script defer="defer" src="js/chunk-vendors.9168bc2a.js"></script><script defer="defer" src="js/chronicle.18dec271.js"></script></head><body><noscript><strong>Experience the web in all its glory! Enable JavaScript to enjoy smooth page transitions, intuitive forms, and a dynamic user experience like never before!</strong></noscript><div id="app"><div class="preloader"><span class="loader"></span></div><div class="temp"><a class="sitemap-temp" href="/chronicle/dist/sitemap.html">Sitemap</a></div></div></body></html>
+    }</style><script defer="defer" src="js/chunk-vendors.e4c0dbea.js"></script><script defer="defer" src="js/chronicle.14e163ff.js"></script><link href="css/chronicle.c49bbc0c.css" rel="stylesheet"></head><body><noscript><strong>Experience the web in all its glory! Enable JavaScript to enjoy smooth page transitions, intuitive forms, and a dynamic user experience like never before!</strong></noscript><div id="app"><div class="preloader"><span class="loader"></span></div><div class="temp"><a class="sitemap-temp" href="/chronicle/dist/sitemap.html">Sitemap</a></div></div><script>if (location.hostname === 'localhost') {
+      console.log('%clocalhost detected, fixing links', 'color: red; font-weight: bold; font-size: 16px;')
+      let href = document.querySelector('.sitemap-temp').href
+      document.querySelector('.sitemap-temp').href = href.replace('chronicle/dist/', '')
+    }</script></body></html>
