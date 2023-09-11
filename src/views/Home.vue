@@ -2,8 +2,8 @@
   <div class="home">
     <div class="content">
       <TextView src="assets/docs/about.txt">
-        <img src="assets/foamy.png" class="avatar" @click="toggleAvatar" v-if="avatar_index === 0" />
-        <img src="assets/sanya.png" class="avatar" @click="toggleAvatar" v-if="avatar_index === 1" />
+        <img src="assets/foamy.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 0" />
+        <img src="assets/sanya.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 1" />
       </TextView>
     </div>
   </div>
@@ -16,14 +16,10 @@ export default Vue.extend({
   data() {
     return {
       avatar_index: 0,
-      sanyabeast_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     };
   },
-  mounted() {
-    this.toggleAvatar();
-  },
   methods: {
-    toggleAvatar() {
+    toggle_avatar() {
       this.avatar_index = (this.avatar_index + 1) % 2;
     }
   }
