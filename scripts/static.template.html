@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title><!--@title--></title>
+    <style>
+        html {
+            background-color: black;
+            color: #fff;
+            font-family: monospace;
+            line-height: 2em;
+            padding-bottom: 62px;
+        }
+
+        h2 {
+            margin-top: 32px;
+            background-color: #fff;
+            display: inline-block;
+            color: #000;
+        }
+
+        a {
+            display: inline-block;
+            color: red;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1em;
+            border-bottom: 1px dotted #444;
+        }
+
+        a#download {
+            display: none;
+        }
+
+        a:hover {
+            background-color: red;
+            color: #000;
+        }
+
+        #about p {
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!--@content-->
+    <script>
+        if (location.hostname === 'localhost') {
+            let links = document.querySelectorAll('a')
+            links.forEach(element => {
+                element.href = element.href.replace('chronicle/dist/', '')
+            });
+        }
+    </script>
+</body>
+
+</html>
