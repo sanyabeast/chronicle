@@ -4,7 +4,7 @@
             <div class="brief">
                 <p v-html="applet_data.title.toUpperCase()"></p>
                 <div class="brief-info">
-                    <p v-if="applet_data.summary" v-html="summary"></p>
+                    <TextView v-if="applet_data.summary" :src="applet_data.summary" />
                     <div class="placeholder" v-if="!applet_data.summary">
                         <i></i>
                         <i></i>
@@ -198,7 +198,7 @@ export default mixins(BaseComponent).extend({
                 background-color: #000;
                 color: #fff;
                 margin-left: 32px;
-                padding-right: 32px;
+                padding-right: 64px;
                 display: flex;
                 text-align: left;
                 flex-direction: column;
@@ -356,6 +356,7 @@ export default mixins(BaseComponent).extend({
 
     .applet-launcher .launcher .brief .brief-info {
         padding: 0 16px;
+        padding-right: 48px;
         margin-left: 0;
     }
 
@@ -387,6 +388,7 @@ export default mixins(BaseComponent).extend({
     .applet-launcher {
         padding: 0;
     }
+
     .applet-launcher .launcher .brief {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
@@ -404,6 +406,7 @@ export default mixins(BaseComponent).extend({
     }
 
     .applet-launcher .launcher .brief .brief-info {
+        padding: 16px;
         padding-top: 0;
         grid-row: 3;
         grid-column: 1;

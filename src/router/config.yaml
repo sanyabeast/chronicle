@@ -113,7 +113,6 @@ applets:
       name: "applet/polar-picture-tool"
       component: PolarPictureTool
       props: true
-    document: "assets/docs/showdown.md"
     summary: "assets/docs/polar_picture_tool.txt"
     tags: ["experiment", "tool", "image", "polar", "math", "three", "gl"]
     title: "Polar Picture Tool"
@@ -130,6 +129,7 @@ applets:
   - route: *model_viewer_route
     tags: ["service"]
     title: "Model Viewer"
+    document: "assets/docs/showdown.md"
     props:
       model_src: null
     service: true

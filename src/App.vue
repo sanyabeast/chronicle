@@ -26,14 +26,14 @@
       <p><span v-html="get_current_year()"></span> |
         <b>Ukraine</b> |
         prototyped &
-        implemented by <a :href="sanyabeast_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github"
+        implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github"
           title="github" href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/"
           v-html="href" title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
-      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="sanyabeast_link"
+      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="mail_link"
           title="github">@sanyabeast</a> | <router-link v-html="href" to="/" title="home"></router-link> | <a
           :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a></p>
 
@@ -59,7 +59,7 @@ export default mixins(BaseComponent).extend({
   data() {
     return {
       href: location.host,
-      sanyabeast_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
+      mail_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     }
   },
   components: { ImageLink, Cookies },
@@ -216,11 +216,11 @@ a {
   cursor: cell;
 
   &[title="github"] {
-    color: #4caf50;
+    color: #999999;
   }
 
   &[title="sitemap"] {
-    color: grey;
+    color: #999999;
   }
 
   &[title="mailto"] {

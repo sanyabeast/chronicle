@@ -190,7 +190,7 @@ async function generate_sitemap() {
         }
     })
 
-    const about_text = read_text_file('public/assets/docs/about.html');
+    const about_text = read_text_file('public/assets/docs/about.txt');
     const html_config_footer = [{
         tag: 'div',
         children: [
