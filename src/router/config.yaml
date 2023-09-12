@@ -7,13 +7,18 @@ route_presets:
     props: true
   applet_launcher_route: &applet_launcher_route
     path: "/applet-launcher/:applet?"
-    name: "applet/applet-launcher"
+    name: "applet-launcher"
     component: AppletLauncher
     props: true
   model_viewer_route: &model_viewer_route
     path: "/model_viewer/:model_src?/:info?"
-    name: "applet/model_viewer"
+    name: "model_viewer"
     component: ModelViewer3D
+    props: true
+  directory_explorer_route: &directory_explorer_route
+    path: "/directory-explorer/:content?"
+    name: "directory-explorer"
+    component: DirectoryExplorer
     props: true
 # applets
 applets:
@@ -131,6 +136,21 @@ applets:
     title: "Model Viewer"
     document: "assets/docs/showdown.md"
     props:
-      model_src: 'assets/models/suzanne/Suzanne.gltf'
-      info: 'assets/models/suzanne/README.md'
+      model_src: "assets/models/suzanne/Suzanne.gltf"
+      info: "assets/models/suzanne/README.md"
+    service: true
+
+  - route: *directory_explorer_route
+    tags: ["service"]
+    title: "Directory Explorer"
+    props:
+      content:
+        title: "Sample Directory"
+        summary: "assets/docs/telechart.txt"
+        avatar: "assets/image/pattern.png"
+        files:
+          - ["Readme", "sample.txt"]
+          - ["Readme2", "sample2.txt"]
+          - ["Personal Photo 1", "pic01.jpg"]
+          - ["Personal Photo 2", "pic02.jpg"]
     service: true

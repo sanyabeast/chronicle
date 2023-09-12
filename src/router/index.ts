@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import { isString, map, uniqBy } from "lodash"
+import { isObject, isString, map, uniqBy } from "lodash"
 import config from './config.yaml'
 console.log(config)
 
@@ -11,6 +11,7 @@ const components = {
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
   SearchResult: () => import('../views/SearchResult.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
+  DirectoryExplorer: () => import('../views/DirectoryExplorer.vue'),
 }
 
 Vue.use(VueRouter)
@@ -22,6 +23,13 @@ applets.forEach((d, i) => {
   if (isString(d.route.component)) {
     console.log(d.route.component)
     d.route.component = components[d.route.component]
+    if (d.props) {
+      for (let key in d.props) {
+        if (isObject(d.props[key])) {
+          d.props[key] = JSON.stringify(d.props[key])
+        }
+      }
+    }
   }
 })
 
