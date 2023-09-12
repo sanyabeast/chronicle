@@ -1,9 +1,11 @@
 <template>
-    <div :class="{ mobile: is_mobile }" class="model-viewer-3d" @dragenter.prevent="handle_dragenter"
-        @dragover.prevent="handle_dragover" @drop.prevent="handle_drop">
+    <div @keydown="handle_keydown" :class="{ mobile: is_mobile }" class="model-viewer-3d"
+        @dragenter.prevent="handle_dragenter" @dragover.prevent="handle_dragover" @drop.prevent="handle_drop">
         <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name" :show_controls="!dragging"
-            :helpers="true" :orbit_controls="true" :rendering_mode="rendering_mode">
+            :show_helpers="show_helpers" :orbit_controls="orbit_controls" :rendering_mode="rendering_mode"
+            :camera_fov="camera_fov">
             <p class="button open-file" @click="open_file">open file</p>
+            <p class="button" @click="show_flashlight = !show_flashlight">flashlight</p>
             <p class="button clear scene" @click="clear_scene" v-if="model || hdri">clear all</p>
         </ThreeRenderer>
         <div class="loader-container" v-if="is_loading">
@@ -40,11 +42,6 @@ const gltf_loader = new GLTFLoader(); // Create a GLTFLoader instance
 gltf_loader.setDRACOLoader(draco_loader);
 const rgbe_loader = new RGBELoader(); // Create a RGBELoader instance
 
-export enum EModelScalingMode {
-    None,
-    Fit
-}
-
 export default mixins(BaseComponent).extend({
     name: 'PolarPictureTool',
     components: {
@@ -53,7 +50,6 @@ export default mixins(BaseComponent).extend({
     },
     data() {
         return {
-            model_scaling_mode: EModelScalingMode.Fit,
             dragging: false,
             download_image_name: 'rendered_frame',
             mouse_mode: -1,
@@ -66,6 +62,7 @@ export default mixins(BaseComponent).extend({
             hdri: null,
             rendering_mode: EThreeSceneRenderinMode.Basic,
             is_loading: false,
+            flashlight: null,
         };
     },
     computed: {
@@ -74,23 +71,99 @@ export default mixins(BaseComponent).extend({
         },
     },
     props: {
-        hdri_src: {
-            type: String,
-            default: null
-        },
         model_src: {
             type: String,
             default: null,
         },
+        hdri_src: {
+            type: String,
+            default: 'assets/hdri/studio.hdr',
+        },
+        show_background: {
+            type: Boolean,
+            default: false,
+        },
+        show_helpers: {
+            type: Boolean,
+            default: false,
+        },
+        orbit_controls: {
+            type: Boolean,
+            default: true,
+        },
+        orbit_controls_autorotate: {
+            type: Boolean,
+            default: false,
+        },
+        orbit_controls_autorotate_speed: {
+            type: Number,
+            default: 0.5,
+        },
+        orbit_controls_pan: {
+            type: Boolean,
+            default: true,
+        },
+        orbit_controls_zoom: {
+            type: Boolean,
+            default: true,
+        },
+        orbit_controls_rotate: {
+            type: Boolean,
+            default: true,
+        },
+        reset_camera_on_space: {
+            type: Boolean,
+            default: true,
+        },
+        default_camera_distance: {
+            type: Number,
+            default: 1,
+        },
+        camera_fov: {
+            type: Number,
+            default: 60,
+        },
+        show_flashlight: {
+            type: Boolean,
+            default: true,
+        },
+        model_orientation: {
+            type: Number,
+            default: 0,
+        },
+
     },
     mounted() {
         debounce(this.set_loading.bind(this), 500);
         this.init()
         document.addEventListener('keydown', this.handle_keydown);
+
+
+        if (this.orbit_controls) {
+            this.$refs.three_renderer.controls.enableZoom = this.orbit_controls_zoom;
+            this.$refs.three_renderer.controls.enableRotate = this.orbit_controls_rotate;
+            this.$refs.three_renderer.controls.enablePan = this.orbit_controls_pan;
+
+            if (this.orbit_controls_autorotate) {
+                this.$refs.three_renderer.controls.autoRotate = true;
+                this.$refs.three_renderer.controls.autoRotateSpeed = this.orbit_controls_autorotate_speed;
+                this.$refs.three_renderer.controls.enableZoom = false;
+                this.$refs.three_renderer.controls.enableRotate = false;
+                this.$refs.three_renderer.controls.enablePan = false;
+            }
+
+        }
+
+
         // this.$refs.three_renderer.scene.background = new THREE.Color(0x000000);
     },
     beforeDestroy() {
         document.removeEventListener('keydown', this.handle_keydown);
+    },
+    watch: {
+        show_flashlight() {
+            this.flashlight.visible = this.show_flashlight
+        },
     },
     methods: {
         async init() {
@@ -100,6 +173,10 @@ export default mixins(BaseComponent).extend({
             if (this.model_src) {
                 this.set_model(await this.load_gltf_file(this.model_src))
             }
+
+            let flashlight = this.flashlight = new THREE.PointLight(0xffffff, 1)
+            flashlight.visible = this.show_flashlight
+            this.$refs.three_renderer.camera.add(flashlight);
         },
         set_loading(is_loading) {
             this.is_loading = is_loading
@@ -125,12 +202,17 @@ export default mixins(BaseComponent).extend({
             let center = bounding_box.getCenter(new THREE.Vector3());
             let size = bounding_box.getSize(new THREE.Vector3());
             let max_dim = Math.max(size.x, size.y, size.z);
-            this.$refs.three_renderer.camera.position.set(
-                center.x,
-                center.y + max_dim / 2,
-                center.z + max_dim
-            )
-            this.$refs.three_renderer.camera.lookAt(center);
+
+            let scale = 1 / max_dim;
+            this.model.position.set(
+                -center.x * scale,
+                -center.y * scale,
+                -center.z * scale
+            );
+
+            this.model.rotation.y = Math.PI / 3 +  (this.model_orientation * Math.PI / 180);
+            this.model.scale.setScalar(scale);
+            this.reset_camera()
         },
         // New method to handle dragenter event
         handle_dragenter(event) {
@@ -192,7 +274,10 @@ export default mixins(BaseComponent).extend({
         set_hdri(hdri) {
             this.hdri = hdri
             this.$refs.three_renderer.scene.environment = hdri;
-            this.$refs.three_renderer.scene.background = hdri;
+            if (this.show_background) {
+                this.$refs.three_renderer.scene.background = hdri;
+            }
+
         },
         set_model(model) {
             this.$refs.three_renderer.scene.remove(this.model);
@@ -200,6 +285,7 @@ export default mixins(BaseComponent).extend({
             this.$refs.three_renderer.scene.add(model);
             this.patch_model(this.model)
             this.fit_camera_to_model()
+
         },
         load_hdri_file(file_src) {
             console.log(`loading hdri: ${file_src}`)
@@ -256,6 +342,16 @@ export default mixins(BaseComponent).extend({
             this.model = null
             this.$refs.three_renderer.scene.environment = null;
             this.$refs.three_renderer.scene.background = null;
+        },
+        reset_camera() {
+            this.$refs.three_renderer.set_camera_position(new THREE.Vector3(this.default_camera_distance, this.default_camera_distance / 2, this.default_camera_distance));
+            this.$refs.three_renderer.set_camera_target(new THREE.Vector3(0, 0, 0));
+        },
+        handle_keydown(event) {
+            /** reset camera on space keydown */
+            if (this.reset_camera_on_space && event.keyCode === 32) {
+                this.reset_camera()
+            }
         }
     }
 });

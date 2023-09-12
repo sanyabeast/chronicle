@@ -18,7 +18,7 @@ import { Component } from 'vue';
 
 
 export interface IThreeRendererProps {
-    helpers?: boolean;
+    show_helpers?: boolean;
     orbit_controls?: boolean;
     map_controls?: boolean;
     show_controls?: boolean;
@@ -66,7 +66,11 @@ export default mixins(BaseComponent).extend({
         };
     },
     props: {
-        helpers: {
+        camera_fov: {
+            type: Number,
+            default: 45,
+        },
+        show_helpers: {
             type: Boolean,
             default: false,
         },
@@ -100,6 +104,7 @@ export default mixins(BaseComponent).extend({
         },
     },
     mounted() {
+        (window as any).t = this;
         this.init_three();
         this.animate();
     },
@@ -121,6 +126,16 @@ export default mixins(BaseComponent).extend({
         this.$refs.renderer_container!.removeChild(this.renderer.domElement);
     },
     methods: {
+        set_camera_position(position: THREE.Vector3) {
+            this.camera.position.set(position.x, position.y, position.z)
+        },
+        set_camera_target(position: THREE.Vector3) {
+            if (this.orbit_controls) {
+                this.controls.target.set(position.x, position.y, position.z)
+            } else {
+                this.camera.lookAt(position)
+            }
+        },
         set_rendering_mode(mode: EThreeSceneRenderinMode) {
             this.set_scene_material_override(scene_rendering_mode_materials[mode])
         },
@@ -132,7 +147,7 @@ export default mixins(BaseComponent).extend({
         },
         init_three() {
             this.scene = new THREE.Scene();
-            this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 10000);
+            this.camera = new THREE.PerspectiveCamera(this.camera_fov, window.innerWidth / window.innerHeight, 0.01, 10000);
             this.renderer = new THREE.WebGLRenderer({
                 antialias: !this.is_mobile,
                 preserveDrawingBuffer: this.preserve_drawing_buffer,
@@ -141,12 +156,13 @@ export default mixins(BaseComponent).extend({
             // Set up the camera position
             this.camera.position.set(10, 10, 10)
             this.camera.lookAt(0, 0, 0)
+            this.scene.add(this.camera)
 
             // Append the Three.js renderer to the container
             this.renderer.setSize(this.width, this.height);
             this.$refs.renderer_container.appendChild(this.renderer.domElement);
 
-            if (this.helpers) {
+            if (this.show_helpers) {
                 // Add a grid to the scene
                 const grid_helper = new THREE.GridHelper(10, 10);
                 this.scene.add(grid_helper);

@@ -8,7 +8,7 @@ const components = {
   AppletLauncher: () => import('../views/AppletLauncher.vue'),
   Home: () => import('../views/Home.vue'),
   WebFrame: () => import('../views/WebFrame.vue'),
-  ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
+  ModelViewer: () => import('../views/ModelViewer3D.vue'),
   SearchResult: () => import('../views/SearchResult.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
 }
