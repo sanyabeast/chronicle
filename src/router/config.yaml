@@ -11,9 +11,9 @@ route_presets:
     component: AppletLauncher
     props: true
   model_viewer_route: &model_viewer_route
-    path: "/model_viewer/:model_src?"
+    path: "/model_viewer/:model_src?/:info?"
     name: "applet/model_viewer"
-    component: ModelViewer
+    component: ModelViewer3D
     props: true
 # applets
 applets:
@@ -132,4 +132,5 @@ applets:
     document: "assets/docs/showdown.md"
     props:
       model_src: 'assets/models/suzanne/Suzanne.gltf'
+      info: 'assets/models/suzanne/README.md'
     service: true

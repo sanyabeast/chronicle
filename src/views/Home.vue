@@ -2,8 +2,10 @@
   <div class="home">
     <div class="content">
       <TextView src="assets/docs/about.txt">
-        <img src="assets/foamy.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 0" />
-        <img src="assets/sanya.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 1" />
+        <div class="avatars">
+          <ImageView src="assets/foamy.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 0" />
+          <ImageView src="assets/sanya.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 1" />
+        </div>
       </TextView>
     </div>
   </div>
@@ -35,10 +37,29 @@ export default Vue.extend({
   align-items: center;
   justify-content: center;
 
-  img.avatar {
+  .avatars {
+    display: flex;
+    width: 100px;
+    height: 100px;
     shape-outside: circle();
     float: left;
+    margin-right: 0;
+    align-items: center;
+    justify-content: center;
     margin-right: 32px;
+    border-radius: 50%;
+    background-color: #0c0c0c;
+    overflow: hidden;
+
+    .image-view {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      
+      .preloader {
+        background-color: transparent;
+      }
+    }
   }
 
   .content a {

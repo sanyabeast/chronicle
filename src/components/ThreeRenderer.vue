@@ -42,17 +42,15 @@ export interface IThreeRendererMethods {
 }
 
 export enum EThreeSceneRenderinMode {
-    None,
-    Basic,
-    Normal,
+    Default,
     Wireframe,
+    Normal
 }
 
 const scene_rendering_mode_materials = {
-    [EThreeSceneRenderinMode.None]: null,
-    [EThreeSceneRenderinMode.Basic]: new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false }),
+    [EThreeSceneRenderinMode.Default]: null,
     [EThreeSceneRenderinMode.Normal]: new THREE.MeshNormalMaterial({ wireframe: false }),
-    [EThreeSceneRenderinMode.Wireframe]: new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
+    [EThreeSceneRenderinMode.Wireframe]: new THREE.MeshNormalMaterial({ color: 0xffffff, wireframe: true }),
 }
 
 export default mixins(BaseComponent).extend({
@@ -92,7 +90,7 @@ export default mixins(BaseComponent).extend({
         },
         rendering_mode: {
             type: Number,
-            default: EThreeSceneRenderinMode.None,
+            default: EThreeSceneRenderinMode.Default,
         },
         preserve_drawing_buffer: {
             type: Boolean,
@@ -106,11 +104,15 @@ export default mixins(BaseComponent).extend({
     mounted() {
         (window as any).t = this;
         this.init_three();
+        // Append the Three.js renderer to the container
+        this.$refs.renderer_container!.appendChild(this.renderer.domElement);
         this.animate();
+
     },
     watch: {
         rendering_mode: {
             handler: function (val: EThreeSceneRenderinMode) {
+                console.log(val)
                 this.set_rendering_mode(val)
             },
             immediate: true
@@ -141,8 +143,8 @@ export default mixins(BaseComponent).extend({
         },
         set_scene_material_override(material: THREE.Material) {
             console.log(material)
-            if (this.$refs.three_renderer) {
-                this.$refs.three_renderer.scene.overrideMaterial = material;
+            if (this.scene) {
+                this.scene.overrideMaterial = material;
             }
         },
         init_three() {
@@ -160,7 +162,7 @@ export default mixins(BaseComponent).extend({
 
             // Append the Three.js renderer to the container
             this.renderer.setSize(this.width, this.height);
-            this.$refs.renderer_container.appendChild(this.renderer.domElement);
+
 
             if (this.show_helpers) {
                 // Add a grid to the scene
@@ -183,6 +185,8 @@ export default mixins(BaseComponent).extend({
                 this.controls = new MapControls(this.camera, this.renderer.domElement);
                 this.controls.update();
             }
+
+            this.set_scene_material_override(scene_rendering_mode_materials[this.rendering_mode])
         },
         animate() {
             // Animation loop

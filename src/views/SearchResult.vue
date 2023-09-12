@@ -278,7 +278,7 @@ export default mixins(BaseComponent).extend({
     }
 }
 
-@media screen and (max-width: 1360px) {
+@media screen and (max-width: 1400px) {
     .view.search-result {
         .results-list {
             padding: 0 16px;

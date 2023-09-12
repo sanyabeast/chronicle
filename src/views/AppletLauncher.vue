@@ -333,7 +333,7 @@ export default mixins(BaseComponent).extend({
     }
 }
 
-@media screen and (max-width: 1360px) {
+@media screen and (max-width: 1400px) {
 
     .applet-launcher .launcher .brief {
         grid-template-columns: 288px 1fr;

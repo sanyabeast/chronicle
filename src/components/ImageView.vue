@@ -1,5 +1,5 @@
 <template>
-    <div class="image-view">
+    <div class="image-view" @click="$emit('click', $event)">
         <img :class="{ loading: is_loading, fit_width: image_aspect_ratio < 1 }" :src="src" @load="handle_image_load" />
         <Preloader v-if="is_loading" full fill :loader_type="loader_type" />
     </div>

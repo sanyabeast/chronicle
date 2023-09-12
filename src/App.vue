@@ -491,7 +491,7 @@ footer {
 
 
 /* Media query for screens less than 600px */
-@media screen and (max-width: 1360px) {
+@media screen and (max-width: 1400px) {
   header {
     padding: 0 16px;
     grid-template-columns: 1fr 2fr 1fr;

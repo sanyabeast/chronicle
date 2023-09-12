@@ -4,10 +4,21 @@
         <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name" :show_controls="!dragging"
             :show_helpers="show_helpers" :orbit_controls="orbit_controls" :rendering_mode="rendering_mode"
             :camera_fov="camera_fov">
+            <div class="separator"></div>
             <p class="button open-file" @click="open_file">open file</p>
-            <p class="button" @click="show_flashlight = !show_flashlight">flashlight</p>
+            <div class="separator"></div>
+            <p class="button" :class="{ active: show_flashlight }" @click="show_flashlight = !show_flashlight">flashlight
+            </p>
+            <p class="button"
+                :class="{ active: show_background, disabled: rendering_mode !== EThreeSceneRenderinMode.Default }"
+                @click="show_background = !show_background">background
+            </p>
+            <p class="button rendering-mode" :data-rendering-mode="rendering_mode_label" @click="toggle_rendering_mode"
+                v-html="rendering_mode_label"></p>
+            <div class="separator"></div>
             <p class="button clear scene" @click="clear_scene" v-if="model || hdri">clear all</p>
         </ThreeRenderer>
+        <Showdown class="model-info" :src="info" v-if="info" />
         <div class="loader-container" v-if="is_loading">
             <Preloader />
         </div>
@@ -43,7 +54,7 @@ gltf_loader.setDRACOLoader(draco_loader);
 const rgbe_loader = new RGBELoader(); // Create a RGBELoader instance
 
 export default mixins(BaseComponent).extend({
-    name: 'PolarPictureTool',
+    name: 'ModelViewer3D',
     components: {
         ThreeRenderer,
         Preloader
@@ -60,15 +71,18 @@ export default mixins(BaseComponent).extend({
             environment: null,
             model: null,
             hdri: null,
-            rendering_mode: EThreeSceneRenderinMode.Basic,
             is_loading: false,
             flashlight: null,
+            EThreeSceneRenderinMode: EThreeSceneRenderinMode
         };
     },
     computed: {
         is_mobile() {
             return this.$store.state.is_mobile_device;
         },
+        rendering_mode_label() {
+            return EThreeSceneRenderinMode[this.rendering_mode].toLocaleLowerCase()
+        }
     },
     props: {
         model_src: {
@@ -101,7 +115,7 @@ export default mixins(BaseComponent).extend({
         },
         orbit_controls_pan: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         orbit_controls_zoom: {
             type: Boolean,
@@ -131,6 +145,14 @@ export default mixins(BaseComponent).extend({
             type: Number,
             default: 0,
         },
+        info: {
+            type: String,
+            default: null
+        },
+        rendering_mode: {
+            type: Number,
+            default: EThreeSceneRenderinMode.Default,
+        },
 
     },
     mounted() {
@@ -138,8 +160,20 @@ export default mixins(BaseComponent).extend({
         this.init()
         document.addEventListener('keydown', this.handle_keydown);
 
+        console.log(this.info, this.model_src)
 
         if (this.orbit_controls) {
+
+            this.$refs.three_renderer.controls.maxDistance = 3
+            this.$refs.three_renderer.controls.maxPolarAngle = Math.PI
+
+            this.$refs.three_renderer.controls.enableDamping = true;
+            this.$refs.three_renderer.controls.dampingFactor = 0.05;
+            this.$refs.three_renderer.controls.rotateSpeed = 0.75;
+            this.$refs.three_renderer.controls.zoomSpeed = 0.75;
+            this.$refs.three_renderer.controls.panSpeed = 0.75;
+
+
             this.$refs.three_renderer.controls.enableZoom = this.orbit_controls_zoom;
             this.$refs.three_renderer.controls.enableRotate = this.orbit_controls_rotate;
             this.$refs.three_renderer.controls.enablePan = this.orbit_controls_pan;
@@ -158,11 +192,16 @@ export default mixins(BaseComponent).extend({
         // this.$refs.three_renderer.scene.background = new THREE.Color(0x000000);
     },
     beforeDestroy() {
+        this.clear_scene()
         document.removeEventListener('keydown', this.handle_keydown);
     },
     watch: {
         show_flashlight() {
             this.flashlight.visible = this.show_flashlight
+        },
+        show_background(new_val, old_val) {
+            console.log(new_val, this.hdri)
+            this.$refs.three_renderer.scene.background = new_val ? this.hdri : null;
         },
     },
     methods: {
@@ -174,7 +213,7 @@ export default mixins(BaseComponent).extend({
                 this.set_model(await this.load_gltf_file(this.model_src))
             }
 
-            let flashlight = this.flashlight = new THREE.PointLight(0xffffff, 1)
+            let flashlight = this.flashlight = new THREE.PointLight(0xffffff, 0.5)
             flashlight.visible = this.show_flashlight
             this.$refs.three_renderer.camera.add(flashlight);
         },
@@ -194,6 +233,7 @@ export default mixins(BaseComponent).extend({
             if (files.length > 0) {
                 const file = files[0]; // Assuming you only handle one file
                 console.log(`File dropped: ${file.name}`)
+                this.info = null
                 await this.load_file(file)
             }
         },
@@ -210,7 +250,7 @@ export default mixins(BaseComponent).extend({
                 -center.z * scale
             );
 
-            this.model.rotation.y = Math.PI / 3 +  (this.model_orientation * Math.PI / 180);
+            this.model.rotation.y = Math.PI / 3 + (this.model_orientation * Math.PI / 180);
             this.model.scale.setScalar(scale);
             this.reset_camera()
         },
@@ -219,7 +259,6 @@ export default mixins(BaseComponent).extend({
             this.dragging = true;
             event.preventDefault();
         },
-
         // New method to handle dragover event
         handle_dragover(event) {
             event.preventDefault();
@@ -229,6 +268,7 @@ export default mixins(BaseComponent).extend({
             const file = event.target.files[0];
             if (!file) return;
 
+            this.info = null
             this.load_file(file)
         },
         async load_file(file): Promise<any> {
@@ -352,6 +392,11 @@ export default mixins(BaseComponent).extend({
             if (this.reset_camera_on_space && event.keyCode === 32) {
                 this.reset_camera()
             }
+        },
+        toggle_rendering_mode() {
+            let modes_count = Object.keys(EThreeSceneRenderinMode).length / 2;
+            this.rendering_mode = (this.rendering_mode + 1) % modes_count
+
         }
     }
 });
@@ -449,6 +494,33 @@ export default mixins(BaseComponent).extend({
                         color: #fff;
                     }
                 }
+
+                &.active {
+                    color: red;
+                }
+
+                &.disabled {
+                    color: #818181;
+                    pointer-events: none;
+                }
+
+                &[data-rendering-mode="default"] {
+                    color: #fff;
+                }
+
+                &[data-rendering-mode="normal"],
+                &[data-rendering-mode="normal2"] {
+                    color: magenta;
+                }
+
+                &[data-rendering-mode="wireframe"] {
+                    color: cyan;
+                }
+
+                &[data-rendering-mode="basic"],
+                &[data-rendering-mode="lambert"] {
+                    color: yellow;
+                }
             }
         }
     }
@@ -502,15 +574,38 @@ export default mixins(BaseComponent).extend({
         }
     }
 
+    .model-info {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        text-align: right;
+        background: transparent;
+        padding: 0;
+        opacity: 0.25;
+        pointer-events: all;
+        z-index: 1;
+        line-height: 2em;
+        font-size: 12px;
+
+        p,
+        h1,
+        h2,
+        h3 {
+            margin: 0em;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
 
     &.mobile {
         .info {
-
             .instructions {
                 background-color: #0000009a;
                 opacity: 1;
             }
         }
     }
-}
-</style>
+}</style>

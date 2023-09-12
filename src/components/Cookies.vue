@@ -81,7 +81,7 @@ export default Vue.extend({
 
 }
 
-@media screen and (max-width: 1360px) {
+@media screen and (max-width: 1400px) {
     .cookies p.warning {
         display: flex;
     }
