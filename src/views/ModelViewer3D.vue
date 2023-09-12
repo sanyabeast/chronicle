@@ -608,4 +608,16 @@ export default mixins(BaseComponent).extend({
             }
         }
     }
-}</style>
+}
+
+@media screen and (max-width: 600px) {
+    .model-viewer-3d .model-info {
+        bottom: auto;
+        right: auto;
+        top: 16px;
+        left: 16px;
+        text-align: left;
+        opacity: 0.5;
+    }
+}
+</style>
