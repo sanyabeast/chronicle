@@ -4,6 +4,13 @@ import { isObject, isString, map, uniqBy } from "lodash"
 import config from './config.yaml'
 console.log(config)
 
+export enum EAppletCategory {
+  Default = 'default',
+  Service = 'service',
+  Experimental = 'experimental',
+  Package = 'package',
+}
+
 const components = {
   AppletLauncher: () => import('../views/AppletLauncher.vue'),
   Home: () => import('../views/Home.vue'),

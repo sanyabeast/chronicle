@@ -24,16 +24,14 @@ declare global {
   }
 
   interface IAppletMetadata {
-    route: RouteConfig,
-    tags: string[]
-    title: string,
-    preview?: string
-    props?: {}
     index?: number
-    document?: string
+    title: string,
     summary?: string
-    show_in_search?: boolean
-    service?: boolean
-    is_extra?: boolean
+    document?: string
+    preview?: string
+    tags: string[]
+    category: string[]
+    route: RouteConfig,
+    props?: {}
   }
 }

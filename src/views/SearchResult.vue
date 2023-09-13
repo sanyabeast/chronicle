@@ -2,53 +2,26 @@
     <div class="search-result">
         <h2 v-html="search_results_message"></h2>
         <div class="results-list">
-            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }"
-                v-if="(!item.service && !item.is_extra) || $store.state.search_query.length > 0" class="result-preview"
-                v-for="(item, index) in filtered_routes" :key="index" :to="get_route_link(item)">
-                <!-- <img v-if="item.preview != undefined" :src="item.preview" /> -->
-                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
-                <div class="fader"></div>
-                <h3 v-html="get_item_title(item)"></h3>
-            </router-link>
-            <div class="search-section">
-                <h2 v-if="show_all_applets">all applets</h2>
+            <div class="applet-category-view" v-if="need_category_show(category_item)"
+                v-for="(category_item, index) in category_view.order" :key="`cat_block_${index}`">
+                <div class="search-section" v-if="category_item.title">
+                    <h2 v-html="category_item.title"></h2>
+                </div>
+                <router-link class="result-preview"
+                    v-for="(applet_item, index) in filter_applets_with_category(category_item.filter ? filter_applets_with_search_query() : all_applets, category_item.include)"
+                    :key="`cat_${index}`" :to="get_route_link(applet_item)">
+                    <ImageView v-if="!is_mobile && applet_item.preview != undefined" :src="applet_item.preview" />
+                    <div class="fader"></div>
+                    <h3 v-html="get_item_title(applet_item)"></h3>
+                </router-link>
             </div>
-            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
-                class="result-preview" v-for="(item, index) in all_applets" :key="`all_${index}`"
-                :to="get_route_link(item)">
-                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
-                <div class="fader"></div>
-                <h3 v-html="get_item_title(item)"></h3>
-            </router-link>
-            <div class="search-section">
-                <h2 v-if="show_all_applets">extra applets</h2>
-            </div>
-            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
-                class="result-preview" v-for="(item, index) in extra_applets" :key="`extra_${index}`"
-                :to="get_route_link(item)">
-                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
-                <div class="fader"></div>
-                <h3 v-html="get_item_title(item)"></h3>
-            </router-link>
-            <div class="search-section">
-                <h2 v-if="show_all_applets">service applets</h2>
-            </div>
-            <router-link :style="{ backgroundColor: get_thumb_bg_color(item) }" v-if="show_all_applets"
-                class="result-preview" v-for="(item, index) in service_applets" :key="`service_${index}`"
-                :to="get_route_link(item)">
-                <!-- <img v-if=" item.preview !=undefined" :src="item.preview" /> -->
-                <ImageView v-if="!is_mobile && item.preview != undefined" :src="item.preview" />
-                <div class="fader"></div>
-                <h3 v-html="get_item_title(item)"></h3>
-            </router-link>
+
         </div>
     </div>
 </template>
 <script lang="ts">
 
-import { applets } from '@/router';
+import { EAppletCategory, applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
 import { get_dark_web_color, get_random_web_color } from "@/tools"
 import ImageView from '@/components/ImageView.vue';
@@ -62,7 +35,52 @@ export default mixins(BaseComponent).extend({
     name: "SearchResults",
     data() {
         return {
-            items_found: 0
+            items_found: 0,
+            category_view: {
+                order: [
+                    {
+                        include: [EAppletCategory.Default],
+                        title: null,
+                        fold: false,
+                        filter: true,
+                        if_search: true,
+                        if_no_search: false
+
+                    },
+                    {
+                        include: [EAppletCategory.Default],
+                        title: null,
+                        fold: false,
+                        filter: true,
+                        if_search: true,
+                        if_no_search: true
+                    },
+                    {
+                        include: [EAppletCategory.Experimental],
+                        title: "experimental",
+                        fold: false,
+                        filter: true,
+                        if_search: true,
+                        if_no_search: true
+                    },
+                    {
+                        include: [EAppletCategory.Package],
+                        title: "packages",
+                        fold: false,
+                        filter: false,
+                        if_search: true,
+                        if_no_search: true
+                    },
+                    {
+                        include: [EAppletCategory.Service],
+                        title: "services",
+                        fold: true,
+                        filter: false,
+                        if_search: true,
+                        if_no_search: false
+                    }
+                ]
+            }
         };
     },
     beforeMount() {
@@ -91,31 +109,19 @@ export default mixins(BaseComponent).extend({
         search_query() {
             return this.$store.state.search_query;
         },
-        filtered_routes() {
-            if (this.$store.state.search_query.length > 0) {
-                const result = searcher.search(this.$store.state.search_query);
-                this.items_found = result.length;
-                return result;
-            }
-            else {
-                this.items_found = applets.length;
-                return applets;
-            }
-        },
+        // filtered_routes() {
+        //     if (this.$store.state.search_query.length > 0) {
+        //         const result = searcher.search(this.$store.state.search_query);
+        //         this.items_found = result.length;
+        //         return result;
+        //     }
+        //     else {
+        //         this.items_found = applets.length;
+        //         return applets;
+        //     }
+        // },
         all_applets() {
-            return filter(applets, (item: IAppletMetadata) => {
-                return !item.service && !item.is_extra;
-            });
-        },
-        service_applets() {
-            return filter(applets, (item: IAppletMetadata) => {
-                return item.service;
-            });
-        },
-        extra_applets() {
-            return filter(applets, (item: IAppletMetadata) => {
-                return item.is_extra;
-            });
+            return applets
         },
         show_all_applets() {
             return this.$store.state.search_query.length > 0;
@@ -130,6 +136,23 @@ export default mixins(BaseComponent).extend({
                     return "aw, no matches found :( But hey, don't give up!";
                 }
 
+            }
+        },
+        need_category_show() {
+            return (category_item: any) => {
+                if (this.$store.state.search_query.length > 0) {
+                    if (category_item.if_search) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    if (category_item.if_no_search) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
             }
         }
     },
@@ -182,6 +205,23 @@ export default mixins(BaseComponent).extend({
         get_preview(uri: string) {
             return require(uri);
         },
+        filter_applets_with_category(applets: IAppletMetadata[], category: EAppletCategory[]): IAppletMetadata[] {
+            return filter(applets, (item: IAppletMetadata) => {
+                return filter(item.category, (cat: EAppletCategory) => {
+                    return category.indexOf(cat) > -1;
+                }).length > 0;
+            });
+        },
+        filter_applets_with_search_query(): IAppletMetadata[] {
+            if (this.$store.state.search_query.length > 0) {
+                const result = searcher.search(this.$store.state.search_query);
+                this.items_found = result.length;
+                return result;
+            } else {
+                this.items_found = applets.length;
+                return applets;
+            }
+        },
     },
     components: { ImageView }
 })
@@ -191,10 +231,17 @@ export default mixins(BaseComponent).extend({
     width: 100%;
 
     .results-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        column-gap: 24px;
-        row-gap: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        .applet-category-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            column-gap: 24px;
+            row-gap: 24px;
+            padding: 32px 0;
+        }
 
         .result-preview {
             user-select: none;
