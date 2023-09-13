@@ -1,5 +1,5 @@
 <template>
-    <div class="directory-explorer" ref="root">
+    <div class="package-explorer" ref="root">
         <div class="content" v-if="parsed_content">
             <h1 v-if="parsed_content.title" v-html="`/ ${parsed_content.title} /`"></h1>
             <div class="summary">
@@ -36,7 +36,7 @@ interface IDirectoryData {
 }
 
 export default mixins(BaseComponent).extend({
-    name: "DirectoryExplorer",
+    name: "PackageExplorer",
     components: { Showdown, ImageView },
     data(): IDirectoryData {
         return {
@@ -69,7 +69,7 @@ export default mixins(BaseComponent).extend({
 
 </script>
 <style lang="less">
-.directory-explorer {
+.package-explorer {
     overflow: hidden;
     position: relative;
     overflow-x: hidden;
@@ -144,7 +144,7 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 1400px) {
-    .directory-explorer {
+    .package-explorer {
         padding: 16px;
 
         .summary {
@@ -161,7 +161,7 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 600px) {
-    .directory-explorer .summary {
+    .package-explorer .summary {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
         grid-gap: 16px;

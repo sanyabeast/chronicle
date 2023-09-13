@@ -5,7 +5,7 @@
         <h1>home</h1>
       </router-link>
       <div class="menu">
-        <router-link id="search" to="/applets-catalog" title="menu">
+        <router-link id="search" to="/applets" title="menu">
           <h1 v-html="search_link_label"></h1>
         </router-link>
         <input v-if="$route.name === `applets-catalog`" ref="search_input" type="search" id="search-input"

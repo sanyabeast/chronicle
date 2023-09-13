@@ -20,7 +20,7 @@ const components = {
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
   AppletsCatalog: () => import('../views/AppletsCatalog.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
-  DirectoryExplorer: () => import('../views/DirectoryExplorer.vue'),
+  PackageExplorer: () => import('../views/PackageExplorer.vue'),
 }
 
 Vue.use(VueRouter)

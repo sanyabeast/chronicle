@@ -48,7 +48,6 @@ import ImageView from '@/components/ImageView.vue';
 import { find } from 'lodash';
 
 
-
 interface IAppletLauncherData {
     applet_data?: IAppletMetadata,
     scroll_height: 0,

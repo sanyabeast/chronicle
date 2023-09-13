@@ -5,18 +5,19 @@
             <div class="applets-category-view" v-if="need_category_show(category_item)"
                 v-for="(category_item, category_index) in category_view.order" :key="`cat_block_${category_index}`">
                 <div @click="category_item.fold = !category_item.fold" class="applet-category-title"
-                    :class="{ folded: category_item.fold && !search_not_empty }" v-if="category_item.title">
+                    :class="{ folded: category_item.fold }" v-if="category_item.title">
+                    <div class="fold-control"></div>
                     <h2 v-html="category_item.title"></h2>
                 </div>
-                <router-link v-if="!category_item.fold || search_not_empty" class="applet-thumb"
-                    :class="{ no_preview: !applet_item.preview }"
+                <router-link v-if="!category_item.fold" class="applet-thumb" :class="{ no_preview: !applet_item.preview }"
                     v-for="(applet_item, index) in get_category_applets(category_item)" :key="`cat_${index}`"
                     :to="get_route_link(applet_item)">
                     <ImageView v-if="applet_item.preview != undefined" :src="applet_item.preview" />
                     <div class="fader"></div>
                     <h3 v-html="get_item_title(applet_item)"></h3>
                 </router-link>
-                <div class="grid-dummy" v-for="index in grid_dummies_count" :key="`dummy_${index}`"></div>
+                <div v-if="!category_item.fold" class="grid-dummy" v-for="index in grid_dummies_count"
+                    :key="`dummy_${index}`"></div>
             </div>
 
         </div>
@@ -34,9 +35,25 @@ import { filter } from 'lodash';
 
 let searcher: FuzzySearch<IAppletMetadata>;
 
+interface IAppletsCatalogData {
+    items_found: number;
+    category_fold_map: any[];
+    category_view: {
+        order: {
+            include: EAppletCategory[];
+            title: string | null;
+            fold: boolean;
+            filter: boolean;
+            if_search: boolean;
+            if_no_search: boolean;
+        }[]
+    };
+    grid_dummies_count: number;
+}
+
 export default mixins(BaseComponent).extend({
     name: "AppletsCatalog",
-    data() {
+    data(): IAppletsCatalogData {
         return {
             items_found: 0,
             category_fold_map: [],
@@ -53,11 +70,19 @@ export default mixins(BaseComponent).extend({
                     },
                     {
                         include: [EAppletCategory.Project, EAppletCategory.Demo],
+                        title: null,
+                        fold: false,
+                        filter: false,
+                        if_search: false,
+                        if_no_search: true
+                    },
+                    {
+                        include: [EAppletCategory.Project, EAppletCategory.Demo],
                         title: "everything",
                         fold: false,
                         filter: false,
                         if_search: true,
-                        if_no_search: true
+                        if_no_search: false
                     },
                     {
                         include: [EAppletCategory.Lab],
@@ -131,6 +156,11 @@ export default mixins(BaseComponent).extend({
         },
 
     },
+    watch: {
+        search_query() {
+            this.unfold_all();
+        }
+    },
     methods: {
         get_random_web_color: get_random_web_color,
         get_thumb_bg_color(item: IAppletMetadata) {
@@ -143,7 +173,7 @@ export default mixins(BaseComponent).extend({
         get_route_link(item: IAppletMetadata): string {
             let result = "";
             if (this.skip_launcher === false || item.summary || item.document) {
-                result = `/applet-launcher/${item.index}`;
+                result = `/applet/${item.index}`;
             }
             else {
                 result = this.$router.resolve({
@@ -217,7 +247,12 @@ export default mixins(BaseComponent).extend({
 
             return result;
 
-        }
+        },
+        unfold_all() {
+            this.category_view.order.forEach((item) => {
+                item.fold = false;
+            });
+        },
     },
     components: { ImageView }
 })
@@ -309,61 +344,70 @@ export default mixins(BaseComponent).extend({
         justify-content: flex-start;
         align-items: center;
         cursor: cell;
+        display: grid;
+        grid-template-columns: 24px auto 1fr;
+        grid-gap: 8px;
+
+
+        .fold-control {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            widows: 24px;
+            height: 24px;
+
+            &:before,
+            &:after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 80%;
+                height: 4px;
+                background-color: #fff;
+                transform: translate(-50%, -50%);
+            }
+
+            &:after {
+                height: 80%;
+                width: 4px;
+                transform: translate(-50%, -50%) scaleY(0);
+            }
+        }
 
         h2 {
             margin: 0;
             text-align: left;
             background-color: #fff;
             color: #000;
-        }
-
-        &:before {
-            content: "⮟";
-            width: 24px;
-        }
-
-        &:hover {
-            &:before {
-                color: #ff0000;
-            }
-
-            h2 {
-                background-color: #ff0000;
-            }
+            display: grid;
         }
 
         &.folded {
-            &:before {
-                content: "⮞";
-                color: #ff0000;
+            .fold-control {
+                &:after {
+                    transform: translate(-50%, -50%) scaleY(1);
+                }
+            }
+        }
+
+
+        &:hover {
+            .fold-control {
+
+                &:after,
+                &:before {
+                    background-color: #ff0000;
+                }
             }
 
             h2 {
                 background-color: #ff0000;
             }
-
-            &:hover {
-                &:before {
-                    color: #fff;
-                }
-
-                h2 {
-                    background-color: #fff;
-                }
-            }
         }
+
     }
 
-    &.search_not_empty {
-        .applet-category-title {
-            pointer-events: none;
-
-            &:before {
-                content: "";
-                display: none;
-            }
-        }
-    }
 
     h2 {
         text-align: center;
@@ -420,13 +464,16 @@ export default mixins(BaseComponent).extend({
                     height: 100%;
                     font-family: 'Ubuntu', sans-serif;
                     font-size: 20px;
+                    font-weight: 400;
 
                 }
 
                 &.no_preview {
-                    h3 {
-                        grid-column: 1 / -1;
-                        padding: 0;
+                    &:before {
+                        content: "";
+                        width: 32px;
+                        height: 32px;
+                        background-color: #4b4b4b;
                     }
                 }
 
@@ -442,6 +489,18 @@ export default mixins(BaseComponent).extend({
                     margin: 0;
                     font-size: 20px;
                     text-align: left;
+                }
+
+                .fold-control {
+
+                    &:after,
+                    &:before {
+                        background-color: #ff0000;
+                    }
+                }
+
+                h2 {
+                    background-color: #ff0000;
                 }
             }
         }

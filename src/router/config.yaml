@@ -1,24 +1,24 @@
 # routes
 route_presets:
   webframe_route: &webframe_route
-    path: "/web-frame/:url?"
-    name: "web-frame"
+    path: "/web/:url?"
+    name: "webframe"
     component: WebFrame
     props: true
   applet_launcher_route: &applet_launcher_route
-    path: "/applet-launcher/:applet?"
+    path: "/applet/:applet?"
     name: "applet-launcher"
     component: AppletLauncher
     props: true
   model_viewer_route: &model_viewer_route
-    path: "/model_viewer/:model_src?/:info?"
-    name: "model_viewer"
+    path: "/models/:model_src?/:info?"
+    name: "model-viewer"
     component: ModelViewer3D
     props: true
-  directory_explorer_route: &directory_explorer_route
-    path: "/directory-explorer/:content?"
-    name: "directory-explorer"
-    component: DirectoryExplorer
+  package_explorer_route: &package_explorer_route
+    path: "/package/:content?"
+    name: "package-explorer"
+    component: PackageExplorer
     props: true
 # applets
 applets:
@@ -35,11 +35,11 @@ applets:
     title: ""
 
   - route:
-      path: "/applets-catalog/:query?"
+      path: "/applets/:query?"
       name: "applets-catalog"
       component: AppletsCatalog
       props: true
-    tags: []
+    tags: ["service"]
     category: ["service"]
     title: ""
 
@@ -126,7 +126,8 @@ applets:
       component: PolarPictureTool
       props: true
     summary: "assets/docs/polar_picture_tool.txt"
-    tags: ["demo"]
+    tags: ["three", "gl", "tool", "shader", "utils", "image"]
+    category: ["project", "experiment"]
     title: "Polar Picture Tool"
     preview: "assets/preview/polar_image_a1.png"
     props:
@@ -140,16 +141,16 @@ applets:
 
   - route: *model_viewer_route
     tags: []
-    category: ["service"]
+    category: ["three", "gl", "model", "viewer"]
     title: "Model Viewer"
     document: "assets/docs/showdown.md"
     props:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"
 
-  - route: *directory_explorer_route
-    tags: []
-    category: ["service"]
+  - route: *package_explorer_route
+    tags: ["service", "utils", "file"]
+    category: []
     title: "Directory Explorer"
     props:
       content:
