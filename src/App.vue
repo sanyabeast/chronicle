@@ -5,10 +5,10 @@
         <h1>home</h1>
       </router-link>
       <div class="menu">
-        <router-link id="search" to="/search-result" title="menu">
+        <router-link id="search" to="/applets-catalog" title="menu">
           <h1 v-html="search_link_label"></h1>
         </router-link>
-        <input v-if="$route.name === `search-result`" ref="search_input" type="search" id="search-input"
+        <input v-if="$route.name === `applets-catalog`" ref="search_input" type="search" id="search-input"
           autocomplete="off" spellcheck="false" @focus="handle_searchbox_focus" @input="handle_searchbox_input"
           @blur="handle_searchbox_blur" :value="$store.state.search_query">
         <a href="#" title="clear search" v-if="show_clear_search" class="clear_search" @click="clear_search"></a>
@@ -26,16 +26,16 @@
       <p><span v-html="get_current_year()"></span> |
         <b>Ukraine</b> |
         prototyped &
-        implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github"
-          title="github" href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/"
-          v-html="href" title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a>
+        implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github" title="github"
+          href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/" v-html="href"
+          title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
-      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="mail_link"
-          title="github">@sanyabeast</a> | <router-link v-html="href" to="/" title="home"></router-link> | <a
-          :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a></p>
+      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="mail_link" title="github">@sanyabeast</a>
+        | <router-link v-html="href" to="/" title="home"></router-link> | <a :href="sitemap_url" id="sitemap"
+          title="sitemap">sitemap</a></p>
 
     </footer>
     <!-- <nav>
@@ -65,7 +65,7 @@ export default mixins(BaseComponent).extend({
   components: { ImageLink, Cookies },
   watch: {
     '$route'(to, from) {
-      if (to.name === 'search-result') {
+      if (to.name === 'applets-catalog') {
         let timeout = 2000;
         let start_data = Date.now();
         let search_focus_interval = setInterval(() => {
@@ -83,21 +83,21 @@ export default mixins(BaseComponent).extend({
     }
   },
   computed: {
-    sitemap_url(){
+    sitemap_url() {
       return `sitemap.html`
     },
     search_link_label() {
-      if (this.$route.name !== 'search-result') {
+      if (this.$route.name !== 'applets-catalog') {
         return 'menu';
       } else {
         return this.$store.state.search_query.length > 0 ? '' : 'menu'
       }
     },
     show_search_link() {
-      return this.$route.name !== 'search-result'
+      return this.$route.name !== 'applets-catalog'
     },
     show_clear_search() {
-      return this.$route.name === 'search-result' && this.$store.state.search_query.length > 0
+      return this.$route.name === 'applets-catalog' && this.$store.state.search_query.length > 0
     },
     search_query() {
       return this.$store.state.search_query
@@ -112,7 +112,7 @@ export default mixins(BaseComponent).extend({
   methods: {
     get_current_year: get_current_year,
     handle_searchbox_focus(event: FocusEvent) {
-      // this.route_push('search-result', { query: this.search_query })
+      // this.route_push('applets-catalog', { query: this.search_query })
     },
     handle_searchbox_blur(event: FocusEvent) {
       // this.$store.commit('route_back')
@@ -121,13 +121,13 @@ export default mixins(BaseComponent).extend({
       let search_input: HTMLInputElement = this.$refs.search_input as HTMLInputElement
       this.$store.commit('search_query', search_input.value)
       this.$router.replace({
-        name: 'search-result', query: { query: this.search_query }
+        name: 'applets-catalog', query: { query: this.search_query }
       })
     },
     clear_search() {
       this.$store.commit('search_query', '')
       this.$router.replace({
-        name: 'search-result', query: { query: this.search_query }
+        name: 'applets-catalog', query: { query: this.search_query }
       })
     },
     goto_home() {

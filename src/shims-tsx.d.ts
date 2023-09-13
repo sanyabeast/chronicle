@@ -24,7 +24,7 @@ declare global {
   }
 
   interface IAppletMetadata {
-    index?: number
+    index?: string
     title: string,
     summary?: string
     document?: string

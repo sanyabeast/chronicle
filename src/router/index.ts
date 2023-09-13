@@ -2,12 +2,14 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import { isObject, isString, map, uniqBy } from "lodash"
 import config from './config.yaml'
+import { to_snake_case } from '@/tools'
 console.log(config)
 
 export enum EAppletCategory {
-  Default = 'default',
+  Project = 'project',
+  Demo = 'demo',
+  Lab = 'lab',
   Service = 'service',
-  Experimental = 'experimental',
   Package = 'package',
 }
 
@@ -16,7 +18,7 @@ const components = {
   Home: () => import('../views/Home.vue'),
   WebFrame: () => import('../views/WebFrame.vue'),
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
-  SearchResult: () => import('../views/SearchResult.vue'),
+  AppletsCatalog: () => import('../views/AppletsCatalog.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
   DirectoryExplorer: () => import('../views/DirectoryExplorer.vue'),
 }
@@ -26,7 +28,7 @@ Vue.use(VueRouter)
 let applets = config.applets as IAppletMetadata[]
 
 applets.forEach((d, i) => {
-  d.index = i
+  d.index = to_snake_case(d.title);
   if (isString(d.route.component)) {
     console.log(d.route.component)
     d.route.component = components[d.route.component]

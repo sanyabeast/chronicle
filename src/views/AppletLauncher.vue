@@ -43,8 +43,9 @@ import mixins from 'vue-typed-mixins'
 import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
-import { get_random_web_color, get_bright_web_color } from '@/tools';
+import { get_random_web_color, get_bright_web_color, to_snake_case } from '@/tools';
 import ImageView from '@/components/ImageView.vue';
+import { find } from 'lodash';
 
 
 
@@ -68,8 +69,7 @@ export default mixins(BaseComponent).extend({
         };
     },
     mounted() {
-        let index = parseInt(this.applet);
-        this.applet_data = applets[index];
+        this.applet_data = find(applets, (item) => to_snake_case(item.title) === this.applet);
 
         if (this.applet_data && this.applet_data.summary) {
             this.update_summary()

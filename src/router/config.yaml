@@ -35,9 +35,9 @@ applets:
     title: ""
 
   - route:
-      path: "/search-result/:query?"
-      name: "search-result"
-      component: SearchResult
+      path: "/applets-catalog/:query?"
+      name: "applets-catalog"
+      component: AppletsCatalog
       props: true
     tags: []
     category: ["service"]
@@ -46,7 +46,7 @@ applets:
   - route: *webframe_route
     tags: ["extras", "experiment", "voxels", "procedural", "three"]
     title: "Brickscape [Demo]"
-    category: ["project", "experimental"]
+    category: ["project", "demo"]
     preview: "assets/preview/hexworld_a1.png"
     summary: "assets/docs/brickscape.txt"
     props:
@@ -64,7 +64,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Forest Lads [Demo]"
-    category: ["project", "experimental"]
+    category: ["project", "demo"]
     preview: "assets/preview/forestlads_a1.png"
     props:
       url: "https://sanyabeast.github.io/forestlads/dist/index.html"
@@ -80,7 +80,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Hill Rider [Demo]"
-    category: ["experimental"]
+    category: ["demo"]
     summary: "assets/docs/hillrider.txt"
     preview: "assets/preview/coderider_a1.png"
     props:
@@ -89,7 +89,7 @@ applets:
   - route: *webframe_route
     tags: ["extras", "game", "engine"]
     title: "Retro Engine [Demo]"
-    category: ["experimental"]
+    category: ["demo"]
     preview: "assets/preview/retro_engine_a1.png"
     props:
       url: "https://sanyabeast.github.io/retro/dist/demo_alt/"
@@ -97,7 +97,7 @@ applets:
   - route: *webframe_route
     tags: ["extras", "experiment"]
     title: "Euphoria [Demo]"
-    category: ["experimental"]
+    category: ["lab"]
     preview: "assets/preview/euphoria_da1.png"
     props:
       url: "https://sanyabeast.github.io/euphoria/dist/index.html"
@@ -105,7 +105,7 @@ applets:
 
   - route: *webframe_route
     tags: ["extras", "commercial", "chart", "plot", "three", "gl"]
-    category: ["default"]
+    category: ["project"]
     title: "Plot3 [Demo]"
     preview: "assets/preview/plot_a1.png"
     props:
@@ -113,7 +113,7 @@ applets:
 
   - route: *webframe_route
     tags: ["extras", "retro", "unity", "game"]
-    category: ["default"]
+    category: ["project"]
     title: "Middlenight [Demo]"
     summary: "assets/docs/middlenight.txt"
     preview: "assets/preview/middlenight_a1.png"
@@ -126,7 +126,7 @@ applets:
       component: PolarPictureTool
       props: true
     summary: "assets/docs/polar_picture_tool.txt"
-    tags: ["experimental"]
+    tags: ["demo"]
     title: "Polar Picture Tool"
     preview: "assets/preview/polar_image_a1.png"
     props:

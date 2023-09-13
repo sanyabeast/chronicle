@@ -1,19 +1,22 @@
 <template>
-    <div class="search-result">
+    <div class="applets-catalog" :class="{ search_not_empty: search_not_empty }">
         <h2 v-html="search_results_message"></h2>
-        <div class="results-list">
-            <div class="applet-category-view" v-if="need_category_show(category_item)"
-                v-for="(category_item, index) in category_view.order" :key="`cat_block_${index}`">
-                <div class="search-section" v-if="category_item.title">
+        <div class="applets-catalog-content">
+            <div class="applets-category-view" v-if="need_category_show(category_item)"
+                v-for="(category_item, category_index) in category_view.order" :key="`cat_block_${category_index}`">
+                <div @click="category_item.fold = !category_item.fold" class="applet-category-title"
+                    :class="{ folded: category_item.fold && !search_not_empty }" v-if="category_item.title">
                     <h2 v-html="category_item.title"></h2>
                 </div>
-                <router-link class="result-preview"
-                    v-for="(applet_item, index) in filter_applets_with_category(category_item.filter ? filter_applets_with_search_query() : all_applets, category_item.include)"
-                    :key="`cat_${index}`" :to="get_route_link(applet_item)">
-                    <ImageView v-if="!is_mobile && applet_item.preview != undefined" :src="applet_item.preview" />
+                <router-link v-if="!category_item.fold || search_not_empty" class="applet-thumb"
+                    :class="{ no_preview: !applet_item.preview }"
+                    v-for="(applet_item, index) in get_category_applets(category_item)" :key="`cat_${index}`"
+                    :to="get_route_link(applet_item)">
+                    <ImageView v-if="applet_item.preview != undefined" :src="applet_item.preview" />
                     <div class="fader"></div>
                     <h3 v-html="get_item_title(applet_item)"></h3>
                 </router-link>
+                <div class="grid-dummy" v-for="index in grid_dummies_count" :key="`dummy_${index}`"></div>
             </div>
 
         </div>
@@ -32,14 +35,15 @@ import { filter } from 'lodash';
 let searcher: FuzzySearch<IAppletMetadata>;
 
 export default mixins(BaseComponent).extend({
-    name: "SearchResults",
+    name: "AppletsCatalog",
     data() {
         return {
             items_found: 0,
+            category_fold_map: [],
             category_view: {
                 order: [
                     {
-                        include: [EAppletCategory.Default],
+                        include: [],
                         title: null,
                         fold: false,
                         filter: true,
@@ -48,20 +52,20 @@ export default mixins(BaseComponent).extend({
 
                     },
                     {
-                        include: [EAppletCategory.Default],
-                        title: null,
+                        include: [EAppletCategory.Project, EAppletCategory.Demo],
+                        title: "everything",
                         fold: false,
-                        filter: true,
+                        filter: false,
                         if_search: true,
                         if_no_search: true
                     },
                     {
-                        include: [EAppletCategory.Experimental],
-                        title: "experimental",
-                        fold: false,
-                        filter: true,
+                        include: [EAppletCategory.Lab],
+                        title: "experiments",
+                        fold: true,
+                        filter: false,
                         if_search: true,
-                        if_no_search: true
+                        if_no_search: false
                     },
                     {
                         include: [EAppletCategory.Package],
@@ -73,14 +77,15 @@ export default mixins(BaseComponent).extend({
                     },
                     {
                         include: [EAppletCategory.Service],
-                        title: "services",
+                        title: "service",
                         fold: true,
                         filter: false,
                         if_search: true,
                         if_no_search: false
                     }
                 ]
-            }
+            },
+            grid_dummies_count: 10
         };
     },
     beforeMount() {
@@ -109,28 +114,11 @@ export default mixins(BaseComponent).extend({
         search_query() {
             return this.$store.state.search_query;
         },
-        // filtered_routes() {
-        //     if (this.$store.state.search_query.length > 0) {
-        //         const result = searcher.search(this.$store.state.search_query);
-        //         this.items_found = result.length;
-        //         return result;
-        //     }
-        //     else {
-        //         this.items_found = applets.length;
-        //         return applets;
-        //     }
-        // },
-        all_applets() {
-            return applets
-        },
-        show_all_applets() {
-            return this.$store.state.search_query.length > 0;
-        },
         search_results_message() {
-            if (this.$store.state.search_query.length == 0) {
+            if (this.search_not_empty == 0) {
                 return "c'mon, type something and let's find what you're looking for!";
             } else {
-                if (this.$store.state.search_query.length > 0 && this.items_found > 0) {
+                if (this.search_not_empty > 0 && this.items_found > 0) {
                     return `found ${this.items_found} ${this.items_found > 1 ? 'matches' : 'match'} for "${this.$store.state.search_query}"`;
                 } else {
                     return "aw, no matches found :( But hey, don't give up!";
@@ -138,23 +126,10 @@ export default mixins(BaseComponent).extend({
 
             }
         },
-        need_category_show() {
-            return (category_item: any) => {
-                if (this.$store.state.search_query.length > 0) {
-                    if (category_item.if_search) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if (category_item.if_no_search) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        }
+        search_not_empty() {
+            return this.search_query.length > 0;
+        },
+
     },
     methods: {
         get_random_web_color: get_random_web_color,
@@ -206,6 +181,9 @@ export default mixins(BaseComponent).extend({
             return require(uri);
         },
         filter_applets_with_category(applets: IAppletMetadata[], category: EAppletCategory[]): IAppletMetadata[] {
+            if (category.length == 0) {
+                return applets;
+            }
             return filter(applets, (item: IAppletMetadata) => {
                 return filter(item.category, (cat: EAppletCategory) => {
                     return category.indexOf(cat) > -1;
@@ -213,7 +191,7 @@ export default mixins(BaseComponent).extend({
             });
         },
         filter_applets_with_search_query(): IAppletMetadata[] {
-            if (this.$store.state.search_query.length > 0) {
+            if (this.search_not_empty > 0) {
                 const result = searcher.search(this.$store.state.search_query);
                 this.items_found = result.length;
                 return result;
@@ -222,28 +200,47 @@ export default mixins(BaseComponent).extend({
                 return applets;
             }
         },
+        get_category_applets(category_item: any) {
+            return this.filter_applets_with_category(category_item.filter ? this.filter_applets_with_search_query() : applets, category_item.include)
+        },
+        need_category_show(category_item) {
+            let result = false;
+            if (this.get_category_applets(category_item).length === 0) {
+                result = false;
+            } else {
+                if (this.search_not_empty > 0) {
+                    result = category_item.if_search
+                } else {
+                    result = category_item.if_no_search
+                }
+            }
+
+            return result;
+
+        }
     },
     components: { ImageView }
 })
 </script>
 <style lang="less">
-.view.search-result {
+.view.applets-catalog {
     width: 100%;
 
-    .results-list {
+    .applets-catalog-content {
         display: flex;
         flex-direction: column;
         align-items: stretch;
 
-        .applet-category-view {
+        .applets-category-view {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             column-gap: 24px;
             row-gap: 24px;
-            padding: 32px 0;
+            padding: 0;
+            margin-bottom: 32px;
         }
 
-        .result-preview {
+        .applet-thumb {
             user-select: none;
             width: 100%;
             height: 120px;
@@ -292,29 +289,78 @@ export default mixins(BaseComponent).extend({
             }
         }
 
-        .search-section {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-
-            h2 {
-                margin: 0;
-                text-align: left;
-                background-color: #ff0000;
-                color: #000;
-            }
-        }
-
-        .result-preview:nth-child(2n) {
+        .applet-thumb:nth-child(2n) {
             .image-view {
                 transform: translate(-50%, -50%) scale(1.5);
             }
         }
 
-        .result-preview:hover {
+        .applet-thumb:hover {
             .fader {
                 opacity: 0.5;
+            }
+        }
+    }
+
+
+    .applet-category-title {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        cursor: cell;
+
+        h2 {
+            margin: 0;
+            text-align: left;
+            background-color: #fff;
+            color: #000;
+        }
+
+        &:before {
+            content: "⮟";
+            width: 24px;
+        }
+
+        &:hover {
+            &:before {
+                color: #ff0000;
+            }
+
+            h2 {
+                background-color: #ff0000;
+            }
+        }
+
+        &.folded {
+            &:before {
+                content: "⮞";
+                color: #ff0000;
+            }
+
+            h2 {
+                background-color: #ff0000;
+            }
+
+            &:hover {
+                &:before {
+                    color: #fff;
+                }
+
+                h2 {
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+
+    &.search_not_empty {
+        .applet-category-title {
+            pointer-events: none;
+
+            &:before {
+                content: "";
+                display: none;
             }
         }
     }
@@ -326,45 +372,77 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 1400px) {
-    .view.search-result {
-        .results-list {
+    .view.applets-catalog {
+        .applets-catalog-content {
             padding: 0 16px;
         }
     }
 }
 
 @media screen and (max-width: 600px) {
-    .view.search-result {
-        .results-list {
+    .view.applets-catalog {
+        .applets-catalog-content {
             display: flex;
             flex-direction: column;
             padding: 0 0;
 
-
-            .result-preview {
+            .applets-category-view {
                 display: flex;
+                flex-direction: column;
+            }
+
+            .grid-dummy {
+                display: none;
+            }
+
+            .applet-thumb {
+                display: grid;
+                grid-template-columns: 32px 1fr;
+                grid-template-rows: 1fr;
                 width: 100%;
                 height: 32px;
-                justify-content: flex-start;
+                align-items: center;
+                padding: 0;
+                border: none;
+
+                .image-view {
+                    position: relative;
+                    grid-column: 1;
+                }
 
                 h3 {
+                    grid-column: 2;
+                    margin: 0;
+                    padding: 0 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    height: 100%;
                     font-family: 'Ubuntu', sans-serif;
-                    font-size: 18px;
+                    font-size: 20px;
+
+                }
+
+                &.no_preview {
+                    h3 {
+                        grid-column: 1 / -1;
+                        padding: 0;
+                    }
+                }
+
+                .applet-thumb:hover {
+                    .fader {
+                        opacity: 0.5;
+                    }
                 }
             }
 
-            .result-preview:hover {
-                .fader {
-                    opacity: 0.5;
+            .applet-category-title {
+                h2 {
+                    margin: 0;
+                    font-size: 20px;
+                    text-align: left;
                 }
-            }
-        }
-
-        .search-section {
-            h2 {
-                margin: 0;
-                font-size: 18px;
-                text-align: left;
             }
         }
     }

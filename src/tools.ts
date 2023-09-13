@@ -135,3 +135,15 @@ export function get_current_year() {
     var currentYear = currentDate.getFullYear();
     return currentYear;
 }
+
+export function to_snake_case(str) {
+    return str
+        // Convert to lowercase
+        .toLowerCase()
+        // Replace spaces with underscores
+        .replace(/\s+/g, '_')
+        // Replace non-alphanumeric characters (excluding underscores) with nothing
+        .replace(/[^a-z0-9_]/g, '')
+        // Replace multiple consecutive underscores with a single one
+        .replace(/_+/g, '_');
+}
