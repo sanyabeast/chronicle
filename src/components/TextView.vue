@@ -13,6 +13,7 @@ import mixins from 'vue-typed-mixins';
 import Preloader, { ELoaderType } from './Preloader.vue';
 import BaseComponent from './BaseComponent.vue';
 import { debounce } from 'lodash';
+import { read_text_file } from '@/tools';
 
 export default mixins(BaseComponent).extend({
     name: 'ImageView',
@@ -44,7 +45,7 @@ export default mixins(BaseComponent).extend({
         async init() {
             if (this.src) {
                 this.set_loading(true)
-                this.text_content = await this.load_text(this.src)
+                this.text_content = await read_text_file(this.src)
                 this.set_loading(false)
             } else if (this.text) {
                 this.text_content = this.text

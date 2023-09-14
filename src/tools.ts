@@ -1,4 +1,6 @@
 
+import { isArray, isString, map } from 'lodash';
+import * as THREE from 'three';
 
 export function get_random_web_color(seed: String) {
     // Array of web colors
@@ -74,7 +76,11 @@ export function get_dark_web_color(seed) {
     return color;
 }
 
-export function load_text_file(file_path: string): Promise<string> {
+export function read_text_file(file_path: string): Promise<string> {
+    if (!isString(file_path)) {
+        throw new Error(`'file_path' must be a string, but got ${typeof file_path}`)
+    }
+    console.log(`Reading text file: ${file_path}`)
     return new Promise((resolve, reject) => {
         fetch(file_path).then((res) => {
             return res.text();
@@ -146,4 +152,48 @@ export function to_snake_case(str) {
         .replace(/[^a-z0-9_]/g, '')
         // Replace multiple consecutive underscores with a single one
         .replace(/_+/g, '_');
+}
+
+export async function load_texture(src: string): Promise<THREE.Texture> {
+    return new Promise((resolve, reject) => {
+        const loader = new THREE.TextureLoader();
+        loader.load(src, (texture) => {
+            resolve(texture);
+        }, undefined, (err) => {
+            reject(err);
+        })
+    })
+}
+
+export async function create_shader_material(shader_data: IShaderData): THREE.ShaderMaterial {
+    console.log(`Creating shader material`, shader_data)
+    const uniforms = {
+        ...THREE.UniformsLib['lights'],
+        ...shader_data.uniforms,
+    };
+
+    let uniform_data = {}
+    for (let key in uniforms) {
+        const value = uniforms[key];
+        if (isString(value)) {
+            uniform_data[key] = { value: await load_texture(value) }
+        } else if (isArray(value)) {
+            uniform_data[key] = { value: new THREE.Vector3(...value) }
+        } else {
+            uniform_data[key] = { value }
+        }
+    }
+
+    try {
+        const material = new THREE.ShaderMaterial({
+            uniforms: uniform_data,
+            vertexShader: await read_text_file(shader_data.vertex),
+            fragmentShader: await read_text_file(shader_data.fragment),
+        });
+
+        return material;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
 }

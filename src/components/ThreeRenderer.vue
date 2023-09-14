@@ -128,6 +128,9 @@ export default mixins(BaseComponent).extend({
         this.$refs.renderer_container!.removeChild(this.renderer.domElement);
     },
     methods: {
+        on_render() {
+            // override this
+        },
         set_camera_position(position: THREE.Vector3) {
             this.camera.position.set(position.x, position.y, position.z)
         },
@@ -212,6 +215,7 @@ export default mixins(BaseComponent).extend({
                     this.controls.update();
                 }
 
+                this.on_render()
                 this.renderer.render(this.scene, this.camera);
             };
 

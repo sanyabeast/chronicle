@@ -61,6 +61,8 @@ import * as THREE from 'three';
 import mixins from 'vue-typed-mixins'
 import ThreeRenderer from '../../components/ThreeRenderer.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
+import { load_texture, read_text_file, create_shader_material } from '@/tools';
+import { shaders } from '@/router/index'
 
 const samples = [
     'assets/image/planet.png',
@@ -134,24 +136,12 @@ export default mixins(BaseComponent).extend({
     methods: {
         async init() {
             let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-            let plane_material = new THREE.ShaderMaterial({
-                uniforms: {
-                    u_time: { value: 0.0 },
-                    u_mouse: { value: new THREE.Vector2() },
-                    u_map: { value: null },
-                    u_mode: { value: this.mode },
-                    u_offset: { value: this.texture_offset },
-                    u_scale: { value: this.texture_scale },
-                },
-                vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = vec4(position * 2., 1.0 );
-                }
-            `,
-                fragmentShader: await this.load_text('assets/shader/polar_picture_tool.frag'),
-            });
+            
+            let plane_material = await create_shader_material(shaders.polar_picture_tool);
+
+            plane_material.uniforms.u_mode.value = this.mode;
+            plane_material.uniforms.u_offset.value = this.texture_offset;
+            plane_material.uniforms.u_scale.value = this.texture_scale;
 
             let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
             this.$refs.three_renderer.scene.add(plane);
@@ -344,7 +334,7 @@ export default mixins(BaseComponent).extend({
 });
 </script>
 <style lang="less">
-.view.polar-picture-tool {
+.polar-picture-tool {
     padding: 0;
 
     .drop-target {

@@ -3,13 +3,14 @@
         <h2 v-html="search_results_message"></h2>
         <div class="applets-catalog-content">
             <div class="applets-category-view" v-if="need_category_show(category_item)"
-                v-for="(category_item, category_index) in category_view.order" :key="`cat_block_${category_index}`">
+                v-for="(category_item, category_index) in category_view.categories" :key="`cat_block_${category_index}`">
                 <div @click="category_item.fold = !category_item.fold" class="applet-category-title"
                     :class="{ folded: category_item.fold }" v-if="category_item.title">
                     <div class="fold-control"></div>
                     <h2 v-html="category_item.title"></h2>
                 </div>
-                <router-link v-if="!category_item.fold" class="applet-thumb" :class="{ no_preview: !applet_item.preview }"
+                <router-link v-if="!category_item.title || !category_item.fold" class="applet-thumb"
+                    :class="{ no_preview: !applet_item.preview }"
                     v-for="(applet_item, index) in get_category_applets(category_item)" :key="`cat_${index}`"
                     :to="get_route_link(applet_item)">
                     <ImageView v-if="applet_item.preview != undefined" :src="applet_item.preview" />
@@ -31,22 +32,25 @@ import { get_dark_web_color, get_random_web_color } from "@/tools"
 import ImageView from '@/components/ImageView.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
-import { filter } from 'lodash';
+import { filter, orderBy } from 'lodash';
 
-let searcher: FuzzySearch<IAppletMetadata>;
+let searcher: FuzzySearch<IAppletData>;
+
+interface IAppletCategoryData {
+    include: EAppletCategory[];
+    title: string | null;
+    fold: boolean;
+    filter: boolean;
+    if_search: boolean;
+    if_no_search: boolean;
+    order: boolean
+}
 
 interface IAppletsCatalogData {
     items_found: number;
     category_fold_map: any[];
     category_view: {
-        order: {
-            include: EAppletCategory[];
-            title: string | null;
-            fold: boolean;
-            filter: boolean;
-            if_search: boolean;
-            if_no_search: boolean;
-        }[]
+        categories: IAppletCategoryData[]
     };
     grid_dummies_count: number;
 }
@@ -58,15 +62,15 @@ export default mixins(BaseComponent).extend({
             items_found: 0,
             category_fold_map: [],
             category_view: {
-                order: [
+                categories: [
                     {
                         include: [],
                         title: null,
                         fold: false,
                         filter: true,
                         if_search: true,
-                        if_no_search: false
-
+                        if_no_search: false,
+                        order: false
                     },
                     {
                         include: [EAppletCategory.Project, EAppletCategory.Demo],
@@ -74,7 +78,8 @@ export default mixins(BaseComponent).extend({
                         fold: false,
                         filter: false,
                         if_search: false,
-                        if_no_search: true
+                        if_no_search: true,
+                        order: true
                     },
                     {
                         include: [EAppletCategory.Project, EAppletCategory.Demo],
@@ -82,7 +87,8 @@ export default mixins(BaseComponent).extend({
                         fold: false,
                         filter: false,
                         if_search: true,
-                        if_no_search: false
+                        if_no_search: false,
+                        order: true
                     },
                     {
                         include: [EAppletCategory.Lab],
@@ -90,7 +96,8 @@ export default mixins(BaseComponent).extend({
                         fold: true,
                         filter: false,
                         if_search: true,
-                        if_no_search: false
+                        if_no_search: false,
+                        order: true
                     },
                     {
                         include: [EAppletCategory.Package],
@@ -98,7 +105,8 @@ export default mixins(BaseComponent).extend({
                         fold: false,
                         filter: false,
                         if_search: true,
-                        if_no_search: true
+                        if_no_search: true,
+                        order: true
                     },
                     {
                         include: [EAppletCategory.Service],
@@ -106,7 +114,17 @@ export default mixins(BaseComponent).extend({
                         fold: true,
                         filter: false,
                         if_search: true,
-                        if_no_search: false
+                        if_no_search: false,
+                        order: true
+                    },
+                    {
+                        include: [EAppletCategory.Project, EAppletCategory.Demo, EAppletCategory.Package, EAppletCategory.Lab, EAppletCategory.Service],
+                        title: "everything",
+                        fold: true,
+                        filter: false,
+                        if_search: false,
+                        if_no_search: true,
+                        order: true
                     }
                 ]
             },
@@ -126,12 +144,7 @@ export default mixins(BaseComponent).extend({
             (this.$refs.search_input as HTMLInputElement).value = "";
         }
     },
-    props: {
-        skip_launcher: {
-            type: Boolean,
-            default: false
-        }
-    },
+    props: {},
     computed: {
         applets() {
             return applets;
@@ -157,33 +170,40 @@ export default mixins(BaseComponent).extend({
 
     },
     watch: {
-        search_query() {
-            this.unfold_all();
+        search_query(new_val: string) {
+            if (new_val.length > 0) {
+                this.unfold_all();
+            } else {
+                this.fold_all()
+            }
         }
     },
     methods: {
         get_random_web_color: get_random_web_color,
-        get_thumb_bg_color(item: IAppletMetadata) {
+        get_thumb_bg_color(item: IAppletData) {
             if (!this.is_mobile) {
                 return '#000';
             } else {
                 return get_dark_web_color(item.title)
             }
         },
-        get_route_link(item: IAppletMetadata): string {
+        get_route_link(item: IAppletData): string {
             let result = "";
-            if (this.skip_launcher === false || item.summary || item.document) {
+            if (item.launcher !== true && (item.summary || item.document)) {
                 result = `/applet/${item.index}`;
             }
             else {
+                console.log(`get_route_link: ${item.route.name}`, item.props)
                 result = this.$router.resolve({
                     name: item.route.name,
-                    props: item.props
+                    params: item.props
                 }).route.path;
             }
+
+            console.log(`get_route_link: ${result}`)
             return result;
         },
-        get_item_title(item: IAppletMetadata) {
+        get_item_title(item: IAppletData) {
             if (item.title.length > 0) {
                 return item.title;
             }
@@ -191,36 +211,20 @@ export default mixins(BaseComponent).extend({
                 return item.route.name;
             }
         },
-        handle_result_item_click(item: IAppletMetadata) {
-            if (this.skip_launcher === false || item.summary || item.document) {
-                this.$store.commit('route_replace', {
-                    name: 'applet/applet-launcher',
-                    props: {
-                        applet: item.index!.toString()
-                    }
-                });
-            }
-            else {
-                this.$store.commit('route_replace', {
-                    name: item.route.name,
-                    props: item.props
-                });
-            }
-        },
         get_preview(uri: string) {
             return require(uri);
         },
-        filter_applets_with_category(applets: IAppletMetadata[], category: EAppletCategory[]): IAppletMetadata[] {
+        filter_applets_with_category(applets: IAppletData[], category: EAppletCategory[]): IAppletData[] {
             if (category.length == 0) {
                 return applets;
             }
-            return filter(applets, (item: IAppletMetadata) => {
+            return filter(applets, (item: IAppletData) => {
                 return filter(item.category, (cat: EAppletCategory) => {
                     return category.indexOf(cat) > -1;
                 }).length > 0;
             });
         },
-        filter_applets_with_search_query(): IAppletMetadata[] {
+        filter_applets_with_search_query(): IAppletData[] {
             if (this.search_not_empty > 0) {
                 const result = searcher.search(this.$store.state.search_query);
                 this.items_found = result.length;
@@ -230,12 +234,30 @@ export default mixins(BaseComponent).extend({
                 return applets;
             }
         },
-        get_category_applets(category_item: any) {
-            return this.filter_applets_with_category(category_item.filter ? this.filter_applets_with_search_query() : applets, category_item.include)
+        get_category_applets(category_item: IAppletCategoryData) {
+            let result = this.filter_applets_with_category(category_item.filter ? this.filter_applets_with_search_query() : applets, category_item.include)
+
+            if (category_item.order) {
+                return this.order_applets(result, category_item);
+            }
+
+            return result;
         },
-        need_category_show(category_item) {
+        order_applets(applets: IAppletData[], category_item: IAppletCategoryData): IAppletData[] {
+            return orderBy(applets, (item: IAppletData) => {
+                let category_index = -1;
+                for (let i = 0; i < category_item.include.length; i++) {
+                    if (item.category.indexOf(category_item.include[i]) > -1) {
+                        category_index = i;
+                        break;
+                    }
+                }
+                return category_index;
+            }, 'asc');
+        },
+        need_category_show(category_item: IAppletCategoryData) {
             let result = false;
-            if (this.get_category_applets(category_item).length === 0) {
+            if (this.get_category_applets(category_item, false).length === 0) {
                 result = false;
             } else {
                 if (this.search_not_empty > 0) {
@@ -246,13 +268,17 @@ export default mixins(BaseComponent).extend({
             }
 
             return result;
-
         },
         unfold_all() {
-            this.category_view.order.forEach((item) => {
+            this.category_view.categories.forEach((item) => {
                 item.fold = false;
             });
         },
+        fold_all() {
+            this.category_view.categories.forEach((item) => {
+                item.fold = true;
+            });
+        }
     },
     components: { ImageView }
 })

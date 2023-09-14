@@ -22,16 +22,4 @@ declare global {
       [elem: string]: any
     }
   }
-
-  interface IAppletMetadata {
-    index?: string
-    title: string,
-    summary?: string
-    document?: string
-    preview?: string
-    tags: string[]
-    category: string[]
-    route: RouteConfig,
-    props?: {}
-  }
 }

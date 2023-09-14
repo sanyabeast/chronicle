@@ -43,13 +43,13 @@ import mixins from 'vue-typed-mixins'
 import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
-import { get_random_web_color, get_bright_web_color, to_snake_case } from '@/tools';
+import { get_random_web_color, get_bright_web_color, to_snake_case, read_text_file } from '@/tools';
 import ImageView from '@/components/ImageView.vue';
 import { find } from 'lodash';
 
 
 interface IAppletLauncherData {
-    applet_data?: IAppletMetadata,
+    applet_data?: IAppletData,
     scroll_height: 0,
     scroll_top: 0,
     summary: string
@@ -80,7 +80,7 @@ export default mixins(BaseComponent).extend({
         get_random_web_color: get_random_web_color,
         get_bright_web_color: get_bright_web_color,
         async update_summary() {
-            this.summary = await this.load_text(this.applet_data!.summary!)
+            this.summary = await read_text_file(this.applet_data!.summary!)
         },
         handle_scroll(event) {
             this.scroll_height = (this.$refs.root as any)!.scrollHeight;

@@ -19,12 +19,13 @@ const components = {
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
   AppletsCatalog: () => import('../views/AppletsCatalog.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
+  ShaderView: () => import('../views/applets/ShaderView.vue'),
   PackageExplorer: () => import('../views/PackageExplorer.vue'),
 }
 
 Vue.use(VueRouter)
 
-let applets = config.applets as IAppletMetadata[]
+let applets = config.applets as IAppletData[]
 
 applets.forEach((d, i) => {
   d.index = to_snake_case(d.title);
@@ -51,6 +52,7 @@ const router = new VueRouter({
 
 export const urls = config.urls
 export const packages = config.packages
+export const shaders = config.shaders
 
 export {
   applets,

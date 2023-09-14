@@ -27,14 +27,24 @@ declare interface IAppletData {
         component: any
         props: boolean
     }
+    index?: number
     summary?: string
     document?: string
     tags: string[]
     category: string[]
     title?: string
     preview?: string
+    launcher: boolean
     props: {
         [x: string]: any
+    }
+}
+
+declare interface IShaderData {
+    fragment: string
+    vertex: string
+    uniforms: {
+        [x: string]: number | number[] | string
     }
 }
 
@@ -52,6 +62,9 @@ declare module "@/router/config.yaml" {
         applets: IAppletData[],
         urls: {
             [x: string]: string
+        },
+        shaders: {
+            [x: string]: IShaderData
         }
     };
     export default value;

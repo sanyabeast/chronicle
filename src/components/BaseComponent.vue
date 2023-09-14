@@ -1,6 +1,5 @@
 
 <script lang="ts">
-import { load_text_file } from '@/tools';
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -39,9 +38,6 @@ export default Vue.extend({
         update_route(params) {
             // override this method to update the route
             throw new Error("update_route not implemented");
-        },
-        async load_text(src: string): Promise<string> {
-            return await load_text_file(src);
         },
     }
 })

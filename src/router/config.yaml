@@ -1,3 +1,21 @@
+shaders:
+  sample:
+    fragment: assets/shader/sample.frag
+    vertex: assets/shader/fullscreen_plane.vert
+    uniforms:
+      u_time: 0
+      u_mouse: [0, 0]
+      u_resolution: [1, 1]
+      u_color: [1, 0, 0]
+  polar_picture_tool:
+    fragment: assets/shader/polar_picture_tool.frag
+    vertex: assets/shader/fullscreen_plane.vert
+    uniforms:
+      u_map: null
+      u_mode: 0
+      u_offset: [0, 0]
+      u_scale: [1, 1]
+
 packages:
   sample:
     title: "Sample Directory"
@@ -175,3 +193,14 @@ applets:
     title: "Package Explorer"
     props:
       package_id: sample
+
+  - route:
+      path: "/shader/:shader_id"
+      name: "applet/shader-view"
+      component: ShaderView
+      props: true
+    tags: ["service"]
+    category: ["service"]
+    title: "ShaderView"
+    props:
+      shader_id: sample

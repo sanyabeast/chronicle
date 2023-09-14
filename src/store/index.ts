@@ -31,8 +31,7 @@ export default new Vuex.Store({
     show_cookie: need_show_cookie(),
     is_mobile_device: is_mobile_device()
   },
-  getters: {
-  },
+  getters: {},
   mutations: {
     no_cookie(state) {
       state.show_cookie = false
@@ -44,6 +43,5 @@ export default new Vuex.Store({
       state.search_query = new_value
     },
   },
-  modules: {
-  }
+  modules: {}
 })

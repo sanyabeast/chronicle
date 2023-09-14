@@ -10,6 +10,7 @@ import mixins from 'vue-typed-mixins'
 
 import BaseComponent from './BaseComponent.vue';
 import showdown from 'showdown'
+import { read_text_file } from '@/tools';
 
 
 const converter = new showdown.Converter()
@@ -54,7 +55,7 @@ export default mixins(BaseComponent).extend({
         },
         async load() {
             try {
-                let text = await this.load_text(this.src)
+                let text = await read_text_file(this.src)
                 this.set_markdown(text);
             } catch (err) {
                 console.error(err)
