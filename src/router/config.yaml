@@ -1,4 +1,25 @@
-# routes
+packages:
+  sample:
+    title: "Sample Directory"
+    summary: "assets/docs/telechart.txt"
+    avatar: "assets/image/pattern.png"
+    files:
+      - ["Readme", "sample.txt"]
+      - ["Readme2", "sample2.txt"]
+      - ["Personal Photo 1", "pic01.jpg"]
+      - ["Personal Photo 2", "pic02.jpg"]
+# web-frame urls
+urls:
+  brickscape: https://sanyabeast.github.io/brickscape/dist/index.html
+  match3: https://sanyabeast.github.io/match3/
+  forestlads: https://sanyabeast.github.io/forestlads/dist/index.html
+  telechart: https://sanyabeast.github.io/telechart/
+  coderider: https://sanyabeast.github.io/coderider/dist/index.html
+  retro_engine_demo: https://sanyabeast.github.io/retro/dist/demo_alt/
+  euphoria_demo: https://sanyabeast.github.io/euphoria/dist/index.html
+  plot3: projects/plot/index.html
+  middlenight: projects/middlenight/index.html
+# route presets
 route_presets:
   webframe_route: &webframe_route
     path: "/web/:url?"
@@ -16,7 +37,7 @@ route_presets:
     component: ModelViewer3D
     props: true
   package_explorer_route: &package_explorer_route
-    path: "/package/:content?"
+    path: "/package/:package_id"
     name: "package-explorer"
     component: PackageExplorer
     props: true
@@ -50,7 +71,7 @@ applets:
     preview: "assets/preview/hexworld_a1.png"
     summary: "assets/docs/brickscape.txt"
     props:
-      url: "https://sanyabeast.github.io/brickscape/dist/index.html"
+      url: brickscape
 
   - route: *webframe_route
     tags: ["game", "old"]
@@ -59,7 +80,7 @@ applets:
     preview: "assets/preview/match3_a1.png"
     summary: "assets/docs/match3.txt"
     props:
-      url: "https://sanyabeast.github.io/match3/"
+      url: match3
 
   - route: *webframe_route
     tags: ["game", "old"]
@@ -67,7 +88,7 @@ applets:
     category: ["project", "demo"]
     preview: "assets/preview/forestlads_a1.png"
     props:
-      url: "https://sanyabeast.github.io/forestlads/dist/index.html"
+      url: forestlads
 
   - route: *webframe_route
     tags: ["game", "old"]
@@ -75,7 +96,7 @@ applets:
     summary: "assets/docs/telechart.txt"
     preview: "assets/preview/telechart_a1.png"
     props:
-      url: "https://sanyabeast.github.io/telechart/"
+      url: telechart
 
   - route: *webframe_route
     tags: ["game", "old"]
@@ -84,7 +105,7 @@ applets:
     summary: "assets/docs/hillrider.txt"
     preview: "assets/preview/coderider_a1.png"
     props:
-      url: "https://sanyabeast.github.io/coderider/dist/index.html"
+      url: coderider
 
   - route: *webframe_route
     tags: ["extras", "game", "engine"]
@@ -92,7 +113,7 @@ applets:
     category: ["demo"]
     preview: "assets/preview/retro_engine_a1.png"
     props:
-      url: "https://sanyabeast.github.io/retro/dist/demo_alt/"
+      url: retro_engine_demo
 
   - route: *webframe_route
     tags: ["extras", "experiment"]
@@ -100,7 +121,7 @@ applets:
     category: ["lab"]
     preview: "assets/preview/euphoria_da1.png"
     props:
-      url: "https://sanyabeast.github.io/euphoria/dist/index.html"
+      url: euphoria_demo
     is_extra: true
 
   - route: *webframe_route
@@ -109,7 +130,7 @@ applets:
     title: "Plot3 [Demo]"
     preview: "assets/preview/plot_a1.png"
     props:
-      url: "projects/plot/index.html"
+      url: plot3
 
   - route: *webframe_route
     tags: ["extras", "retro", "unity", "game"]
@@ -118,7 +139,7 @@ applets:
     summary: "assets/docs/middlenight.txt"
     preview: "assets/preview/middlenight_a1.png"
     props:
-      url: "projects/middlenight/index.html"
+      url: middlenight
 
   - route:
       path: "/applet/polar-picture-tool/:image"
@@ -140,8 +161,8 @@ applets:
     props: {}
 
   - route: *model_viewer_route
-    tags: []
-    category: ["three", "gl", "model", "viewer"]
+    tags: ["service"]
+    category: ["service"]
     title: "Model Viewer"
     document: "assets/docs/showdown.md"
     props:
@@ -149,16 +170,8 @@ applets:
       info: "assets/models/suzanne/README.md"
 
   - route: *package_explorer_route
-    tags: ["service", "utils", "file"]
-    category: []
-    title: "Directory Explorer"
+    tags: ["service"]
+    category: ["service"]
+    title: "Package Explorer"
     props:
-      content:
-        title: "Sample Directory"
-        summary: "assets/docs/telechart.txt"
-        avatar: "assets/image/pattern.png"
-        files:
-          - ["Readme", "sample.txt"]
-          - ["Readme2", "sample2.txt"]
-          - ["Personal Photo 1", "pic01.jpg"]
-          - ["Personal Photo 2", "pic02.jpg"]
+      package_id: sample

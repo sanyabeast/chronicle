@@ -1,13 +1,13 @@
 <template>
     <div class="package-explorer" ref="root">
-        <div class="content" v-if="parsed_content">
-            <h1 v-if="parsed_content.title" v-html="`/ ${parsed_content.title} /`"></h1>
+        <div class="content" v-if="package_data">
+            <h1 v-if="package_data.title" v-html="`/ ${package_data.title} /`"></h1>
             <div class="summary">
-                <ImageView v-if="parsed_content.avatar" :src="parsed_content.avatar" class="avatar" />
+                <ImageView v-if="package_data.avatar" :src="package_data.avatar" class="avatar" />
                 <div class="main">
-                    <TextView v-if="parsed_content.summary" :src="parsed_content.summary" />
-                    <div class="files" v-if="parsed_content.files">
-                        <div class="file" v-for="(item, index) in parsed_content.files" :key="`file_${index}`">
+                    <TextView v-if="package_data.summary" :src="package_data.summary" />
+                    <div class="files" v-if="package_data.files">
+                        <div class="file" v-for="(item, index) in package_data.files" :key="`file_${index}`">
                             <a v-html="item[0]" :href="item[1]"></a>
                         </div>
                     </div>
@@ -24,43 +24,33 @@ import mixins from 'vue-typed-mixins'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import ImageView from '@/components/ImageView.vue';
-import { isString } from 'lodash';
+import { packages } from '@/router';
 
-interface IDirectoryData {
-    parsed_content: {
-        files: string[][] | null
-        title: string | null
-        summary: string | null
-        avatar: string | null
-    },
-}
 
 export default mixins(BaseComponent).extend({
     name: "PackageExplorer",
     components: { Showdown, ImageView },
-    data(): IDirectoryData {
+    data(): IPackageData {
         return {
-            parsed_content: null,
+            package_data: null,
         };
     },
     mounted() {
         this.update_data()
     },
     watch: {
-        content() {
+        package_id() {
             this.update_data()
         }
     },
     computed: {},
     props: {
-        content: null
+        package_id: null
     },
     methods: {
         update_data() {
-            if (this.content) {
-                console.log(`Content: ${this.content}`)
-                this.parsed_content = JSON.parse(this.content)
-                console.log(`Parsed content:`, this.parsed_content)
+            if (this.package_id) {
+                this.package_data = packages[this.package_id]
             }
 
         }

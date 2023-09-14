@@ -1,15 +1,16 @@
 <template>
     <div class="web-frame">
-        <iframe v-if="url != undefined" :src="url" @load="handle_iframe_loaded" />
+        <iframe v-if="url != undefined" :src="web_url" @load="handle_iframe_loaded" />
         <Preloader v-if="!iframe_loaded" full fill :loader_type="loader_type" />
     </div>
 </template>
   
 <script lang="ts">
-import Vue from 'vue';
+
 import Preloader, { ELoaderType } from '@/components/Preloader.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
+import { urls } from '@/router';
 
 export default mixins(BaseComponent).extend({
     name: "WebFrame",
@@ -29,7 +30,11 @@ export default mixins(BaseComponent).extend({
             }, 250)
         }
     },
-    computed: {},
+    computed: {
+        web_url() {
+            return urls[this.url]
+        }
+    },
     props: {
         url: String
     },

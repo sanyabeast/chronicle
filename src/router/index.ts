@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import { isObject, isString, map, uniqBy } from "lodash"
-import config from './config.yaml'
+import config from '@/router/config.yaml'
 import { to_snake_case } from '@/tools'
-console.log(config)
 
 export enum EAppletCategory {
   Project = 'project',
@@ -49,6 +48,9 @@ function get_routes_config(): Array<RouteConfig> {
 const router = new VueRouter({
   routes: get_routes_config()
 })
+
+export const urls = config.urls
+export const packages = config.packages
 
 export {
   applets,

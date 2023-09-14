@@ -212,8 +212,6 @@ async function generate_sitemap() {
 
 }
 
-
-
 // Usage
 create_page('sitemap');
 // generate_sitemap('src/router/config.yaml', 'scripts/static.template.html', 'public/sitemap.html');
