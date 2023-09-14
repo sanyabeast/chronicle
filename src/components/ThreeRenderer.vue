@@ -128,7 +128,7 @@ export default mixins(BaseComponent).extend({
         this.$refs.renderer_container!.removeChild(this.renderer.domElement);
     },
     methods: {
-        on_render() {
+        on_render(delta: number) {
             // override this
         },
         set_camera_position(position: THREE.Vector3) {
@@ -193,8 +193,13 @@ export default mixins(BaseComponent).extend({
         },
         animate() {
             // Animation loop
+            let prev_frame_date = Date.now();
             const animate = () => {
                 this.raf_id = requestAnimationFrame(animate);
+
+                let now = Date.now();
+                let delta = (now - prev_frame_date) / 1000.0;
+                prev_frame_date = now;
 
                 let bounds = this.$refs.renderer_container.getBoundingClientRect();
                 let size_changed = false
@@ -215,7 +220,7 @@ export default mixins(BaseComponent).extend({
                     this.controls.update();
                 }
 
-                this.on_render()
+                this.on_render(delta)
                 this.renderer.render(this.scene, this.camera);
             };
 

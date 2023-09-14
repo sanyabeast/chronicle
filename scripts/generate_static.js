@@ -159,7 +159,7 @@ async function generate_sitemap() {
     const applets = router_config.applets;
 
     const html_config_head = [{
-        tag: 'div',
+        tag: 'header',
         children: [
             {
                 tag: 'h2',
@@ -192,7 +192,7 @@ async function generate_sitemap() {
 
     const about_text = read_text_file('public/assets/docs/about.txt');
     const html_config_footer = [{
-        tag: 'div',
+        tag: 'footer',
         children: [
             {
                 tag: 'h2',

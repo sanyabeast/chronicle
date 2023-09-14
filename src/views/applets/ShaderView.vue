@@ -43,8 +43,8 @@ export default mixins(BaseComponent).extend({
 
     },
     methods: {
-        on_render() {
-            this.plane.material.uniforms.u_time.value += 1.0 / 60.0;
+        on_render(delta) {
+            this.plane.material.uniforms.u_time.value += 1.0 * delta;
             this.plane.material.uniforms.u_resolution.value.x = this.$refs.three_renderer.width;
             this.plane.material.uniforms.u_resolution.value.y = this.$refs.three_renderer.height;
             this.plane.material.uniforms.u_mouse.value.x = this.mouse_pos.x;
