@@ -70,15 +70,16 @@ export default mixins(BaseComponent).extend({
 .showdown-viewer {
     background-color: #b5b5b50d;
     padding-bottom: 32px;
+    line-height: 2em;
 
     p {
         color: #b8b8b8;
-        line-height: 1.5em;
     }
 
     ul {
-        list-style: none;
         padding: 0;
+        list-style: disc;
+        margin-left: 32px;
     }
 
     li a {

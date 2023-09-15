@@ -139,6 +139,7 @@ export default mixins(BaseComponent).extend({
             grid-template-columns: 256px 1fr;
             grid-template-rows: 96px minmax(272px, 1fr);
             width: 100%;
+            flex-shrink: 0;
 
             >p {
                 grid-row: 1;
@@ -255,6 +256,7 @@ export default mixins(BaseComponent).extend({
         }
 
         .tags {
+            flex-shrink: 0;
             margin-top: 16px;
             margin-bottom: 16px;
             padding: 0px;
@@ -294,6 +296,7 @@ export default mixins(BaseComponent).extend({
 
         .showdown-viewer,
         .document-placeholder {
+            flex-shrink: 0;
             margin-top: 16px;
             padding: 16px;
             width: 100%;
