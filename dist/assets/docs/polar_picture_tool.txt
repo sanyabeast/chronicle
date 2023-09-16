@@ -1,0 +1,2 @@
+
+This applet enables users to apply polar-to-cartesian coordinate transformations to images and vice-versa, with options for downloading the results. 
