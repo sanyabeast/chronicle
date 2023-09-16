@@ -47,3 +47,6 @@ The chart also allows for the visualization of various secondary elements in eit
 - Performance profiling
 - Optimization for mobile devices
 - Experimental rendering in a worker via OffscreenCanvas
+
+
+[@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
