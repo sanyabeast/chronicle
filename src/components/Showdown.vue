@@ -68,18 +68,29 @@ export default mixins(BaseComponent).extend({
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
 .showdown-viewer {
-    background-color: #b5b5b50d;
+    background-color: #b5b5b51f;
     padding-bottom: 32px;
     line-height: 2em;
 
     p {
-        color: #b8b8b8;
+        color: #eee;
     }
 
-    ul {
-        padding: 0;
-        list-style: disc;
+    ul,
+    ol {
+        list-style: none;
         margin-left: 32px;
+        padding: 16px;
+        background: #33333338;
+
+        li {
+            color: #eee;
+
+            &:before {
+                content: "•";
+                margin-right: 16px;
+            }
+        }
     }
 
     li a {
@@ -96,7 +107,17 @@ export default mixins(BaseComponent).extend({
 
     a,
     a strong {
-        color: #f44336;
+        background-color: #000;
+        color: #ff0000;
+        font-weight: 900;
+    }
+
+    a {
+        &:hover {
+            background-color: #fff;
+            color: #000;
+
+        }
     }
 
 
@@ -105,15 +126,32 @@ export default mixins(BaseComponent).extend({
     h3,
     h4 {
         color: #fff;
-        text-decoration: underline;
+        text-decoration: none;
+        background-color: #000;
+        display: inline-block;
     }
 
     pre {
         background-color: #000;
-        border: 1px dotted #fff;
+        border: 1px dotted #ff0000;
         margin-bottom: 16px;
         padding: 16px;
         font-family: 'Ubuntu Mono', monospace;
+        white-space: pre-wrap;
+
+        code {
+            color: #ffc79b;
+        }
+    }
+
+    img {
+        background-color: #000;
+        border: 2px solid #000;
+        margin: 16px;
+
+        &:first-child {
+            margin-left: 0;
+        }
     }
 }
 </style>

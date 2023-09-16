@@ -298,8 +298,7 @@ export default mixins(BaseComponent).extend({
         .document-placeholder {
             flex-shrink: 0;
             margin-top: 16px;
-            padding: 16px;
-            width: 100%;
+            padding: 32px;
             padding-bottom: 64px;
             border-top-left-radius: 16px;
             border-top-right-radius: 16px;
