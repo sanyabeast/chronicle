@@ -164,6 +164,8 @@ applets:
     tags: ["extras", "commercial", "chart", "plot", "three", "gl"]
     category: ["project"]
     title: "Plot3 [Demo]"
+    summary: "assets/docs/plot3.txt"
+    document: "assets/docs/plot3.md"
     preview: "assets/preview/plot_a1.png"
     props:
       url: plot3
