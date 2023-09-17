@@ -184,7 +184,7 @@ body {
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
+  
   font-size: 18px;
   font-weight: 100;
   /* Console-like font */
@@ -195,6 +195,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
+}
+
+pre, code {
+  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
 }
 
 * {

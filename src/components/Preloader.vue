@@ -12,7 +12,8 @@ export enum ELoaderType {
     DefaultInner = 'default-inner',
     Alternate01 = 'alternate-01',
     Alternate02 = 'alternate-02',
-    Coffee = 'coffee'
+    Coffee = 'coffee',
+    Chiptune = 'chiptune'
 
 }
 
@@ -32,7 +33,7 @@ export default Vue.extend({
         },
         loader_type: {
             type: String,
-            default: ELoaderType.Alternate01
+            default: ELoaderType.Chiptune
         }
     },
     mounted() { },
@@ -215,7 +216,7 @@ export default Vue.extend({
             }
         }
 
-        &[data-loader-type="coffee"].loader {
+        &[data-loader-type="coffee"] {
             width: 48px;
             height: 48px;
             display: inline-block;
@@ -225,7 +226,6 @@ export default Vue.extend({
             animation: fill 2s linear infinite alternate;
             color: rgba(255, 0, 0, 0.9);
             border-radius: 0 0 4px 4px;
-
 
             &::after {
                 content: '';
@@ -247,6 +247,368 @@ export default Vue.extend({
 
                 100% {
                     box-shadow: 0 -48px inset;
+                }
+            }
+        }
+
+        &[data-loader-type="chiptune"] {
+            display: flex;
+            animation: spin 2s linear infinite;
+            height: 8px;
+            width: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            border-radius: 0;
+            background-color: transparent;
+            border: none;
+
+            @loader-color: #8e8e8e;
+
+            &::after {
+                display: none;
+            }
+
+            @keyframes spin {
+                0% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                6.25% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                12.5% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                18.75% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                25% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                31.25% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                37.5% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
+                }
+
+                43.75% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px @loader-color,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px transparent;
+                }
+
+                50% {
+                    box-shadow:
+                        0px -30px transparent,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px @loader-color,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                56.25% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px transparent,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px @loader-color,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                62.5% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px transparent,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px @loader-color,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                68.75% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px transparent,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px @loader-color,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                75% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px transparent,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px @loader-color,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                81.25% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px transparent,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px @loader-color,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                87.5% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px transparent,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px @loader-color,
+                        -10px -30px @loader-color;
+                }
+
+                93.75% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px transparent,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px @loader-color;
+                }
+
+                100% {
+                    box-shadow:
+                        0px -30px @loader-color,
+                        10px -30px @loader-color,
+                        20px -20px @loader-color,
+                        30px -10px @loader-color,
+                        30px 0px @loader-color,
+                        30px 10px @loader-color,
+                        20px 20px @loader-color,
+                        10px 30px @loader-color,
+                        0px 30px transparent,
+                        -10px 30px transparent,
+                        -20px 20px transparent,
+                        -30px 10px transparent,
+                        -30px 0px transparent,
+                        -30px -10px transparent,
+                        -20px -20px transparent,
+                        -10px -30px transparent;
                 }
             }
         }
