@@ -33,7 +33,7 @@ export default Vue.extend({
         },
         loader_type: {
             type: String,
-            default: ELoaderType.Chiptune
+            default: ELoaderType.Alternate01
         }
     },
     mounted() { },
@@ -44,6 +44,7 @@ export default Vue.extend({
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 @import url('@/assets/index.less');
+
 .preloader {
     display: flex;
     justify-content: center;

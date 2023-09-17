@@ -199,7 +199,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: @font-family-primary;
+  font-family: @font-family-condensed;
 }
 
 h1,
@@ -208,13 +208,16 @@ h3,
 h3,
 h5,
 h6 {
-  font-family: @font-family-primary;
+  font-family: @font-family-serif;
+  font-weight: bold;
 }
 
 
 p,
 li {
-  font-family: @font-family-primary;
+  font-family: @font-family-serif;
+  font-size: @font-size-m;
+  line-height: 2em;
 }
 
 pre,
@@ -258,7 +261,7 @@ input[type="search"] {
   color: @color-text;
   max-width: 100%;
   text-align: center;
-  font-family: 'Red Alert B', sans-serif;
+  font-family: @font-family-serif;
   font-size: @font-size-header-item;
   font-style: italic;
   align-self: flex-end;
@@ -392,8 +395,8 @@ header {
       &:after {
         content: "";
         position: absolute;
-        width: 1px;
-        height: 18px;
+        width: @clear-search-icon-el-width;
+        height: @clear-search-icon-el-height;
         top: calc(50% + 2px);
         left: 50%;
         transform: translateY(-50%) translateX(-50%) rotate(45deg);
@@ -403,8 +406,8 @@ header {
       &:before {
         content: "";
         position: absolute;
-        width: 1px;
-        height: 18px;
+        width: @clear-search-icon-el-width;
+        height: @clear-search-icon-el-height;
         top: calc(50% + 2px);
         left: 50%;
         transform: translateY(-50%) translateX(-50%) rotate(-45deg);
@@ -467,7 +470,7 @@ nav {
 }
 
 footer {
-  font-size: 14px;
+  font-size: @font-size-xs;
   color: #5c5c5c;
   line-height: 0;
   border-top: 1px solid #333;
@@ -482,7 +485,7 @@ footer {
 
   p,
   span {
-    font-family: @font-family-primary;
+    font-family: @font-family-condensed;
     color: #5c5c5c;
   }
 

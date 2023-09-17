@@ -147,7 +147,7 @@ export default mixins(BaseComponent).extend({
                 grid-row: 1;
                 grid-column: 2;
                 grid-column-end: 2;
-                font-size: 64px;
+                font-size: @font-size-xxxl;
                 color: @color-text;
                 font-weight: 800;
                 margin: 0;
@@ -230,12 +230,13 @@ export default mixins(BaseComponent).extend({
                     &.launch {
                         background-color: @color-accent;
                         color: @color-background;
-                        font-size: 24px;
+                        font-size: @font-size-xl;
                         font-weight: 800;
                         border: 1px solid @color-text;
 
                         p {
                             background-color: @color-background;
+                            font-size: @font-size-xs;
                             color: @color-text;
                         }
 
@@ -339,7 +340,7 @@ export default mixins(BaseComponent).extend({
         padding: 0 16px;
         margin-top: 0;
         margin-left: 0;
-        font-size: 48px;
+        font-size: @font-size-xxxl;
     }
 
     .applet-launcher .launcher .brief .placeholder {
@@ -368,14 +369,14 @@ export default mixins(BaseComponent).extend({
 
 @media screen and (max-width: 1024px) {
     .applet-launcher .launcher .brief>h1 {
-        font-size: 32px;
+        font-size: @font-size-xl;
     }
 
 }
 
 @media screen and (max-width: 800px) {
     .applet-launcher .launcher .brief>h1 {
-        font-size: 32px;
+        font-size: @font-size-xl;
     }
 
 }
@@ -394,7 +395,8 @@ export default mixins(BaseComponent).extend({
         margin-top: 16px;
         grid-row: 1;
         grid-column: 1;
-        font-size: 32px;
+        font-size: @font-size-xl;
+        font-family: @font-family-sans;
     }
 
     .applet-launcher .launcher .brief .placeholder {

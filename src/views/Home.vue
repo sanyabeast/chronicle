@@ -49,6 +49,7 @@ export default Vue.extend({
     align-items: center;
     justify-content: center;
     margin-right: 32px;
+    margin-top: 8px;
     border-radius: 50%;
     background-color: #0c0c0c;
     overflow: hidden;
@@ -78,7 +79,7 @@ export default Vue.extend({
 
     p {
       margin: 0;
-      line-height: 1.5em;
+      line-height: 2em;
       width: 100%;
       max-width: 640px;
       text-align: justify;

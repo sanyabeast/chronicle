@@ -13,9 +13,14 @@
         html {
             background-color: black;
             color: #fff;
-            font-family: 'Red Alert B', sans-serif;
+            font-family: 'IBM Plex Serif', sans-serif;
             line-height: 2em;
-            padding-bottom: 62px;
+        }
+
+        body {
+            padding-top: 48px;
+            padding-bottom: 48px;
+            font-size: 14px;
         }
 
         h2 {
@@ -33,6 +38,7 @@
         }
 
         p {
+
             margin-top: 0;
             margin-bottom: 1em;
             border-bottom: 1px dotted #444;
@@ -50,10 +56,40 @@
         #about p {
             border: none;
         }
+
+        .back-button {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 0 8px;
+            height: 48px;
+            background: #000;
+            border-bottom: 1px solid red;
+            width: 100%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .back-button.bottom {
+            top: auto;
+            bottom: 0;
+            border-bottom: none;
+            border-top: 1px solid red;
+        }
+
+        .back-button a {
+            color: #fff;
+        }
     </style>
 </head>
 
 <body>
+    <div class="back-button">
+        <a href="/chronicle/dist/">Back</a>
+    </div>
     <!--@content-->
     <script>
         if (location.hostname === 'localhost') {
@@ -63,6 +99,10 @@
             });
         }
     </script>
+
+    <div class="back-button bottom">
+        <a href="/chronicle/dist/">Back</a>
+    </div>
 </body>
 
 </html>

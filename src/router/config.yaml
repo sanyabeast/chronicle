@@ -84,7 +84,8 @@ applets:
       component: Home
     tags: []
     category: ["service"]
-    title: ""
+    summary: assets/docs/about.txt
+    title: "About"
 
   - route: *webframe_route
     tags: []
@@ -96,8 +97,9 @@ applets:
       component: AppletsCatalog
       props: true
     tags: ["service"]
+    summary: assets/docs/applets-catalog.txt
     category: ["service"]
-    title: ""
+    title: "Applets"
 
   - route: *webframe_route
     tags: ["extras", "experiment", "voxels", "procedural", "three"]
@@ -166,7 +168,7 @@ applets:
     title: "Plot3 [Demo]"
     summary: "assets/docs/plot3.txt"
     document: "assets/docs/plot3.md"
-    preview: "assets/preview/plot_a1.png"
+    preview: "assets/preview/stonks_a1.png"
     props:
       url: plot3
 
@@ -202,7 +204,8 @@ applets:
     tags: ["service"]
     category: ["service"]
     title: "Model Viewer"
-    document: "assets/docs/showdown.md"
+    summary: "assets/docs/model-viewer.txt"
+    document: "assets/docs/model-viewer.md"
     props:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"

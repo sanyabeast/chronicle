@@ -76,6 +76,8 @@ export default mixins(BaseComponent).extend({
 
     * {
         user-select: text;
+        max-width: 100%;
+        word-wrap: break-word;
     }
 
     p {
@@ -85,12 +87,16 @@ export default mixins(BaseComponent).extend({
     ul,
     ol {
         list-style: none;
-        margin-left: 32px;
+        margin-left: 16px;
         padding: 16px;
         background: #33333338;
+        font-size: @font-size-s;
 
         li {
             color: #eee;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
             &:before {
                 content: "•";
@@ -130,10 +136,13 @@ export default mixins(BaseComponent).extend({
     h1,
     h2,
     h3,
-    h4 {
+    h4,
+    h5 {
         color: @color-text;
         text-decoration: none;
         background-color: @color-background;
+        font-family: @font-family-sans;
+        font-weight: bold;
         display: inline-block;
     }
 

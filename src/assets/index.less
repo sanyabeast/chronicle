@@ -2,8 +2,39 @@
 @color-background: #000;
 @color-text: #fff;
 @color-deco-1: #c2c2c2;
-@font-family-secondary: 'Ubuntu Condensed', sans-serif;
-@font-family-primary: 'Ubuntu', sans-serif;
-@font-family-monospace: 'Ubuntu Mo', sans-serif;
-@font-size-base: 16px;
-@font-size-header-item: 28px;
+@font-family-sans: 'IBM Plex Sans', sans-serif;
+@font-family-serif: 'IBM Plex Serif', sans-serif;
+@font-family-condensed: 'IBM Plex Condensed', sans-serif;
+@font-family-monospace: 'IBM Plex Mono', sans-serif;
+@font-size-base: 14px;
+
+@font-size-xs: 0.8em;
+@font-size-s: 1em;
+@font-size-m: 1.2em;
+@font-size-l: 1.5em;
+@font-size-xl: 2em;
+@font-size-xxl: 3em;
+@font-size-xxxl: 4em;
+
+@font-size-header-item: 2em;
+
+@clear-search-icon-el-width: 2px;
+@clear-search-icon-el-height: 18px;
+
+/* Initial state of the entering and leaving element */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+/* Ending state of the entered element */
+.fade-enter-to,
+.fade-enter-active .fade-enter-to {
+    opacity: 1;
+}
+
+/* Starting state of the leaving element */
+.fade-leave,
+.fade-leave-active .fade-leave {
+    opacity: 0;
+}

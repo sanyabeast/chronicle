@@ -158,17 +158,6 @@ async function generate_sitemap() {
     // Extract the routes
     const applets = router_config.applets;
 
-    const html_config_head = [{
-        tag: 'header',
-        children: [
-            {
-                tag: 'h2',
-                content: 'Places'
-            },
-
-        ]
-    }];
-
     const html_config_applets = applets.map(applet => {
         let summary = '';
         if (applet.summary) {
@@ -193,21 +182,12 @@ async function generate_sitemap() {
     const about_text = read_text_file('public/assets/docs/about.txt');
     const html_config_footer = [{
         tag: 'footer',
-        children: [
-            {
-                tag: 'h2',
-                content: 'About'
-            },
-        ]
-    },
-    {
-        tag: 'p',
-        content: about_text
+        children: []
     }];
 
     generate_page_file('sitemap', {
         title: 'sitemap',
-        content: [...html_config_head, ...html_config_applets, ...html_config_footer]
+        content: html_config_applets
     });
 
 }

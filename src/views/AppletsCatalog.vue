@@ -344,11 +344,11 @@ export default mixins(BaseComponent).extend({
             }
 
             h3 {
-                font-size: 20px;
+                font-size: @font-size-m;
                 z-index: 2;
                 background: @color-background;
                 text-transform: capitalize;
-                font-family: @font-family-secondary;
+                font-family: @font-family-condensed;
             }
         }
 
@@ -359,8 +359,10 @@ export default mixins(BaseComponent).extend({
         }
 
         .applet-thumb:hover {
+            transform: translateY(-4px);
+
             .fader {
-                opacity: 0.5;
+                opacity: 0.25;
             }
         }
     }
@@ -490,9 +492,9 @@ export default mixins(BaseComponent).extend({
                     align-items: center;
                     justify-content: flex-start;
                     height: 100%;
-                    font-size: 20px;
+                    font-size: @font-size-l;
                     font-weight: 400;
-                    font-family: @font-family-primary;
+                    font-family: @font-family-serif;
 
                 }
 
@@ -515,7 +517,7 @@ export default mixins(BaseComponent).extend({
             .applet-category-title {
                 h2 {
                     margin: 0;
-                    font-size: 20px;
+                    font-size: @font-size-l;
                     text-align: left;
                 }
 

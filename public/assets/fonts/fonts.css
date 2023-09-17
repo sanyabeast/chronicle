@@ -126,3 +126,44 @@
     /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
     src: url('../fonts/hardpixel/Hardpixel.OTF') format('opentype');
 }
+
+
+@font-face {
+    font-family: 'Proggy Clean';
+    font-style: normal;
+    font-weight: 900;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/proggyfonts-master/ProggyVector/ProggyVector-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSerif-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Condensed';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSansCondensed-Regular.woff2') format('woff2');
+}

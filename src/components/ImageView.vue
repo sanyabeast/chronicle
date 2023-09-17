@@ -31,7 +31,7 @@ export default mixins(BaseComponent).extend({
         },
         loader_type: {
             type: String,
-            default: ELoaderType.Chiptune
+            default: ELoaderType.Alternate01
         }
     },
     mounted() {
