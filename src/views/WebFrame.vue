@@ -48,6 +48,8 @@ export default mixins(BaseComponent).extend({
 })
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .view.web-frame {
     padding: 0;
     overflow: hidden;
@@ -69,7 +71,7 @@ export default mixins(BaseComponent).extend({
         height: 100%;
         align-items: center;
         justify-content: center;
-        background-color: #000;
+        background-color: @color-background;
     }
 
 }

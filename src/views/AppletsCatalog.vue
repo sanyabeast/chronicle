@@ -284,6 +284,8 @@ export default mixins(BaseComponent).extend({
 })
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .view.applets-catalog {
     width: 100%;
 
@@ -306,8 +308,8 @@ export default mixins(BaseComponent).extend({
             width: 100%;
             height: 120px;
             overflow: hidden;
-            background-color: #000;
-            border: 1px solid #fff;
+            background-color: @color-background;
+            border: 1px solid @color-text;
             padding: 8px;
             display: flex;
             align-items: center;
@@ -338,14 +340,15 @@ export default mixins(BaseComponent).extend({
                 width: 100%;
                 height: 100%;
                 opacity: 0;
-                background-color: red;
+                background-color: @color-accent;
             }
 
             h3 {
                 font-size: 20px;
                 z-index: 2;
-                background: #000;
+                background: @color-background;
                 text-transform: capitalize;
+                font-family: @font-family-secondary;
             }
         }
 
@@ -389,7 +392,7 @@ export default mixins(BaseComponent).extend({
                 left: 50%;
                 width: 80%;
                 height: 4px;
-                background-color: #fff;
+                background-color: @color-text;
                 transform: translate(-50%, -50%);
             }
 
@@ -403,8 +406,8 @@ export default mixins(BaseComponent).extend({
         h2 {
             margin: 0;
             text-align: left;
-            background-color: #fff;
-            color: #000;
+            background-color: @color-text;
+            color: @color-background;
             display: grid;
         }
 
@@ -422,12 +425,12 @@ export default mixins(BaseComponent).extend({
 
                 &:after,
                 &:before {
-                    background-color: #ff0000;
+                    background-color: @color-accent;
                 }
             }
 
             h2 {
-                background-color: #ff0000;
+                background-color: @color-accent;
             }
         }
 
@@ -489,6 +492,7 @@ export default mixins(BaseComponent).extend({
                     height: 100%;
                     font-size: 20px;
                     font-weight: 400;
+                    font-family: @font-family-primary;
 
                 }
 
@@ -519,12 +523,12 @@ export default mixins(BaseComponent).extend({
 
                     &:after,
                     &:before {
-                        background-color: #ff0000;
+                        background-color: @color-accent;
                     }
                 }
 
                 h2 {
-                    background-color: #ff0000;
+                    background-color: @color-accent;
                 }
             }
         }

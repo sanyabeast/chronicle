@@ -52,7 +52,9 @@ export default mixins(BaseComponent).extend({
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style lang="less">
+@import url('@/assets/index.less');
+
 .image-view {
     display: flex;
     justify-content: center;
@@ -75,7 +77,7 @@ export default mixins(BaseComponent).extend({
     }
 
     .loader-container {
-        background-color: #000;
+        background-color: @color-background;
         position: absolute;
         top: 0;
         left: 0;

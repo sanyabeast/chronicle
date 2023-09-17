@@ -67,6 +67,8 @@ export default mixins(BaseComponent).extend({
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
+@import url('@/assets/index.less');
+
 .showdown-viewer {
     background-color: #b5b5b51f;
     padding-bottom: 32px;
@@ -111,15 +113,15 @@ export default mixins(BaseComponent).extend({
 
     a,
     a strong {
-        background-color: #000;
-        color: #ff0000;
+        background-color: @color-background;
+        color: @color-accent;
         font-weight: 900;
     }
 
     a {
         &:hover {
-            background-color: #fff;
-            color: #000;
+            background-color: @color-text;
+            color: @color-background;
 
         }
     }
@@ -129,15 +131,15 @@ export default mixins(BaseComponent).extend({
     h2,
     h3,
     h4 {
-        color: #fff;
+        color: @color-text;
         text-decoration: none;
-        background-color: #000;
+        background-color: @color-background;
         display: inline-block;
     }
 
     pre {
-        background-color: #000;
-        border: 1px dotted #ff0000;
+        background-color: @color-background;
+        border: 1px dotted @color-accent;
         margin-bottom: 16px;
         padding: 16px;
         white-space: pre-wrap;
@@ -148,8 +150,8 @@ export default mixins(BaseComponent).extend({
     }
 
     img {
-        background-color: #000;
-        border: 2px solid #000;
+        background-color: @color-background;
+        border: 2px solid @color-background;
         margin: 8px;
 
         &:first-child {

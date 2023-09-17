@@ -402,6 +402,8 @@ export default mixins(BaseComponent).extend({
 });
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .model-viewer-3d {
     padding: 0;
 
@@ -434,7 +436,7 @@ export default mixins(BaseComponent).extend({
             width: calc(100% - 64px);
             height: calc(100% - 64px);
             background-color: black;
-            border: 2px dotted #fff;
+            border: 2px dotted @color-text;
         }
 
         &.dragging {
@@ -460,7 +462,7 @@ export default mixins(BaseComponent).extend({
         height: 100%;
         align-items: center;
         justify-content: center;
-        background-color: #000;
+        background-color: @color-background;
     }
 
     .renderer_container {
@@ -470,7 +472,7 @@ export default mixins(BaseComponent).extend({
         .controls {
             .separator {
                 height: 16px;
-                border-bottom: 1px solid #fff;
+                border-bottom: 1px solid @color-text;
             }
 
             .button {
@@ -483,7 +485,7 @@ export default mixins(BaseComponent).extend({
                 &.toggle-grid,
                 &.toggle-tiling {
                     &.active {
-                        color: red;
+                        color: @color-accent;
                     }
                 }
 
@@ -491,12 +493,12 @@ export default mixins(BaseComponent).extend({
                     color: #555;
 
                     &.active {
-                        color: #fff;
+                        color: @color-text;
                     }
                 }
 
                 &.active {
-                    color: red;
+                    color: @color-accent;
                 }
 
                 &.disabled {
@@ -505,7 +507,7 @@ export default mixins(BaseComponent).extend({
                 }
 
                 &[data-rendering-mode="default"] {
-                    color: #fff;
+                    color: @color-text;
                 }
 
                 &[data-rendering-mode="normal"],
@@ -549,7 +551,7 @@ export default mixins(BaseComponent).extend({
                 opacity: 0;
 
                 span {
-                    color: #fff;
+                    color: @color-text;
                     font-weight: 800;
 
                     &.offset {

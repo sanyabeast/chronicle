@@ -2,7 +2,7 @@
     <div class="applet-launcher" ref="root" @scroll="handle_scroll">
         <div class="launcher" v-if="applet_data !== undefined">
             <div class="brief">
-                <p v-html="applet_data.title.toUpperCase()"></p>
+                <h1 v-html="applet_data.title.toUpperCase()"></h1>
                 <div class="brief-info">
                     <TextView v-if="applet_data.summary" :src="applet_data.summary" />
                     <div class="placeholder" v-if="!applet_data.summary">
@@ -110,6 +110,8 @@ export default mixins(BaseComponent).extend({
 })
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .applet-launcher {
     overflow: hidden;
     position: relative;
@@ -141,12 +143,12 @@ export default mixins(BaseComponent).extend({
             width: 100%;
             flex-shrink: 0;
 
-            >p {
+            >h1 {
                 grid-row: 1;
                 grid-column: 2;
                 grid-column-end: 2;
                 font-size: 64px;
-                color: #fff;
+                color: @color-text;
                 font-weight: 800;
                 margin: 0;
                 margin-left: 32px;
@@ -194,8 +196,8 @@ export default mixins(BaseComponent).extend({
                 width: 100%;
                 height: 100%;
                 flex-grow: 1;
-                background-color: #000;
-                color: #fff;
+                background-color: @color-background;
+                color: @color-text;
                 margin-left: 32px;
                 padding-right: 64px;
                 display: flex;
@@ -211,8 +213,8 @@ export default mixins(BaseComponent).extend({
                 width: 100%;
                 height: 100%;
                 flex-grow: 1;
-                background-color: #000;
-                color: #fff;
+                background-color: @color-background;
+                color: @color-text;
                 display: flex;
                 padding: 16px 0 0 0;
                 flex-direction: column;
@@ -226,19 +228,19 @@ export default mixins(BaseComponent).extend({
                     align-items: center;
 
                     &.launch {
-                        background-color: red;
-                        color: #000;
+                        background-color: @color-accent;
+                        color: @color-background;
                         font-size: 24px;
                         font-weight: 800;
-                        border: 1px solid #fff;
+                        border: 1px solid @color-text;
 
                         p {
-                            background-color: #000;
-                            color: #fff;
+                            background-color: @color-background;
+                            color: @color-text;
                         }
 
                         &:hover {
-                            background-color: #000 !important;
+                            background-color: @color-background !important;
                         }
                     }
 
@@ -249,7 +251,7 @@ export default mixins(BaseComponent).extend({
                     min-height: 200px;
                     width: auto;
                     margin-bottom: 16px;
-                    border: 1px dotted #fff;
+                    border: 1px dotted @color-text;
                 }
             }
         }
@@ -267,7 +269,7 @@ export default mixins(BaseComponent).extend({
             align-items: center;
 
             .tag-thumb {
-                // border: 1px solid #fff;
+                // border: 1px solid @color-text;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -276,10 +278,10 @@ export default mixins(BaseComponent).extend({
                 background-color: #2d2d2d;
 
                 &:hover {
-                    background-color: #fff;
+                    background-color: @color-text;
 
                     p {
-                        color: #000 !important;
+                        color: @color-background !important;
                     }
                 }
 
@@ -333,7 +335,7 @@ export default mixins(BaseComponent).extend({
         grid-template-columns: 288px 1fr;
     }
 
-    .applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>h1 {
         padding: 0 16px;
         margin-top: 0;
         margin-left: 0;
@@ -365,14 +367,14 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 1024px) {
-    .applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>h1 {
         font-size: 32px;
     }
 
 }
 
 @media screen and (max-width: 800px) {
-    .applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>h1 {
         font-size: 32px;
     }
 
@@ -388,7 +390,7 @@ export default mixins(BaseComponent).extend({
         grid-template-rows: auto;
     }
 
-    .applet-launcher .launcher .brief>p {
+    .applet-launcher .launcher .brief>h1 {
         margin-top: 16px;
         grid-row: 1;
         grid-column: 1;

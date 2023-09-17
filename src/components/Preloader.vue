@@ -43,13 +43,14 @@ export default Vue.extend({
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+@import url('@/assets/index.less');
 .preloader {
     display: flex;
     justify-content: center;
     align-items: center;
 
     &.fill {
-        background-color: #000;
+        background-color: @color-background;
     }
 
     &.full {
@@ -82,7 +83,7 @@ export default Vue.extend({
                 height: 56px;
                 border-radius: 50%;
                 border: 3px solid transparent;
-                border-bottom-color: #ff0000;
+                border-bottom-color: @color-accent;
             }
 
             @keyframes rotation {

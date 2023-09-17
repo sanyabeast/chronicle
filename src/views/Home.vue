@@ -29,6 +29,8 @@ export default Vue.extend({
 
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .view.home {
 
   text-align: center;
@@ -63,10 +65,10 @@ export default Vue.extend({
   }
 
   .content a {
-    color: #fff;
+    color: @color-text;
 
     &:hover {
-      color: red;
+      color: @color-accent;
     }
   }
 

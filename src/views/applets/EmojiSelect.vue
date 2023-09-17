@@ -10,7 +10,6 @@
 import Vue from 'vue';
 import emoji_data from '@/assets/emoji.json'
 
-console.log(emoji_data)
 
 export default Vue.extend({
     name: "EmojiSelect",
@@ -34,7 +33,9 @@ export default Vue.extend({
 })
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .emoji-select {
-    color: red;
+    color: @color-accent;
 }
 </style>

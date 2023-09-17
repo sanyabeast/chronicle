@@ -23,7 +23,7 @@
       <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
-      <p><span v-html="get_current_year()"></span> |
+      <p><span v-html="`${career_start_date} - ${get_current_year()}`"></span> |
         <b>Ukraine</b> |
         prototyped &
         implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github" title="github"
@@ -33,7 +33,8 @@
       <i id="version" v-html="app_version"></i>
     </footer>
     <footer class="mobile">
-      <p><span v-html="get_current_year()"></span> | <b>Ukraine</b> | <a :href="mail_link" title="github">@sanyabeast</a>
+      <p><span v-html="`${career_start_date} - ${get_current_year()}`"></span> | <b>Ukraine</b> | <a :href="mail_link"
+          title="github">@sanyabeast</a>
         | <router-link v-html="href" to="/" title="home"></router-link> | <a :href="sitemap_url" id="sitemap"
           title="sitemap">sitemap</a></p>
 
@@ -58,6 +59,7 @@ export default mixins(BaseComponent).extend({
   name: 'App',
   data() {
     return {
+      career_start_date: 2013,
       href: location.host,
       mail_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
     }
@@ -150,11 +152,13 @@ export default mixins(BaseComponent).extend({
 </script>
 
 <style lang="less">
+@import url('@/assets/index.less');
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 * {
   scrollbar-width: auto;
-  scrollbar-color: #ff0000 #000000;
+  scrollbar-color: @color-accent @color-background;
 }
 
 /* Chrome, Edge, and Safari */
@@ -163,13 +167,13 @@ export default mixins(BaseComponent).extend({
 }
 
 *::-webkit-scrollbar-track {
-  background: #000000;
+  background: @color-background;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: #050505;
   border-radius: 0px;
-  border: 0px none #000000;
+  border: 0px none @color-background;
 }
 
 html,
@@ -184,36 +188,50 @@ body {
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  
-  font-size: 18px;
+
+  font-size: @font-size-base;
   font-weight: 100;
   /* Console-like font */
-  background-color: #000;
+  background-color: @color-background;
   /* Black background */
-  color: #fff;
+  color: @color-text;
   /* Green text color */
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
+  font-family: @font-family-primary;
 }
 
-pre, code {
-  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
+h1,
+h2,
+h3,
+h3,
+h5,
+h6 {
+  font-family: @font-family-primary;
+}
+
+
+p,
+li {
+  font-family: @font-family-primary;
+}
+
+pre,
+code {
+  font-family: @font-family-monospace;
 }
 
 * {
   box-sizing: border-box;
-  color: #fff;
+  color: @color-text;
   user-select: none;
   flex-shrink: 0;
   flex-grow: 0;
-  font-smooth: never;
-  -webkit-font-smoothing: none;
 }
 
 a {
-  color: red;
+  color: @color-accent;
   cursor: cell;
 
   &[title="github"] {
@@ -237,11 +255,11 @@ input[type="search"] {
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: @color-text;
   max-width: 100%;
   text-align: center;
   font-family: 'Red Alert B', sans-serif;
-  font-size: 32px;
+  font-size: @font-size-header-item;
   font-style: italic;
   align-self: flex-end;
   height: 100%;
@@ -255,7 +273,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 h1 {
-  font-size: 32px;
+  font-size: @font-size-header-item;
 }
 
 #homepage,
@@ -272,7 +290,7 @@ h1 {
     align-items: center;
     justify-content: center;
     text-align: left;
-    color: #eee;
+    color: @color-deco-1;
     height: 100%;
     margin: 0;
     // margin-bottom: 1px;
@@ -301,7 +319,7 @@ a#homepage:hover,
 a#quit-link:hover,
 a#search:hover {
   h1 {
-    color: red;
+    color: @color-accent;
   }
 }
 
@@ -324,7 +342,7 @@ header {
   top: 0;
   left: 0;
   z-index: 999;
-  background: #000;
+  background: @color-background;
   border-bottom: 1px solid #333;
   line-height: 0;
   height: 48px;
@@ -333,6 +351,7 @@ header {
   align-items: center;
   justify-content: center;
   width: 100%;
+
 
   a {
     text-decoration: none;
@@ -378,7 +397,7 @@ header {
         top: calc(50% + 2px);
         left: 50%;
         transform: translateY(-50%) translateX(-50%) rotate(45deg);
-        background: #eee;
+        background: @color-deco-1;
       }
 
       &:before {
@@ -389,16 +408,16 @@ header {
         top: calc(50% + 2px);
         left: 50%;
         transform: translateY(-50%) translateX(-50%) rotate(-45deg);
-        background: #eee;
+        background: @color-deco-1;
       }
 
       &:hover {
         &:after {
-          background: red;
+          background: @color-accent;
         }
 
         &:before {
-          background: red;
+          background: @color-accent;
         }
       }
     }
@@ -438,7 +457,7 @@ nav {
 }
 
 .view {
-  color: #fff;
+  color: @color-text;
   text-align: left;
   max-width: 1360px;
   padding: 16px 0;
@@ -463,6 +482,7 @@ footer {
 
   p,
   span {
+    font-family: @font-family-primary;
     color: #5c5c5c;
   }
 
@@ -487,6 +507,10 @@ footer {
     background: linear-gradient(to bottom, cornflowerblue 50%, gold 50%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  a:hover {
+    color: @color-accent;
   }
 }
 

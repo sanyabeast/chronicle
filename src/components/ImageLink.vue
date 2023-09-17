@@ -18,7 +18,9 @@ export default Vue.extend({
 });
 </script>
 <style lang="less">
-    .image-link {
-        background: red;
-    }
+@import url('@/assets/index.less');
+
+.image-link {
+    background: @color-accent;
+}
 </style>

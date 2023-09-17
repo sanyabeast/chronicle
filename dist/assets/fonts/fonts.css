@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Light.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 500;
+    src: url(../fonts/Ubuntu/Ubuntu-Medium.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: italic;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Italic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Condensed';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Condensed/UbuntuCondensed-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Mono/UbuntuMono-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Mono/UbuntuMono-Bold.ttf) format('truetype');
+}
+
+/* [0] */
+@font-face {
+    font-family: 'Noto Emoji';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url(../fonts/Noto_Emoji/static/NotoEmoji-Medium.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Red Alert';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/RedAlert/RedAlertA.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Red Alert B';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/RedAlert/RedAlertB.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'silkscreennormal';
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+    src: url('../fonts/Silkscreen-fontfacekit/webfonts/silkscreen_normal_macroman/slkscr-webfont.woff') format('woff2');
+}
+
+@font-face {
+    font-family: 'Munro';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('../fonts/munro/munro.ttf') format('woff2');
+}
+
+@font-face {
+    font-family: 'Press Start';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/press_start/prstartk.ttf') format('woff2');
+}
+
+@font-face {
+    font-family: '04b03';
+    font-style: normal;
+    font-weight: 900;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/04b03/04B_03__.TTF') format('woff2');
+}
+
+@font-face {
+    font-family: 'Edit Undo';
+    font-style: normal;
+    font-weight: 900;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/edit-undo.brk.ttf') format('woff2');
+}
+
+@font-face {
+    font-family: 'Hardpixel';
+    font-style: normal;
+    font-weight: 900;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/hardpixel/Hardpixel.OTF') format('opentype');
+}

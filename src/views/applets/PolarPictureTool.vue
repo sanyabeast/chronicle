@@ -136,7 +136,7 @@ export default mixins(BaseComponent).extend({
     methods: {
         async init() {
             let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-            
+
             let plane_material = await create_shader_material(shaders.polar_picture_tool);
 
             plane_material.uniforms.u_mode.value = this.mode;
@@ -334,6 +334,8 @@ export default mixins(BaseComponent).extend({
 });
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .polar-picture-tool {
     padding: 0;
 
@@ -365,7 +367,7 @@ export default mixins(BaseComponent).extend({
             width: calc(100% - 64px);
             height: calc(100% - 64px);
             background-color: black;
-            border: 2px dotted #fff;
+            border: 2px dotted @color-text;
         }
 
         &.dragging {
@@ -389,7 +391,7 @@ export default mixins(BaseComponent).extend({
         .controls {
             .separator {
                 height: 16px;
-                border-bottom: 1px solid #fff;
+                border-bottom: 1px solid @color-text;
             }
 
             .button {
@@ -402,7 +404,7 @@ export default mixins(BaseComponent).extend({
                 &.toggle-grid,
                 &.toggle-tiling {
                     &.active {
-                        color: red;
+                        color: @color-accent;
                     }
                 }
 
@@ -410,7 +412,7 @@ export default mixins(BaseComponent).extend({
                     color: #555;
 
                     &.active {
-                        color: #fff;
+                        color: @color-text;
                     }
                 }
             }
@@ -441,7 +443,7 @@ export default mixins(BaseComponent).extend({
                 opacity: 0;
 
                 span {
-                    color: #fff;
+                    color: @color-text;
                     font-weight: 800;
 
                     &.offset {

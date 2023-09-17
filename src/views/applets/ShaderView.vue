@@ -24,7 +24,7 @@ export default mixins(BaseComponent).extend({
     },
     data() {
         return {
-            download_image_name: 'rendered_frame',
+            download_image_name: 'rende@color-accent_frame',
             mouse_pos: {
                 x: 0,
                 y: 0
@@ -66,6 +66,8 @@ export default mixins(BaseComponent).extend({
 });
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .shader-view {
     padding: 0;
 
@@ -76,7 +78,7 @@ export default mixins(BaseComponent).extend({
         .controls {
             .separator {
                 height: 16px;
-                border-bottom: 1px solid #fff;
+                border-bottom: 1px solid @color-text;
             }
 
             .button {
@@ -89,7 +91,7 @@ export default mixins(BaseComponent).extend({
                 &.toggle-grid,
                 &.toggle-tiling {
                     &.active {
-                        color: red;
+                        color: @color-accent;
                     }
                 }
 
@@ -97,7 +99,7 @@ export default mixins(BaseComponent).extend({
                     color: #555;
 
                     &.active {
-                        color: #fff;
+                        color: @color-text;
                     }
                 }
             }

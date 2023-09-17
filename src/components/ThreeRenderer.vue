@@ -243,7 +243,9 @@ export default mixins(BaseComponent).extend({
 });
 </script>
   
-<style scoped>
+<style lang="less">
+@import url('@/assets/index.less');
+
 /* Add any custom styles for your renderer container if needed */
 .renderer_container {
     /* Example styles */
@@ -265,11 +267,11 @@ export default mixins(BaseComponent).extend({
             cursor: cell;
             z-index: 100;
             display: flex;
-            background-color: #000;
+            background-color: @color-background;
             margin: 1px 0;
 
             &:hover {
-                color: #ff0000;
+                color: @color-accent;
             }
         }
     }

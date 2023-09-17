@@ -59,6 +59,8 @@ export default mixins(BaseComponent).extend({
 
 </script>
 <style lang="less">
+@import url('@/assets/index.less');
+
 .package-explorer {
     overflow: hidden;
     position: relative;
@@ -113,17 +115,17 @@ export default mixins(BaseComponent).extend({
                 background-color: #0c0c0c;
 
                 a {
-                    color: #fff;
+                    color: @color-text;
                     text-decoration: none;
                     font-size: 24px;
-                    background-color: #000;
+                    background-color: @color-background;
                 }
 
                 &:hover {
-                    border-color: red;
+                    border-color: @color-accent;
 
                     a {
-                        color: red;
+                        color: @color-accent;
                     }
                 }
             }

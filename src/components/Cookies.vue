@@ -24,7 +24,9 @@ export default Vue.extend({
 </script>
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style lang="less">
+@import url('@/assets/index.less');
+
 .cookies {
     position: fixed;
     bottom: 32px;
@@ -32,7 +34,7 @@ export default Vue.extend({
     width: 100%;
     min-height: 200px;
     background-color: #eee;
-    border-top: 2px solid red;
+    border-top: 2px solid @color-accent;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,7 +43,7 @@ export default Vue.extend({
 
     p {
         &.warning {
-            color: red;
+            color: @color-accent;
             position: absolute;
             left: 0;
             top: 0;
@@ -55,25 +57,25 @@ export default Vue.extend({
         }
 
         font-size: 36px;
-        color: #000;
+        color: @color-background;
         margin: 12px;
 
         span {
-            color: #000;
+            color: @color-background;
             font-style: italic;
         }
     }
 
     div {
-        border: 2px solid red;
-        color: #000;
+        border: 2px solid @color-accent;
+        color: @color-background;
         padding: 12px;
         font-size: 36px;
         margin: 12px;
         cursor: cell;
 
         &:hover {
-            background-color: red;
+            background-color: @color-accent;
             color: #eee;
         }
     }
