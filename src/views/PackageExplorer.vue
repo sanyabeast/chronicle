@@ -87,7 +87,7 @@ export default mixins(BaseComponent).extend({
         }
 
         .text-view {
-            line-height: 2em;
+            line-height: 1.5em;
             padding-right: 64px;
 
             p {
@@ -161,7 +161,7 @@ export default mixins(BaseComponent).extend({
         }
 
         .text-view {
-            line-height: 2em;
+            line-height: 1.5em;
             padding-right: 0;
 
             p {

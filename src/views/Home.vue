@@ -76,7 +76,7 @@ export default Vue.extend({
 
     p {
       margin: 0;
-      line-height: 2em;
+      line-height: 1.5em;
       width: 100%;
       max-width: 640px;
       text-align: justify;

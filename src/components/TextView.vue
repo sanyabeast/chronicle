@@ -72,7 +72,7 @@ export default mixins(BaseComponent).extend({
 .text-view {
     overflow: hidden;
     position: relative;
-    line-height: 2em;
+    line-height: 1.5em;
 }
 </style>
   

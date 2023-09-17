@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "npm run generate && vue-cli-service build",
-    "start": "npm run serve",
+    "start": "npm run generate && npm run serve",
     "generate": "node scripts/generate_static.js",
     "serve-dist": "php -S localhost:8090"
   },

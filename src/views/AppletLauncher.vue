@@ -165,7 +165,6 @@ export default mixins(BaseComponent).extend({
                 i {
                     background-color: #ffffff06;
                     transition: background-color 1s ease-in-out;
-                    border-radius: 8px;
                     display: flex;
                     height: 16px;
                     width: 100%;
@@ -275,7 +274,6 @@ export default mixins(BaseComponent).extend({
                 justify-content: center;
                 margin-left: 8px;
                 background-color: #2d2d2d;
-                border-radius: 16px;
 
                 &:hover {
                     background-color: #fff;
@@ -289,7 +287,6 @@ export default mixins(BaseComponent).extend({
                     color: #ddd;
                     font-weight: 800;
                     margin: 0;
-                    font-family: 'Ubuntu Mono', monospace;
                 }
             }
         }
@@ -300,18 +297,14 @@ export default mixins(BaseComponent).extend({
             margin-top: 16px;
             padding: 32px;
             padding-bottom: 64px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
         }
 
         .document-placeholder {
             height: 256px;
             background-color: #ffffff05;
-            border-radius: 16px;
 
             i {
                 background-color: #ffffff03;
-                border-radius: 8px;
                 display: flex;
                 height: 16px;
                 width: 66%;

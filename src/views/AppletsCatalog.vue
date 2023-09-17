@@ -342,11 +342,10 @@ export default mixins(BaseComponent).extend({
             }
 
             h3 {
-                font-size: 18px;
+                font-size: 20px;
                 z-index: 2;
                 background: #000;
                 text-transform: capitalize;
-                font-family: 'Ubuntu Condensed', sans-serif;
             }
         }
 
@@ -488,7 +487,6 @@ export default mixins(BaseComponent).extend({
                     align-items: center;
                     justify-content: flex-start;
                     height: 100%;
-                    font-family: 'Ubuntu', sans-serif;
                     font-size: 20px;
                     font-weight: 400;
 

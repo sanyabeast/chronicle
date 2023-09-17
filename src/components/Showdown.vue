@@ -70,7 +70,11 @@ export default mixins(BaseComponent).extend({
 .showdown-viewer {
     background-color: #b5b5b51f;
     padding-bottom: 32px;
-    line-height: 2em;
+    line-height: 1.5em;
+
+    * {
+        user-select: text;
+    }
 
     p {
         color: #eee;
@@ -136,7 +140,6 @@ export default mixins(BaseComponent).extend({
         border: 1px dotted #ff0000;
         margin-bottom: 16px;
         padding: 16px;
-        font-family: 'Ubuntu Mono', monospace;
         white-space: pre-wrap;
 
         code {
@@ -147,12 +150,21 @@ export default mixins(BaseComponent).extend({
     img {
         background-color: #000;
         border: 2px solid #000;
-        margin: 16px;
+        margin: 8px;
 
         &:first-child {
             margin-left: 0;
         }
     }
+}
+
+@media screen and (max-width: 600px) {
+    .showdown-viewer {
+        img {
+            margin: 0;
+        }
+    }
+
 }
 </style>
   

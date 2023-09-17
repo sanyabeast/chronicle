@@ -5,7 +5,7 @@ import Vue from 'vue';
 export default Vue.extend({
     name: "BaseComponent",
     computed: {
-        is_mobile() {
+        is_mobile(): boolean {
             return this.$store.state.is_mobile_device;
         }
     },

@@ -184,9 +184,8 @@ body {
 body {
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: 'Ubuntu', sans-serif;
-  ;
-  font-size: 14px;
+  font-family: 'Red Alert B', 'Noto Emoji', sans-serif;
+  font-size: 18px;
   font-weight: 100;
   /* Console-like font */
   background-color: #000;
@@ -198,17 +197,14 @@ body {
   align-items: center;
 }
 
-.monospace {
-  font-family: 'Ubuntu Mono', monospace;
-  ;
-}
-
 * {
   box-sizing: border-box;
   color: #fff;
   user-select: none;
   flex-shrink: 0;
   flex-grow: 0;
+  font-smooth: never;
+  -webkit-font-smoothing: none;
 }
 
 a {
@@ -239,8 +235,8 @@ input[type="search"] {
   color: #fff;
   max-width: 100%;
   text-align: center;
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 24px;
+  font-family: 'Red Alert B', sans-serif;
+  font-size: 32px;
   font-style: italic;
   align-self: flex-end;
   height: 100%;
@@ -254,7 +250,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 32px;
 }
 
 #homepage,
@@ -447,7 +443,7 @@ nav {
 }
 
 footer {
-  font-size: 12px;
+  font-size: 14px;
   color: #5c5c5c;
   line-height: 0;
   border-top: 1px solid #333;
@@ -568,7 +564,7 @@ footer {
     p,
     span,
     a {
-      font-size: 10px;
+      font-size: 12px;
     }
 
     &.mobile {
