@@ -17,6 +17,10 @@
             line-height: 2em;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             padding-top: 48px;
             padding-bottom: 48px;
@@ -76,6 +80,7 @@
             align-items: center;
             flex-direction: row;
             justify-content: flex-start;
+            z-index: 1;
         }
 
         .back-button.bottom {
@@ -122,6 +127,7 @@
         }
 
         .applet-details {
+           
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -135,13 +141,15 @@
         }
 
         .applet-document {
+            align-self: stretch;
             padding: 16px;
             background-color: #000;
             border-top: 1px solid #ffffff40;
         }
 
         .applet-details-content {
-            align-items: flex-start;
+            align-items: stretch;
+            width: 100%;
             justify-content: space-between;
             display: flex;
             flex-direction: column;
@@ -189,7 +197,6 @@
             console.log('adjusting links and images...');
             if (location.hostname === 'localhost') {
                 console.log('Running locally, adjusting links.');
-                console.log('adjusting links');
                 let links = document.querySelectorAll('a');
                 links.forEach(element => {
                     element.href = element.href.replace('chronicle/dist/', '');
@@ -202,7 +209,13 @@
                     element.src = element.src.replace('static/assets/', 'assets/');
                 });
             } else {
-                console.log('Running on server, not adjusting links.');
+                console.log('Running on server, adjusting links.');
+                let applet_document = document.querySelector('.applet-document');
+                let applet_document_images = applet_document.querySelectorAll('img');
+                applet_document_images.forEach((img) => {
+                    img.src = img.src.replace('static/assets/', 'assets/');
+                    img.src = img.src.replace('assets/', 'chronicle/dist/assets/')
+                })
             }
 
         }
@@ -212,7 +225,7 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Package Explorer</h1><p class="no-content">No preview available</p><a class="applet-launch" href="/chronicle/dist/#/package/sample">Launch</a><p class="no-content">No summary available</p></div><p class="no-content">No document available</p></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Package Explorer</h1><p class="no-content">No preview available</p><a class="applet-launch" href="/chronicle/dist/#/package/sample">Launch</a><p class="no-content">No summary available</p></div><div class="applet-document no-content">No document available</div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
 </body>
 
 </html>

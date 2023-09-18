@@ -17,6 +17,7 @@ const converter = new showdown.Converter();
 
 function remove_directory(dir) {
     console.log(`Removing directory: ${dir}`);
+    if (!fs.existsSync(dir)) return;
     fs.rmdirSync(dir, { recursive: true });
 }
 
@@ -254,8 +255,8 @@ function generate_details_page(applet) {
                             }
                         } else {
                             return {
-                                tag: 'p',
-                                classes: ['no-content'],
+                                tag: 'div',
+                                classes: ['applet-document', 'no-content'],
                                 content: 'No document available'
                             }
                         }
@@ -342,8 +343,18 @@ async function generate_sitemap() {
 
 }
 
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Usage
-remove_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
-create_new_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
-create_page('static/index');
+async function main() {
+    remove_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
+    await wait(1000);
+    create_new_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
+    await wait(1000);
+    create_page('static/index');
+}
+
+main()
 // generate_sitemap('src/router/config.yaml', 'scripts/static.template.html', 'public/sitemap.html');

@@ -23,21 +23,14 @@
       <Cookies v-if="$store.state.show_cookie" />
     </main>
     <footer>
-      <p><span v-html="`${career_start_date} - ${get_current_year()}`"></span> |
-        <b>Ukraine</b> |
-        prototyped &
-        implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github" title="github"
-          href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/" v-html="href"
-          title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">web 1.0 version</a>
-      </p>
+      <p v-html="`${career_start_date} - ${get_current_year()}`"></p>
+      <b>Ukraine</b>
+      <p>prototyped & implemented by</p>
+      <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a>
+      <a class="github" title="github" href="https://github.com/sanyabeast" target="_blank">github</a>
+      <router-link to="/" v-html="href" title="home"></router-link>
+      <a :href="sitemap_url" id="sitemap" title="sitemap">web 1.0</a>
       <i id="version" v-html="app_version"></i>
-    </footer>
-    <footer class="mobile">
-      <p><span v-html="`${career_start_date} - ${get_current_year()}`"></span> | <b>Ukraine</b> | <a :href="mail_link"
-          title="github">@sanyabeast</a>
-        | <router-link v-html="href" to="/" title="home"></router-link> | <a :href="sitemap_url" id="sitemap"
-          title="sitemap">web 1.0 version</a></p>
-
     </footer>
     <!-- <nav>
       <image-link target="/" label="Home" />
@@ -474,33 +467,39 @@ footer {
   color: #5c5c5c;
   line-height: 0;
   border-top: 1px solid #333;
+  position: relative;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  position: relative;
+  line-height: 1em;
+  font-family: @font-family-condensed;
+  color: @color-text;
 
-  &.mobile {
-    display: none;
-  }
-
-  p,
-  span {
+  >* {
+    color: #666;
+    margin: 0;
     font-family: @font-family-condensed;
-    color: #5c5c5c;
     font-size: @font-size-xs;
+
+    &:after,
+    &:first-child:before {
+      content: "•";
+      margin: 0 4px;
+      background-color: @color-background;
+      color: #3f3f3f;
+    }
   }
 
-  span {
-    font-weight: bold;
-  }
+  a {
+    color: @color-text;
+    text-decoration: none;
 
-  i {
-    user-select: none;
-    pointer-events: none;
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    color: #333;
+    &:hover {
+      color: @color-accent;
+    }
   }
 
   b {
@@ -513,8 +512,13 @@ footer {
     -webkit-text-fill-color: transparent;
   }
 
-  a:hover {
-    color: @color-accent;
+  i {
+    position: absolute;
+    right: 8px;
+    bottom: 50%;
+    transform: translateY(50%);
+    font-size: 12px;
+    color: #2f2f2f;
   }
 }
 
@@ -530,7 +534,7 @@ footer {
 /* Media query for screens less than 600px */
 @media screen and (max-width: 600px) {
   #vue_app {
-    grid-template-rows: 48px 1fr 32px;
+    grid-template-rows: 48px 1fr 48px;
   }
 
   header {
@@ -592,21 +596,10 @@ footer {
   }
 
   footer {
-    display: none;
-
-    p,
-    span,
-    a {
-      font-size: 12px;
-    }
-
-    &.mobile {
-      display: flex;
-      flex-direction: column;
-    }
-
-    * {
-      flex-shrink: 0;
+    font-size: 12px;
+    padding-bottom: 8px;
+    i {
+      display: none;
     }
   }
 
