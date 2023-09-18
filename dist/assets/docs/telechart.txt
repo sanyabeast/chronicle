@@ -1,0 +1,2 @@
+
+The project developed for the "Telegram Charts JavaScript Contest" is a noteworthy technical effort. It introduces a custom rendering engine with abstractions similar to Three.js, including Node, Mesh, Geometry, and Material (ShaderMaterial). The project also integrates rendering loops and the manipulation of DOM objects. Additionally, it includes a developer launcher for creating multiple charts, each with predefined datasets. This project demonstrates advanced technical capabilities in the field of web-based charting and visualization.
