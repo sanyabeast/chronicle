@@ -188,7 +188,7 @@ function generate_details_page(applet) {
                 attrs: {
                     href: `${HTML_BASE_URL}static/index.html`
                 },
-                content: 'All Applets'
+                content: '&#x25c0; All Applets'
             },
             {
                 tag: 'h1',
@@ -211,6 +211,7 @@ function generate_details_page(applet) {
                         } else {
                             return {
                                 tag: 'p',
+                                classes: ['no-content'],
                                 content: 'No preview available'
                             }
                         }
@@ -232,6 +233,7 @@ function generate_details_page(applet) {
                         } else {
                             return {
                                 tag: 'p',
+                                classes: ['no-content'],
                                 content: 'No summary available'
                             }
                         }
@@ -245,6 +247,7 @@ function generate_details_page(applet) {
                         } else {
                             return {
                                 tag: 'p',
+                                classes: ['no-content'],
                                 content: 'No document available'
                             }
                         }
@@ -309,6 +312,7 @@ async function generate_sitemap() {
                 } else {
                     return {
                         tag: 'p',
+                        classes: ['no-content'],
                         content: 'No summary available'
                     }
                 }
