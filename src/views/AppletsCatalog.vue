@@ -286,7 +286,7 @@ export default mixins(BaseComponent).extend({
 <style lang="less">
 @import url('@/assets/index.less');
 
-.view.applets-catalog {
+.applets-catalog {
     width: 100%;
 
     .applets-catalog-content {
@@ -446,7 +446,7 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 1400px) {
-    .view.applets-catalog {
+    .applets-catalog {
         .applets-catalog-content {
             padding: 0 16px;
         }
@@ -454,7 +454,7 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 600px) {
-    .view.applets-catalog {
+    .applets-catalog {
         .applets-catalog-content {
             display: flex;
             flex-direction: column;
@@ -507,9 +507,10 @@ export default mixins(BaseComponent).extend({
                     }
                 }
 
-                .applet-thumb:hover {
+                &:hover {
+                    transform: none;
                     .fader {
-                        opacity: 0.5;
+                        opacity: 0;
                     }
                 }
             }
