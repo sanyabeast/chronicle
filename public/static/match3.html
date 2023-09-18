@@ -100,19 +100,25 @@
             padding: 8px 16px;
         }
 
-        .applet > a {
+        .applet>a {
             color: #fff;
             font-weight: bold;
             font-size: 18px;
         }
 
-        .applet > p {
+        .applet>p {
             color: #b4b4b4;
         }
 
         .applet:hover {
             background: #0e0e0e;
 
+        }
+
+        .applet-details-main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .applet-details {
@@ -122,8 +128,16 @@
             justify-content: flex-start;
             background-color: #0f0f0f;
             border-bottom: 1px solid #ffffff40;
+        }
+
+        .applet-details-main {
             padding: 16px;
-            ;
+        }
+
+        .applet-document {
+            padding: 16px;
+            background-color: #000;
+            border-top: 1px solid #ffffff40;
         }
 
         .applet-details-content {
@@ -198,13 +212,13 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Match3</h1><div class="applet-details-content"><img src="/chronicle/dist/assets/preview/match3_a1.png" alt="Match3"></img><a class="applet-launch" href="/chronicle/dist/#/web/match3">Launch</a><p>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Match3</h1><img src="/chronicle/dist/assets/preview/match3_a1.png" alt="Match3"></img><a class="applet-launch" href="/chronicle/dist/#/web/match3">Launch</a><p>
 Around a decade ago, I embarked on a JavaScript experiment - the "Match-3 Game" project. This early project, though admittedly with messy code, holds immense value in my journey. It was my first step into the world of game development, faithfully recreating the classic match-3 puzzle genre. It symbolizes my initial skills and passion, laying the foundation for my future projects and growth.
-</p><p><h2 id="overview">Overview</h2>
+</p></div><div class="applet-document"><h2 id="overview">Overview</h2>
 <p>Historical project. A JavaScript implementation of the 'three in a row' game, created in 2013, is notable for being the first game that was completed from start to finish. The code is a kind of spaghetti that somehow works. However, there are some enlightening moments. For example, I was surprised to discover that setTimeout can accept a string as its first argument, functioning like eval. I wasn't aware of this, although 10 years ago I did know – let's call it 'lost ancient knowledge'</p>
 <h2 id="codeexample">Code example</h2>
 <p><img src="assets/docs/image/spaghettic_code_a1.png" alt="Code example" title="Code example" /></p>
-<p><em>Prototyped and implemented by <a href="mailto:a.gvrnsk@gmail.com?subject=chronicle">@sanyabeast</a></em></p></p></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
+<p><em>Prototyped and implemented by <a href="mailto:a.gvrnsk@gmail.com?subject=chronicle">@sanyabeast</a></em></p></div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
 </body>
 
 </html>

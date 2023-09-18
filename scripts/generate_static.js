@@ -182,66 +182,74 @@ function generate_details_page(applet) {
         tag: 'div',
         classes: ['applet-details'],
         children: [
-            {
-                tag: 'a',
-                classes: ['applet-all'],
-                attrs: {
-                    href: `${HTML_BASE_URL}static/index.html`
-                },
-                content: '&#x25c0; All Applets'
-            },
-            {
-                tag: 'h1',
-                content: title
-            },
+
             {
                 tag: 'div',
                 classes: ['applet-details-content'],
                 children: [
 
-                    () => {
-                        if (applet.preview) {
-                            return {
-                                tag: 'img',
+                    {
+                        tag: 'div',
+                        classes: ['applet-details-main'],
+                        children: [
+                            {
+                                tag: 'a',
+                                classes: ['applet-all'],
                                 attrs: {
-                                    src: `${HTML_BASE_URL}${applet.preview}`,
-                                    alt: title
+                                    href: `${HTML_BASE_URL}static/index.html`
+                                },
+                                content: '&#x25c0; All Applets'
+                            },
+                            {
+                                tag: 'h1',
+                                content: title
+                            },
+                            () => {
+                                if (applet.preview) {
+                                    return {
+                                        tag: 'img',
+                                        attrs: {
+                                            src: `${HTML_BASE_URL}${applet.preview}`,
+                                            alt: title
+                                        }
+                                    }
+                                } else {
+                                    return {
+                                        tag: 'p',
+                                        classes: ['no-content'],
+                                        content: 'No preview available'
+                                    }
+                                }
+                            },
+                            {
+                                tag: 'a',
+                                classes: ['applet-launch'],
+                                attrs: {
+                                    href: `${HTML_BASE_URL}#${get_applet_url(applet)}`,
+                                },
+                                content: 'Launch'
+                            },
+                            () => {
+                                if (applet.summary) {
+                                    return {
+                                        tag: 'p',
+                                        content: read_text_file(`public/${applet.summary}`)
+                                    }
+                                } else {
+                                    return {
+                                        tag: 'p',
+                                        classes: ['no-content'],
+                                        content: 'No summary available'
+                                    }
                                 }
                             }
-                        } else {
-                            return {
-                                tag: 'p',
-                                classes: ['no-content'],
-                                content: 'No preview available'
-                            }
-                        }
-                    },
-                    {
-                        tag: 'a',
-                        classes: ['applet-launch'],
-                        attrs: {
-                            href: `${HTML_BASE_URL}#${get_applet_url(applet)}`,
-                        },
-                        content: 'Launch'
-                    },
-                    () => {
-                        if (applet.summary) {
-                            return {
-                                tag: 'p',
-                                content: read_text_file(`public/${applet.summary}`)
-                            }
-                        } else {
-                            return {
-                                tag: 'p',
-                                classes: ['no-content'],
-                                content: 'No summary available'
-                            }
-                        }
+                        ]
                     },
                     () => {
                         if (applet.document) {
                             return {
-                                tag: 'p',
+                                tag: 'div',
+                                classes: ['applet-document'],
                                 content: converter.makeHtml(read_text_file(`public/${applet.document}`))
                             }
                         } else {
