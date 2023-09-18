@@ -197,7 +197,6 @@ function generate_details_page(applet) {
                         content: 'Launch'
                     },
                     () => {
-                        console.log(`! Generating details page for ${applet.title} summary`)
                         if (applet.summary) {
                             return {
                                 tag: 'p',
@@ -211,7 +210,6 @@ function generate_details_page(applet) {
                         }
                     },
                     () => {
-                        console.log(`! Generating details page for ${applet.title} description`)
                         if (applet.document) {
                             return {
                                 tag: 'p',
@@ -227,8 +225,6 @@ function generate_details_page(applet) {
                 ]
             }]
     }]
-
-    console.dir(html_config, { depth: null });
 
     generate_page_file(`static/${alias}`, {
         title: title,
