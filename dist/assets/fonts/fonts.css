@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Light.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 500;
+    src: url(../fonts/Ubuntu/Ubuntu-Medium.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: italic;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/Ubuntu/Ubuntu-Italic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Condensed';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Condensed/UbuntuCondensed-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Mono/UbuntuMono-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(../fonts/Ubuntu_Mono/UbuntuMono-Bold.ttf) format('truetype');
+}
+
+/* [0] */
+@font-face {
+    font-family: 'Noto Emoji';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url(../fonts/Noto_Emoji/static/NotoEmoji-Medium.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'IBM Plex Serif';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSerif-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexMono-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IBM Plex Condensed';
+    font-style: normal;
+    font-weight: 500;
+    /* src: url('../fonts/press_start/PrStart.ttf') format('woff2'); */
+    src: url('../fonts/ibm_plex/IBMPlexSansCondensed-Regular.woff2') format('woff2');
+}
