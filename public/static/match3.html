@@ -214,7 +214,7 @@
                 let applet_document_images = applet_document.querySelectorAll('img');
                 applet_document_images.forEach((img) => {
                     img.src = img.src.replace('static/assets/', 'assets/');
-                    img.src = img.src.replace('assets/', '/chronicle/dist/assets/')
+                    img.src = img.src.replace('/assets/', 'chronicle/dist/assets/')
                 })
             }
 
