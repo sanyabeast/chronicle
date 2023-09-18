@@ -54,6 +54,7 @@ urls:
   euphoria_demo: https://sanyabeast.github.io/euphoria/dist/index.html
   plot3: projects/plot/index.html
   middlenight: projects/middlenight/index.html
+  random_wikipedia: https://en.wikipedia.org/wiki/Special:Random
 # route presets
 route_presets:
   webframe_route: &webframe_route
@@ -90,6 +91,8 @@ applets:
   - route: *webframe_route
     tags: []
     title: ""
+    props:
+      url: random_wikipedia
 
   - route:
       path: "/applets/:query?"
@@ -117,6 +120,7 @@ applets:
     category: ["project"]
     preview: "assets/preview/match3_a1.png"
     summary: "assets/docs/match3.txt"
+    document: "assets/docs/match3.md"
     props:
       url: match3
 

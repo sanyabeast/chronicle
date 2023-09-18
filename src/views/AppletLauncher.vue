@@ -236,7 +236,7 @@ export default mixins(BaseComponent).extend({
 
                         p {
                             background-color: @color-background;
-                            font-size: @font-size-xs;
+                            font-size: @font-size-l;
                             color: @color-text;
                         }
 

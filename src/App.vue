@@ -251,7 +251,7 @@ a {
 }
 
 img {
-  image-rendering: pixelated;
+  // image-rendering: pixelated;
 }
 
 input[type="search"] {

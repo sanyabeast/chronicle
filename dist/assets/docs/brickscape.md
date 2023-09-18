@@ -2,6 +2,8 @@
 
 A project aimed at visualizing an infinite voxel world. The world procedurally generates based on set rules, accommodating parameters from base noise to structure altitude considerations.
 
+![Screenshot](assets/docs/image/brickscape_006.png "Screenshot")
+
 # Key Features:
 
 - Procedural Generation: Presupposes the placement of full structures, such as a group of blocks, during generation. This includes predefined structures like trees (shown in the demo).
