@@ -21,3 +21,6 @@ The ModelViewer3D component is a specialized module designed for the intuitive v
 - Lifecycle Methods: Properly initializes key event listeners, models, and lighting on mounting, and ensures clean up before component destruction.
 
 - Event Handlers & Methods: Employs a multitude of methods ranging from file uploads, scene clearing, camera resets, keyboard interactions to toggling between rendering modes.
+
+
+*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*

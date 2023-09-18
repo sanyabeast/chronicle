@@ -1,8 +1,30 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
+const { get } = require('lodash');
+const { isFunction } = require('lodash');
+const { remove } = require('lodash');
 const path = require('path');
 
-const base_url = '/chronicle/dist/'
+const BASE_URL = '../public/';
+const STATIC_URL_SUFFIX = 'static/';
+const CONFIG_PATH = '../src/router/config.yaml'
+
+const HTML_BASE_URL = '/chronicle/dist/'
+
+function remove_directory(dir) {
+    console.log(`Removing directory: ${dir}`);
+    if (fs.existsSync(dir)) {
+        fs.rmdirSync(dir, { recursive: true });
+    }
+}
+
+function create_new_directory(dir) {
+    console.log(`Creating directory: ${dir}`);
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
+}
+
 
 function to_snake_case(str) {
     return str
@@ -70,6 +92,10 @@ function to_html(data) {
     if (!Array.isArray(data)) return "";
 
     return data.map(item => {
+        if (isFunction(item)) {
+            item = item();
+        }
+
         let html = `<${item.tag}`;
 
         // Add id if exists
@@ -110,7 +136,7 @@ function to_html(data) {
 
 function generate_page_file(page_name, template_params) {
     let template = update_template(template_params);
-    let output_path = path.resolve(__dirname, `../public/${page_name}.html`)
+    let output_path = path.resolve(__dirname, BASE_URL, `${page_name}.html`)
     write_text_file(output_path, template);
     console.log(`"${page_name}" generated at: ${output_path}`);
 }
@@ -147,19 +173,88 @@ function update_template(params) {
     return template;
 }
 
+function generate_details_page(applet) {
+    let title = get_applet_title(applet);
+    let alias = to_snake_case(title);
+    console.log(`Generating details page for ${applet.title}`);
+
+    const html_config = [{
+        tag: 'div',
+        classes: ['applet-details'],
+        children: [
+            {
+                tag: 'h1',
+                content: title
+            },
+            {
+                tag: 'div',
+                children: [
+                    {
+                        tag: 'a',
+                        attrs: {
+                            href: `${HTML_BASE_URL}#${get_applet_url(applet)}`
+                        },
+                        content: 'Launch'
+                    },
+                    () => {
+                        console.log(`! Generating details page for ${applet.title} summary`)
+                        if (applet.summary) {
+                            return {
+                                tag: 'p',
+                                content: read_text_file(`public/${applet.summary}`)
+                            }
+                        } else {
+                            return {
+                                tag: 'p',
+                                content: 'No summary available'
+                            }
+                        }
+                    },
+                    () => {
+                        console.log(`! Generating details page for ${applet.title} description`)
+                        if (applet.document) {
+                            return {
+                                tag: 'p',
+                                content: read_text_file(`public/${applet.document}`)
+                            }
+                        } else {
+                            return {
+                                tag: 'p',
+                                content: 'No document available'
+                            }
+                        }
+                    }
+                ]
+            }]
+    }]
+
+    console.dir(html_config, { depth: null });
+
+    generate_page_file(`static/${alias}`, {
+        title: title,
+        content: html_config
+    });
+}
+
+function get_applet_title(applet) {
+    return to_snake_case(applet.title || applet.route.name);
+}
+
 /**
  * Function to generate the sitemap
  */
 async function generate_sitemap() {
-    const config_path = path.join(__dirname, '../src/router/config.yaml');
-
+    const config_path = path.join(__dirname, CONFIG_PATH);
     // Load and parse the YAML data
     const router_config = yaml.load(read_text_file(config_path));
     // Extract the routes
     const applets = router_config.applets;
 
     const html_config_applets = applets.map(applet => {
+        generate_details_page(applet);
+
         let summary = '';
+
         if (applet.summary) {
             summary = read_text_file(`public/${applet.summary}`);
         }
@@ -168,7 +263,8 @@ async function generate_sitemap() {
             children: [{
                 tag: 'a',
                 attrs: {
-                    href: `${base_url}#${get_applet_url(applet)}`
+                    // href: `${HTML_BASE_URL}#${get_applet_url(applet)}`
+                    href: `${HTML_BASE_URL}static/${to_snake_case(get_applet_title(applet))}.html`
                 },
                 content: applet.title || applet.route.name
             },
@@ -179,12 +275,6 @@ async function generate_sitemap() {
         }
     })
 
-    const about_text = read_text_file('public/assets/docs/about.txt');
-    const html_config_footer = [{
-        tag: 'footer',
-        children: []
-    }];
-
     generate_page_file('sitemap', {
         title: 'sitemap',
         content: html_config_applets
@@ -193,5 +283,7 @@ async function generate_sitemap() {
 }
 
 // Usage
+remove_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
+create_new_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
 create_page('sitemap');
 // generate_sitemap('src/router/config.yaml', 'scripts/static.template.html', 'public/sitemap.html');

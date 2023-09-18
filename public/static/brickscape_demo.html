@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/css/fonts.css">
+    <title>brickscape_demo</title>
+    <style>
+        html {
+            background-color: black;
+            color: #fff;
+            font-family: 'IBM Plex Serif', sans-serif;
+            line-height: 2em;
+        }
+
+        body {
+            padding-top: 48px;
+            padding-bottom: 48px;
+            font-size: 14px;
+        }
+
+        h2 {
+            margin-top: 32px;
+            background-color: #fff;
+            display: inline-block;
+            color: #000;
+        }
+
+        a {
+            display: inline-block;
+            color: red;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        p {
+
+            margin-top: 0;
+            margin-bottom: 1em;
+            border-bottom: 1px dotted #444;
+        }
+
+        a#download {
+            display: none;
+        }
+
+        a:hover {
+            background-color: red;
+            color: #000;
+        }
+
+        #about p {
+            border: none;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 0 8px;
+            height: 48px;
+            background: #000;
+            border-bottom: 1px solid red;
+            width: 100%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .back-button.bottom {
+            top: auto;
+            bottom: 0;
+            border-bottom: none;
+            border-top: 1px solid red;
+        }
+
+        .back-button a {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="back-button">
+        <a href="/chronicle/dist/">Back</a>
+    </div>
+    <div class="applet-details"><h1>brickscape_demo</h1><div><a href="/chronicle/dist/#/web/brickscape">Launch</a><p>The "Minecraft Clone" project, developed with TypeScript and Three.js, is a technical endeavor. It employs instanced mesh rendering and shader code injection to handle a large variety of textured blocks efficiently. The project also features a basic day-night cycle and offers two exploration modes: bird-flight view and first-person view, providing an engaging experience for users interested in 3D graphics and game development.
+</p><p># Overview:
+
+A project aimed at visualizing an infinite voxel world. The world procedurally generates based on set rules, accommodating parameters from base noise to structure altitude considerations.
+
+![Screenshot](assets/docs/image/brickscape_006.png "Screenshot")
+
+# Key Features:
+
+- Procedural Generation: Presupposes the placement of full structures, such as a group of blocks, during generation. This includes predefined structures like trees (shown in the demo).
+
+### Visualization Technique: Utilizes Three.js for visualization. Block rendering employs:
+
+![alt text](assets/docs/image/brickscape_003.png "Chunk rendering including empty blocks")
+
+- Instanced geometry
+- Custom shaders
+- Instance attributes
+  
+This combination allows extensive control over block attributes while ensuring efficient resource usage.
+The chunk organization closely mirrors the processes observed in Minecraft™.
+
+# Performance Optimizations:
+
+![alt text](assets/docs/image/brickscape_004.gif "Chunks Loading")
+![alt text](assets/docs/image/brickscape_005.gif "Chunks Loading")
+
+Tasks like chunk generation and updates are spread asynchronously over time. This minimizes heavy peak loads, preventing application freezes.
+Rendering, while resource-intensive, is optimized for efficiency in a JavaScript environment.
+Occlusion-Type Shading: A shading method based on neighboring blocks and their positions. It offers a visually appealing effect, adding depth to the imagery.
+
+# Demo Exploration Modes:
+
+![alt text](assets/docs/image/brickscape_001.png "Bird's-Eye View")
+![alt text](assets/docs/image/brickscape_002.png "First-Person View")
+
+Bird's-Eye View (MapControls): An aerial perspective of the voxel world.
+
+
+
+First-Person View: Features basic character-block collision and allows activities like walking, running, and jumping.
+
+
+*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*</p></div></div>
+    <script>
+        if (location.hostname === 'localhost') {
+            let links = document.querySelectorAll('a')
+            links.forEach(element => {
+                element.href = element.href.replace('chronicle/dist/', '')
+            });
+        }
+    </script>
+
+    <div class="back-button bottom">
+        <a href="/chronicle/dist/">Back</a>
+    </div>
+</body>
+
+</html>

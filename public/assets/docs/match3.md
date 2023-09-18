@@ -5,3 +5,5 @@ Historical project. A JavaScript implementation of the 'three in a row' game, cr
 ## Code example
 
 ![Code example](assets/docs/image/spaghettic_code_a1.png "Code example")
+
+*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*

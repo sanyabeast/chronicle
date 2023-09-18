@@ -470,7 +470,6 @@ nav {
 }
 
 footer {
-  font-size: @font-size-xs;
   color: #5c5c5c;
   line-height: 0;
   border-top: 1px solid #333;
@@ -487,6 +486,7 @@ footer {
   span {
     font-family: @font-family-condensed;
     color: #5c5c5c;
+    font-size: @font-size-xs;
   }
 
   span {
