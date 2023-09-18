@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="assets/css/fonts.css">
-    <title>plot3_demo</title>
+    <title>Welcome to @sanyabeast's Digital Abode [Web 1.0] - Plot3 [Demo]</title>
     <style>
         html {
             background-color: black;
@@ -21,13 +21,15 @@
             padding-top: 48px;
             padding-bottom: 48px;
             font-size: 14px;
+            margin: 0;
         }
 
         h2 {
             margin-top: 32px;
-            background-color: #fff;
             display: inline-block;
-            color: #000;
+            color: #fff;
+            background-color: #000;
+            font-weight: bold;
         }
 
         a {
@@ -41,7 +43,6 @@
 
             margin-top: 0;
             margin-bottom: 1em;
-            border-bottom: 1px dotted #444;
         }
 
         a#download {
@@ -57,11 +58,15 @@
             border: none;
         }
 
+        .emoji {
+            font-family: 'Noto Sans';
+        }
+
         .back-button {
             position: fixed;
             top: 0;
             left: 0;
-            padding: 0 8px;
+            padding: 0 16px;
             height: 48px;
             background: #000;
             border-bottom: 1px solid red;
@@ -77,83 +82,154 @@
             top: auto;
             bottom: 0;
             border-bottom: none;
-            border-top: 1px solid red;
+            border-top: 2px solid red;
         }
 
         .back-button a {
+            color: #ff0000;
+        }
+
+        .back-button:hover a {
+            color: #000;
+        }
+
+        .applet {
+            border-bottom: 1px solid #ffffff40;
+            margin-bottom: 16px;
+            background: #0a0a0a;
+            padding: 8px 16px;
+        }
+
+        .applet a {
             color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .applet p {
+            color: #b4b4b4;
+        }
+
+        .applet:hover {
+            background: #0e0e0e;
+
+        }
+
+        .applet-details {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            background-color: #0f0f0f;
+            border-bottom: 1px solid #ffffff40;
+            padding: 16px;
+            ;
+        }
+
+        .applet-details-content {
+            align-items: flex-start;
+            justify-content: space-between;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .applet-launch,
+        .applet-all {
+            font-size: 24px;
+            background: #fff;
+            margin: 16px 0;
+            color: #000;
+        }
+
+        .applet-all {
+            font-size: 18px;
+        }
+
+        .applet-launch:hover,
+        .applet-all:hover {
+            background: #ff0000;
+            color: #000;
+        }
+
+        img {
+            width: max-content;
+            height: max-content;
+            border: 1px solid #fff;
         }
     </style>
 </head>
 
 <body>
     <div class="back-button">
-        <a href="/chronicle/dist/">Back</a>
+        <a href="/chronicle/dist/">&#x25c0;Back to site</a>
     </div>
-    <div class="applet-details"><h1>plot3_demo</h1><div><a href="/chronicle/dist/#/web/plot3">Launch</a><p>The Trading Chart Visualization Project is an integrated library designed for live tracking and visualization of trading charts, offering advanced features such as technical analysis tools, customizable measurement instruments, and optimized rendering. It supports multiple display formats, user-friendly navigation, and ensures adaptability through theming, localization, and mobile optimization.</p><p># Trading Chart Visualization Project
-
-## Overview:
-
-A project dedicated to the visualization of trading charts. This project serves as a library integrated into the main client.
-
-## Key Features:
-
-### Live Tracking: Enables tracking of live trading quotes in various formats:
-
-![Curve](assets/docs/image/plot3/001.png "Curve painter")
-![Candlesticks](assets/docs/image/plot3/002.png "Curve painter")
-
-- Curves (including filled curves)
-- Candles
-- Bars
-
-### User Navigation: Allows users to:
-
-![User navigation](assets/docs/image/plot3/005.gif "User navigation")
-
-- Zoom in and out, dynamically changing the level of detail.
-- Pan forwards or backwards on the timeline for historical data exploration.
-Rendering System: Uses a custom build of Three.js. Chart visualization divides the timeline into updatable segments. Almost all chart geometry is visualized using custom procedural BufferGeometry and a custom ShaderMaterial for interaction with the chart coordinate management system.
-
-### Multiple Display Types: 
-
-![Technical analysis tools](assets/docs/image/plot3/003.png "Technical analysis tools")
-
-
-Can display several types simultaneously. This feature is primarily showcased via "technical analysis tools"—offering roughly twenty tools displayed either above the main chart or below it, in cases where a unique scale is required.
-
-### Measurement Tools: 
-
-![Measurement tools](assets/docs/image/plot3/004.png "Measurement tools")
-
-Enables users to add special "measurement tools" to the chart. This set comprises around 20 customizable tools to tailor the chart's analytical capabilities.
-
-###  Secondary Elements: 
-
-The chart also allows for the visualization of various secondary elements in either screen space or world space, tied to the chart's grid based on zoom and position. This includes badges, markers, timers, fragments, and more.
-
-## Advanced Features:
-
-- Theming
-- Localization
-- Performance profiling
-- Optimization for mobile devices
-- Experimental rendering in a worker via OffscreenCanvas
-
-
-*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*</p></div></div>
+    <div class="back-button bottom">
+        <a href="/chronicle/dist/">&#x25c0;Back to site</a>
+    </div>
     <script>
-        if (location.hostname === 'localhost') {
-            let links = document.querySelectorAll('a')
-            links.forEach(element => {
-                element.href = element.href.replace('chronicle/dist/', '')
-            });
+        function adjustLinksAndImages() {
+            console.log('adjusting links and images...');
+            if (location.hostname === 'localhost') {
+                console.log('Running locally, adjusting links.');
+                console.log('adjusting links');
+                let links = document.querySelectorAll('a');
+                links.forEach(element => {
+                    element.href = element.href.replace('chronicle/dist/', '');
+                    element.href = element.href.replace('static/assets/', 'assets/');
+                });
+
+                let imgs = document.querySelectorAll('img');
+                imgs.forEach(element => {
+                    element.src = element.src.replace('chronicle/dist/', '');
+                    element.src = element.src.replace('static/assets/', 'assets/');
+                });
+            } else {
+                console.log('Running on server, not adjusting links.');
+            }
+
         }
+
+        // Call once initially to adjust links and images.
+        adjustLinksAndImages();
+        window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="back-button bottom">
-        <a href="/chronicle/dist/">Back</a>
-    </div>
+    <div class="applet-details"><a class="applet-all" href="/chronicle/dist/static/index.html">All Applets</a><h1>Plot3 [Demo]</h1><div class="applet-details-content"><img src="/chronicle/dist/assets/preview/stonks_a1.png" alt="Plot3 [Demo]"></img><a class="applet-launch" href="/chronicle/dist/#/web/plot3">Launch</a><p>The Trading Chart Visualization Project is an integrated library designed for live tracking and visualization of trading charts, offering advanced features such as technical analysis tools, customizable measurement instruments, and optimized rendering. It supports multiple display formats, user-friendly navigation, and ensures adaptability through theming, localization, and mobile optimization.</p><p><h1 id="tradingchartvisualizationproject">Trading Chart Visualization Project</h1>
+<h2 id="overview">Overview:</h2>
+<p>A project dedicated to the visualization of trading charts. This project serves as a library integrated into the main client.</p>
+<h2 id="keyfeatures">Key Features:</h2>
+<h3 id="livetrackingenablestrackingoflivetradingquotesinvariousformats">Live Tracking: Enables tracking of live trading quotes in various formats:</h3>
+<p><img src="assets/docs/image/plot3/001.png" alt="Curve" title="Curve painter" />
+<img src="assets/docs/image/plot3/002.png" alt="Candlesticks" title="Curve painter" /></p>
+<ul>
+<li>Curves (including filled curves)</li>
+<li>Candles</li>
+<li>Bars</li>
+</ul>
+<h3 id="usernavigationallowsusersto">User Navigation: Allows users to:</h3>
+<p><img src="assets/docs/image/plot3/005.gif" alt="User navigation" title="User navigation" /></p>
+<ul>
+<li>Zoom in and out, dynamically changing the level of detail.</li>
+<li>Pan forwards or backwards on the timeline for historical data exploration.
+Rendering System: Uses a custom build of Three.js. Chart visualization divides the timeline into updatable segments. Almost all chart geometry is visualized using custom procedural BufferGeometry and a custom ShaderMaterial for interaction with the chart coordinate management system.</li>
+</ul>
+<h3 id="multipledisplaytypes">Multiple Display Types:</h3>
+<p><img src="assets/docs/image/plot3/003.png" alt="Technical analysis tools" title="Technical analysis tools" /></p>
+<p>Can display several types simultaneously. This feature is primarily showcased via "technical analysis tools"—offering roughly twenty tools displayed either above the main chart or below it, in cases where a unique scale is required.</p>
+<h3 id="measurementtools">Measurement Tools:</h3>
+<p><img src="assets/docs/image/plot3/004.png" alt="Measurement tools" title="Measurement tools" /></p>
+<p>Enables users to add special "measurement tools" to the chart. This set comprises around 20 customizable tools to tailor the chart's analytical capabilities.</p>
+<h3 id="secondaryelements">Secondary Elements:</h3>
+<p>The chart also allows for the visualization of various secondary elements in either screen space or world space, tied to the chart's grid based on zoom and position. This includes badges, markers, timers, fragments, and more.</p>
+<h2 id="advancedfeatures">Advanced Features:</h2>
+<ul>
+<li>Theming</li>
+<li>Localization</li>
+<li>Performance profiling</li>
+<li>Optimization for mobile devices</li>
+<li>Experimental rendering in a worker via OffscreenCanvas</li>
+</ul>
+<p><em>Prototyped and implemented by <a href="mailto:a.gvrnsk@gmail.com?subject=chronicle">@sanyabeast</a></em></p></p></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
 </body>
 
 </html>

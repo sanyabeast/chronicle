@@ -28,7 +28,7 @@
         prototyped &
         implemented by <a :href="mail_link" id="mail" title="mailto">@sanyabeast</a> | <a class="github" title="github"
           href="https://github.com/sanyabeast" target="_blank">github</a> | <router-link to="/" v-html="href"
-          title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">sitemap</a>
+          title="home"></router-link> | <a :href="sitemap_url" id="sitemap" title="sitemap">web 1.0 version</a>
       </p>
       <i id="version" v-html="app_version"></i>
     </footer>
@@ -36,7 +36,7 @@
       <p><span v-html="`${career_start_date} - ${get_current_year()}`"></span> | <b>Ukraine</b> | <a :href="mail_link"
           title="github">@sanyabeast</a>
         | <router-link v-html="href" to="/" title="home"></router-link> | <a :href="sitemap_url" id="sitemap"
-          title="sitemap">sitemap</a></p>
+          title="sitemap">web 1.0 version</a></p>
 
     </footer>
     <!-- <nav>
@@ -86,7 +86,7 @@ export default mixins(BaseComponent).extend({
   },
   computed: {
     sitemap_url() {
-      return `sitemap.html`
+      return `static/index.html`
     },
     search_link_label() {
       if (this.$route.name !== 'applets-catalog') {

@@ -5,24 +5,24 @@ const { isFunction } = require('lodash');
 const { remove } = require('lodash');
 const path = require('path');
 
+const PAGE_TITLE_BASE = "Welcome to @sanyabeast's Digital Abode [Web 1.0]"
 const BASE_URL = '../public/';
 const STATIC_URL_SUFFIX = 'static/';
 const CONFIG_PATH = '../src/router/config.yaml'
 
 const HTML_BASE_URL = '/chronicle/dist/'
+const showdown = require('showdown');
+
+const converter = new showdown.Converter();
 
 function remove_directory(dir) {
     console.log(`Removing directory: ${dir}`);
-    if (fs.existsSync(dir)) {
-        fs.rmdirSync(dir, { recursive: true });
-    }
+    fs.rmdirSync(dir, { recursive: true });
 }
 
 function create_new_directory(dir) {
     console.log(`Creating directory: ${dir}`);
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-    }
+    fs.mkdirSync(dir);
 }
 
 
@@ -146,7 +146,7 @@ function generate_page_file(page_name, template_params) {
  */
 function create_page(type, params) {
     switch (type) {
-        case 'sitemap': {
+        case 'static/index': {
             generate_sitemap();
             break;
         }
@@ -183,16 +183,43 @@ function generate_details_page(applet) {
         classes: ['applet-details'],
         children: [
             {
+                tag: 'a',
+                classes: ['applet-all'],
+                attrs: {
+                    href: `${HTML_BASE_URL}static/index.html`
+                },
+                content: 'All Applets'
+            },
+            {
                 tag: 'h1',
                 content: title
             },
             {
                 tag: 'div',
+                classes: ['applet-details-content'],
                 children: [
+
+                    () => {
+                        if (applet.preview) {
+                            return {
+                                tag: 'img',
+                                attrs: {
+                                    src: `${HTML_BASE_URL}${applet.preview}`,
+                                    alt: title
+                                }
+                            }
+                        } else {
+                            return {
+                                tag: 'p',
+                                content: 'No preview available'
+                            }
+                        }
+                    },
                     {
                         tag: 'a',
+                        classes: ['applet-launch'],
                         attrs: {
-                            href: `${HTML_BASE_URL}#${get_applet_url(applet)}`
+                            href: `${HTML_BASE_URL}#${get_applet_url(applet)}`,
                         },
                         content: 'Launch'
                     },
@@ -213,7 +240,7 @@ function generate_details_page(applet) {
                         if (applet.document) {
                             return {
                                 tag: 'p',
-                                content: read_text_file(`public/${applet.document}`)
+                                content: converter.makeHtml(read_text_file(`public/${applet.document}`))
                             }
                         } else {
                             return {
@@ -223,17 +250,25 @@ function generate_details_page(applet) {
                         }
                     }
                 ]
-            }]
+            },
+            {
+                tag: 'script',
+                content: 'window.adjustLinksAndImages();',
+                attrs: {
+                    type: 'text/javascript'
+                }
+            }
+        ]
     }]
 
     generate_page_file(`static/${alias}`, {
-        title: title,
+        title: `${PAGE_TITLE_BASE} - ${title}`,
         content: html_config
     });
 }
 
 function get_applet_title(applet) {
-    return to_snake_case(applet.title || applet.route.name);
+    return applet.title || applet.route.name;
 }
 
 /**
@@ -256,6 +291,7 @@ async function generate_sitemap() {
         }
         return {
             tag: 'div',
+            classes: ['applet'],
             children: [{
                 tag: 'a',
                 attrs: {
@@ -264,16 +300,32 @@ async function generate_sitemap() {
                 },
                 content: applet.title || applet.route.name
             },
-            {
-                tag: 'p',
-                content: summary
+            () => {
+                if (applet.summary) {
+                    return {
+                        tag: 'p',
+                        content: summary
+                    }
+                } else {
+                    return {
+                        tag: 'p',
+                        content: 'No summary available'
+                    }
+                }
             }]
         }
     })
 
-    generate_page_file('sitemap', {
-        title: 'sitemap',
-        content: html_config_applets
+    generate_page_file('static/index', {
+        title: `${PAGE_TITLE_BASE} - Index`,
+        content: [...html_config_applets,
+        {
+            tag: 'script',
+            content: 'window.adjustLinksAndImages();',
+            attrs: {
+                type: 'text/javascript'
+            }
+        }]
     });
 
 }
@@ -281,5 +333,5 @@ async function generate_sitemap() {
 // Usage
 remove_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
 create_new_directory(path.join(__dirname, BASE_URL, STATIC_URL_SUFFIX));
-create_page('sitemap');
+create_page('static/index');
 // generate_sitemap('src/router/config.yaml', 'scripts/static.template.html', 'public/sitemap.html');
