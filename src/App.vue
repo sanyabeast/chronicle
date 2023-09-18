@@ -109,6 +109,7 @@ export default mixins(BaseComponent).extend({
     }
   },
   mounted() {
+    console.log('App mounted');
     (window as any).vue_app = this;
   },
   methods: {
