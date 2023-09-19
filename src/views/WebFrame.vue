@@ -11,6 +11,7 @@ import Preloader, { ELoaderType } from '@/components/Preloader.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
 import { urls } from '@/router';
+import { get } from 'lodash';
 
 export default mixins(BaseComponent).extend({
     name: "WebFrame",
@@ -32,7 +33,7 @@ export default mixins(BaseComponent).extend({
     },
     computed: {
         web_url() {
-            return urls[this.url]
+            return get(urls, this.url, this.url)
         }
     },
     props: {

@@ -12,12 +12,10 @@ declare module 'gif.js.optimized' {
 }
 
 declare interface IPackageData {
-    package_data: {
-        files: string[][] | null
-        title: string | null
-        summary: string | null
-        avatar: string | null
-    },
+    files: string[][] | null
+    title: string | null
+    summary: string | null
+    avatar: string | null
 }
 
 declare interface IAppletData {
@@ -33,6 +31,7 @@ declare interface IAppletData {
     tags: string[]
     category: string[]
     title?: string
+    package?: string
     preview?: string
     launcher: boolean
     props: {

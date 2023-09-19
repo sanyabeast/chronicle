@@ -9,6 +9,7 @@ Vue.component('TextView', () => import('./components/TextView.vue'))
 Vue.component('ImageView', () => import('./components/ImageView.vue'))
 Vue.component('Showdown', () => import('./components/Showdown.vue'))
 Vue.component('ThreeRenderer', () => import('./components/ThreeRenderer.vue'))
+Vue.component('PackageExplorer', () => import('./components/PackageExplorer.vue'))
 
 new Vue({
   router,

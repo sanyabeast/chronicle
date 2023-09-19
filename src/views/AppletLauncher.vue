@@ -1,20 +1,15 @@
 <template>
     <div class="applet-launcher" ref="root" @scroll="handle_scroll">
         <div class="launcher" v-if="applet_data !== undefined">
-            <div class="brief">
+            <div class="brief" :class="{ no_preview: !applet_data.preview }">
                 <h1 v-html="applet_data.title.toUpperCase()"></h1>
                 <div class="brief-info">
                     <TextView v-if="applet_data.summary" :src="applet_data.summary" />
-                    <div class="placeholder" v-if="!applet_data.summary">
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                    </div>
+                    <PackageExplorer :package="applet_data.package" v-if="applet_data.package" />
                 </div>
                 <div class="avatar">
-                    <ImageView :src="applet_data.preview" />
-                    <router-link class="button launch" :to="applet_route_link">
+                    <ImageView v-if="applet_data.preview" :src="applet_data.preview" />
+                    <router-link v-if="applet_data.route.name !== 'noop'" class="button launch" :to="applet_route_link">
                         <p>Launch</p>
                     </router-link>
                 </div>
@@ -24,6 +19,8 @@
                     <p v-html="`${item}`" :style="{ color: `${get_bright_web_color(item)}` }"></p>
                 </div>
             </div>
+
+
 
             <Showdown v-if="applet_data.document" :src="applet_data.document" />
 
@@ -143,6 +140,16 @@ export default mixins(BaseComponent).extend({
             width: 100%;
             flex-shrink: 0;
 
+            &.no_preview {
+                display: flex;
+                flex-direction: column;
+
+                .brief-info {
+                    margin-left: 0;
+                    padding: 16px 0;
+                }
+            }
+
             >h1 {
                 grid-row: 1;
                 grid-column: 2;
@@ -193,13 +200,12 @@ export default mixins(BaseComponent).extend({
             .brief-info {
                 grid-row: 2;
                 grid-column: 2;
-                width: 100%;
+                // width: 100
                 height: 100%;
                 flex-grow: 1;
                 background-color: @color-background;
                 color: @color-text;
                 margin-left: 32px;
-                padding-right: 64px;
                 display: flex;
                 text-align: left;
                 flex-direction: column;
@@ -352,9 +358,12 @@ export default mixins(BaseComponent).extend({
     }
 
     .applet-launcher .launcher .brief .brief-info {
-        padding: 0 16px;
-        padding-right: 48px;
+        padding: 16px;
         margin-left: 0;
+
+        &.no_preview {
+            padding: 16px;
+        }
     }
 
     .applet-launcher .launcher .tags {

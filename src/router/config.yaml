@@ -40,9 +40,18 @@ packages:
     avatar: "assets/image/pattern.png"
     files:
       - ["Readme", "sample.txt"]
-      - ["Readme2", "sample2.txt"]
+      - ["Readme2", "sample2.md"]
       - ["Personal Photo 1", "pic01.jpg"]
-      - ["Personal Photo 2", "pic02.jpg"]
+      - ["Personal Photo 2", "pic02.png"]
+      - ["Personal Video 3", "pic03.mp4"]
+      - ["Personal Video 4", "pic04.webm"]
+      - ["Personal Audio 5", "pic05.mp3"]
+      - ["Some File", "pic02"]
+      - [github, https://github.com/sanyabeast/brickscape]
+  brickscape:
+    files:
+      - [github, https://github.com/sanyabeast/brickscape]
+
 # web-frame urls
 urls:
   brickscape: https://sanyabeast.github.io/brickscape/dist/index.html
@@ -57,6 +66,13 @@ urls:
   random_wikipedia: https://en.wikipedia.org/wiki/Special:Random
 # route presets
 route_presets:
+  noop_route: &noop_route
+    path: "/"
+    name: "noop"
+  home_route: &home_route
+    path: "/"
+    name: "home"
+    component: Home
   webframe_route: &webframe_route
     path: "/web/:url?"
     name: "webframe"
@@ -72,17 +88,9 @@ route_presets:
     name: "model-viewer"
     component: ModelViewer3D
     props: true
-  package_explorer_route: &package_explorer_route
-    path: "/package/:package_id"
-    name: "package-explorer"
-    component: PackageExplorer
-    props: true
 # applets
 applets:
-  - route:
-      path: "/"
-      name: "home"
-      component: Home
+  - route: *home_route
     tags: []
     category: ["service"]
     summary: assets/docs/about.txt
@@ -91,6 +99,7 @@ applets:
   - route: *webframe_route
     tags: []
     title: ""
+    category: ["service"]
     props:
       url: random_wikipedia
 
@@ -200,7 +209,7 @@ applets:
 
   - route: *applet_launcher_route
     tags: []
-    category: ["service"]
+    category: []
     title: "Applet Launcher"
     props: {}
 
@@ -214,12 +223,16 @@ applets:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"
 
-  - route: *package_explorer_route
+  - route: *noop_route
     tags: ["service"]
     category: ["service"]
-    title: "Package Explorer"
-    props:
-      package_id: sample
+    # 
+    preview: "assets/preview/middlenight_a1.png"
+    summary: "assets/docs/model-viewer.txt"
+    document: "assets/docs/model-viewer.md"
+    # 
+    title: "Packages Example"
+    package: sample
 
   - route:
       path: "/shader/:shader_id"

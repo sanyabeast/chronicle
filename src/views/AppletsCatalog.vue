@@ -188,20 +188,7 @@ export default mixins(BaseComponent).extend({
             }
         },
         get_route_link(item: IAppletData): string {
-            let result = "";
-            if (item.launcher !== true && (item.summary || item.document)) {
-                result = `/applet/${item.index}`;
-            }
-            else {
-                console.log(`get_route_link: ${item.route.name}`, item.props)
-                result = this.$router.resolve({
-                    name: item.route.name,
-                    params: item.props
-                }).route.path;
-            }
-
-            console.log(`get_route_link: ${result}`)
-            return result;
+            return `/applet/${item.index}`;
         },
         get_item_title(item: IAppletData) {
             if (item.title.length > 0) {
