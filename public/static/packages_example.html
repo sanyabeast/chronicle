@@ -127,7 +127,7 @@
         }
 
         .applet-details {
-           
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -167,6 +167,19 @@
             font-size: 18px;
         }
 
+        .applet-files {
+            padding: 16px;
+        }
+
+        .applet-files h2 {
+            margin-top: 0;
+        }
+
+        .applet-files a {
+            display: block;
+            color: #fff;
+        }
+
         .applet-launch:hover,
         .applet-all:hover {
             background: #ff0000;
@@ -180,17 +193,20 @@
         img {
             width: max-content;
             height: max-content;
+            max-width: 100%;
+            max-width: 256px;
             border: 1px solid #fff;
+            margin: 16px 0;
         }
     </style>
 </head>
 
 <body>
     <div class="back-button">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <div class="back-button bottom">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <script>
         function adjustLinksAndImages() {
@@ -225,7 +241,7 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Packages Example</h1><img src="/chronicle/dist/assets/image/pattern.png" alt="Packages Example"></img><a class="applet-launch" href="/chronicle/dist/#/">Launch</a><p>ModelViewer3D stands as a comprehensive tool, fostering a user-friendly interface for 3D model visualization and interaction within a web setting. Through a combination of powerful features and efficient lifecycle management, it offers users a fluid and dynamic 3D experience.</p></div><div class="applet-document"><p>ModelViewer3D: A Sophisticated 3D Model Viewing Component</p>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Packages Example</h1><img src="/chronicle/dist/assets/image/pattern.png" alt="Packages Example"></img><div></div><p>ModelViewer3D stands as a comprehensive tool, fostering a user-friendly interface for 3D model visualization and interaction within a web setting. Through a combination of powerful features and efficient lifecycle management, it offers users a fluid and dynamic 3D experience.</p></div><div class="applet-files"><h2>Links</h2><a href="sample.txt" target="_blank">Readme</a><a href="sample2.md" target="_blank">Readme2</a><a href="pic01.jpg" target="_blank">Personal Photo 1</a><a href="pic02.png" target="_blank">Personal Photo 2</a><a href="pic03.mp4" target="_blank">Personal Video 3</a><a href="pic04.webm" target="_blank">Personal Video 4</a><a href="pic05.mp3" target="_blank">Personal Audio 5</a><a href="pic02" target="_blank">Some File</a><a href="https://github.com/sanyabeast/brickscape" target="_blank">github</a><a href="mailto:a.gvrnsk@gmail.com?subject=chronicle" target="_blank">mail</a></div><div class="applet-document"><p>ModelViewer3D: A Sophisticated 3D Model Viewing Component</p>
 <h2 id="overview">Overview:</h2>
 <p>The ModelViewer3D component is a specialized module designed for the intuitive visualization and interaction of 3D models within the browser environment.</p>
 <h2 id="corefeatures">Core Features:</h2>

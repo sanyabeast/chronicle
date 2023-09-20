@@ -127,7 +127,7 @@
         }
 
         .applet-details {
-           
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -167,6 +167,19 @@
             font-size: 18px;
         }
 
+        .applet-files {
+            padding: 16px;
+        }
+
+        .applet-files h2 {
+            margin-top: 0;
+        }
+
+        .applet-files a {
+            display: block;
+            color: #fff;
+        }
+
         .applet-launch:hover,
         .applet-all:hover {
             background: #ff0000;
@@ -180,17 +193,20 @@
         img {
             width: max-content;
             height: max-content;
+            max-width: 100%;
+            max-width: 256px;
             border: 1px solid #fff;
+            margin: 16px 0;
         }
     </style>
 </head>
 
 <body>
     <div class="back-button">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <div class="back-button bottom">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <script>
         function adjustLinksAndImages() {
@@ -225,7 +241,7 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Applets</h1><p class="no-content">No preview available</p><a class="applet-launch" href="/chronicle/dist/#/applets/">Launch</a><p>Discover the "Applets Catalog" - your intuitive gateway to a world of applets, brilliantly categorized for a seamless browsing experience. Dive into smart, real-time search capabilities with our integrated FuzzySearch engine, ensuring you find exactly what you're looking for in mere moments. Engage with a dynamic interface, where categories can effortlessly expand or collapse, adapting to your every whim. Plus, with our smart filtering and ordering techniques, you're always one step ahead, navigating through a perfectly curated collection of applets tailored to your preferences. Experience catalog browsing like never before!</p></div><div class="applet-document no-content">No document available</div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Applets</h1><p class="no-content">No preview available</p><a class="applet-launch" href="/chronicle/dist/#/applets/">Launch</a><p>Discover the "Applets Catalog" - your intuitive gateway to a world of applets, brilliantly categorized for a seamless browsing experience. Dive into smart, real-time search capabilities with our integrated FuzzySearch engine, ensuring you find exactly what you're looking for in mere moments. Engage with a dynamic interface, where categories can effortlessly expand or collapse, adapting to your every whim. Plus, with our smart filtering and ordering techniques, you're always one step ahead, navigating through a perfectly curated collection of applets tailored to your preferences. Experience catalog browsing like never before!</p></div><div></div><div class="applet-document no-content">No document available</div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
 </body>
 
 </html>

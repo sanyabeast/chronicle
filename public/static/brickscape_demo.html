@@ -127,7 +127,7 @@
         }
 
         .applet-details {
-           
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -167,6 +167,19 @@
             font-size: 18px;
         }
 
+        .applet-files {
+            padding: 16px;
+        }
+
+        .applet-files h2 {
+            margin-top: 0;
+        }
+
+        .applet-files a {
+            display: block;
+            color: #fff;
+        }
+
         .applet-launch:hover,
         .applet-all:hover {
             background: #ff0000;
@@ -180,17 +193,20 @@
         img {
             width: max-content;
             height: max-content;
+            max-width: 100%;
+            max-width: 256px;
             border: 1px solid #fff;
+            margin: 16px 0;
         }
     </style>
 </head>
 
 <body>
     <div class="back-button">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <div class="back-button bottom">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <script>
         function adjustLinksAndImages() {
@@ -225,8 +241,8 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Brickscape [Demo]</h1><img src="/chronicle/dist/assets/preview/hexworld_a1.png" alt="Brickscape [Demo]"></img><a class="applet-launch" href="/chronicle/dist/#/web/brickscape">Launch</a><p>The "Minecraft Clone" project, developed with TypeScript and Three.js, is a technical endeavor. It employs instanced mesh rendering and shader code injection to handle a large variety of textured blocks efficiently. The project also features a basic day-night cycle and offers two exploration modes: bird-flight view and first-person view, providing an engaging experience for users interested in 3D graphics and game development.
-</p></div><div class="applet-document"><h1 id="overview">Overview:</h1>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Brickscape [Demo]</h1><img src="/chronicle/dist/assets/preview/hexworld_a1.png" alt="Brickscape [Demo]"></img><a class="applet-launch" href="/chronicle/dist/#/web/brickscape">Launch</a><p>The "Minecraft Clone" project, developed with TypeScript and Three.js, is a technical endeavor. It employs instanced mesh rendering and shader code injection to handle a large variety of textured blocks efficiently. The project also features a basic day-night cycle and offers two exploration modes: bird-flight view and first-person view, providing an engaging experience for users interested in 3D graphics and game development.
+</p></div><div class="applet-files"><h2>Links</h2><a href="https://github.com/sanyabeast/brickscape" target="_blank">source code</a></div><div class="applet-document"><h1 id="overview">Overview:</h1>
 <p>A project aimed at visualizing an infinite voxel world. The world procedurally generates based on set rules, accommodating parameters from base noise to structure altitude considerations.</p>
 <p><img src="assets/docs/image/brickscape_006.png" alt="Screenshot" title="Screenshot" /></p>
 <h1 id="keyfeatures">Key Features:</h1>

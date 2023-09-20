@@ -1,6 +1,6 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
-const { get } = require('lodash');
+const { get, isString } = require('lodash');
 const { isFunction } = require('lodash');
 const { remove } = require('lodash');
 const path = require('path');
@@ -154,6 +154,11 @@ function create_page(type, params) {
     }
 }
 
+function get_applet_title(applet) {
+    return applet.title || applet.route.name;
+}
+
+
 /**
  * Function to update the template with the given parameters
  * and return the updated template
@@ -169,12 +174,15 @@ function update_template(params) {
             final_value = to_html(value);
         }
 
-        template = template.replace(`<!--@${key}-->`, final_value);
+        template = template.replaceAll(`<!--@${key}-->`, final_value);
     }
     return template;
 }
 
 function generate_details_page(applet) {
+    const config_path = path.join(__dirname, CONFIG_PATH);
+    const router_config = yaml.load(read_text_file(config_path));
+
     let title = get_applet_title(applet);
     let alias = to_snake_case(title);
     console.log(`Generating details page for ${applet.title}`);
@@ -193,14 +201,6 @@ function generate_details_page(applet) {
                         tag: 'div',
                         classes: ['applet-details-main'],
                         children: [
-                            {
-                                tag: 'a',
-                                classes: ['applet-all'],
-                                attrs: {
-                                    href: `${HTML_BASE_URL}static/index.html`
-                                },
-                                content: '&#x25c0; All Applets'
-                            },
                             {
                                 tag: 'h1',
                                 content: title
@@ -222,13 +222,21 @@ function generate_details_page(applet) {
                                     }
                                 }
                             },
-                            {
-                                tag: 'a',
-                                classes: ['applet-launch'],
-                                attrs: {
-                                    href: `${HTML_BASE_URL}#${get_applet_url(applet)}`,
-                                },
-                                content: 'Launch'
+                            () => {
+                                if (applet.route.name === 'about') {
+                                    return {
+                                        tag: 'div'
+                                    }
+                                } else {
+                                    return {
+                                        tag: 'a',
+                                        classes: ['applet-launch'],
+                                        attrs: {
+                                            href: `${HTML_BASE_URL}#${get_applet_url(applet)}`,
+                                        },
+                                        content: 'Launch'
+                                    }
+                                }
                             },
                             () => {
                                 if (applet.summary) {
@@ -245,6 +253,35 @@ function generate_details_page(applet) {
                                 }
                             }
                         ]
+                    },
+                    () => {
+                        if (applet.package) {
+                            let package_data = Array.isArray(applet.package) ? applet.package : router_config.packages[applet.package];
+                            let files_container = {
+                                tag: 'div',
+                                classes: ['applet-files'],
+                                children: [{
+                                    tag: 'h2',
+                                    content: 'Links'
+                                }]
+                            }
+
+                            package_data.forEach(file => {
+                                files_container.children.push({
+                                    tag: 'a',
+                                    attrs: {
+                                        href: file[1],
+                                        target: '_blank'
+                                    },
+                                    content: file[0]
+                                })
+                            })
+                            return files_container;
+                        } else {
+                            return {
+                                tag: 'div',
+                            }
+                        }
                     },
                     () => {
                         if (applet.document) {
@@ -275,12 +312,9 @@ function generate_details_page(applet) {
 
     generate_page_file(`static/${alias}`, {
         title: `${PAGE_TITLE_BASE} - ${title}`,
+        back_location: `${HTML_BASE_URL}static/index.html`,
         content: html_config
     });
-}
-
-function get_applet_title(applet) {
-    return applet.title || applet.route.name;
 }
 
 /**
@@ -331,6 +365,7 @@ async function generate_sitemap() {
 
     generate_page_file('static/index', {
         title: `${PAGE_TITLE_BASE} - Index`,
+        back_location: '/chronicle/dist/',
         content: [...html_config_applets,
         {
             tag: 'script',
@@ -339,6 +374,7 @@ async function generate_sitemap() {
                 type: 'text/javascript'
             }
         }]
+
     });
 
 }

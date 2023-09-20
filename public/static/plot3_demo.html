@@ -127,7 +127,7 @@
         }
 
         .applet-details {
-           
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -167,6 +167,19 @@
             font-size: 18px;
         }
 
+        .applet-files {
+            padding: 16px;
+        }
+
+        .applet-files h2 {
+            margin-top: 0;
+        }
+
+        .applet-files a {
+            display: block;
+            color: #fff;
+        }
+
         .applet-launch:hover,
         .applet-all:hover {
             background: #ff0000;
@@ -180,17 +193,20 @@
         img {
             width: max-content;
             height: max-content;
+            max-width: 100%;
+            max-width: 256px;
             border: 1px solid #fff;
+            margin: 16px 0;
         }
     </style>
 </head>
 
 <body>
     <div class="back-button">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <div class="back-button bottom">
-        <a href="/chronicle/dist/">&#x25c0; Back to site</a>
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
     </div>
     <script>
         function adjustLinksAndImages() {
@@ -225,7 +241,7 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><a class="applet-all" href="/chronicle/dist/static/index.html">&#x25c0; All Applets</a><h1>Plot3 [Demo]</h1><img src="/chronicle/dist/assets/preview/stonks_a1.png" alt="Plot3 [Demo]"></img><a class="applet-launch" href="/chronicle/dist/#/web/plot3">Launch</a><p>The Trading Chart Visualization Project is an integrated library designed for live tracking and visualization of trading charts, offering advanced features such as technical analysis tools, customizable measurement instruments, and optimized rendering. It supports multiple display formats, user-friendly navigation, and ensures adaptability through theming, localization, and mobile optimization.</p></div><div class="applet-document"><h1 id="tradingchartvisualizationproject">Trading Chart Visualization Project</h1>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Plot3 [Demo]</h1><img src="/chronicle/dist/assets/preview/stonks_a1.png" alt="Plot3 [Demo]"></img><a class="applet-launch" href="/chronicle/dist/#/web/plot3">Launch</a><p>The Trading Chart Visualization Project is an integrated library designed for live tracking and visualization of trading charts, offering advanced features such as technical analysis tools, customizable measurement instruments, and optimized rendering. It supports multiple display formats, user-friendly navigation, and ensures adaptability through theming, localization, and mobile optimization.</p></div><div></div><div class="applet-document"><h1 id="tradingchartvisualizationproject">Trading Chart Visualization Project</h1>
 <h2 id="overview">Overview:</h2>
 <p>A project dedicated to the visualization of trading charts. This project serves as a library integrated into the main client.</p>
 <h2 id="keyfeatures">Key Features:</h2>
