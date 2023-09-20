@@ -1,0 +1,4 @@
+The program is a 3D model file viewer that supports mainstream formats like gltf, glb, fbx, and obj. However, support is planned to be expanded in the future. 
+It works on all platforms since it's built on top of Electron and uses a graphics renderer based on three.js. 
+All primary and additional viewer functions for 3D are supported - including all types of navigation and scene lighting control. 
+Animations, lighting, and cameras are all supported, and there are several inspection display modes available.

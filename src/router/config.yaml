@@ -91,11 +91,11 @@ applets:
     summary: assets/docs/about.txt
     preview: assets/pimp_002.png
     package:
-      - [source code, https://github.com/sanyabeast/chronicle]
       - [github profile, https://github.com/sanyabeast]
       - [e-mail, mailto:a.gvrnsk@gmail.com?subject=chronicle]
       - [linkedin, https://www.linkedin.com/in/sanyabeast/]
       - [sketchfab, https://sketchfab.com/sanchibbo/models]
+      - [source code of this site, https://github.com/sanyabeast/chronicle]
     title: "About"
 
   - route: *webframe_route
@@ -115,6 +115,12 @@ applets:
     category: ["service"]
     title: "Applets"
 
+  - route: *applet_launcher_route
+    tags: []
+    category: []
+    title: "Applet Launcher"
+    props: {}
+  
   - route: *webframe_route
     tags: ["extras", "experiment", "voxels", "procedural", "three"]
     title: "Brickscape [Demo]"
@@ -212,12 +218,6 @@ applets:
     props:
       image: "random"
 
-  - route: *applet_launcher_route
-    tags: []
-    category: []
-    title: "Applet Launcher"
-    props: {}
-
   - route: *model_viewer_route
     tags: ["service"]
     category: ["service"]
@@ -231,11 +231,9 @@ applets:
   - route: *about_route
     tags: ["service"]
     category: ["service"]
-    #
     preview: "assets/image/pattern.png"
     summary: "assets/docs/model-viewer.txt"
     document: "assets/docs/model-viewer.md"
-    #
     title: "Packages Example"
     package: sample
 
@@ -249,3 +247,16 @@ applets:
     title: "Shader View"
     props:
       shader_id: starscape
+
+  - route: *about_route
+    tags: ["project", "3d", "three", "gl", "application", "windows", "macos", "linux"]
+    category: ["project"]
+    title: "preview3d"
+    preview: "assets/preview/preview3d_01.png"
+    summary: "assets/docs/preview3d.txt"
+    package: 
+      - [releases, https://github.com/sanyabeast/preview_3d/releases]
+      - [windows, https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d.Setup.1.0.11.exe]
+      - [macos, https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d-1.0.11.dmg]
+      - [source code, https://github.com/sanyabeast/preview_3d]
+

@@ -1,8 +1,8 @@
 <template>
     <div class="package-explorer" ref="root">
         <div class="files" v-if="package_data">
-            <a class="file" v-for="(item, index) in package_data" :key="`file_${index}`" :title="item[1]"
-                target="_blank" :data-file-type="detect_file_type(item[1])" :href="item[1]">
+            <a class="file" v-for="(item, index) in package_data" :key="`file_${index}`" :title="item[1]" target="_blank"
+                :data-file-type="detect_file_type(item[1])" :href="item[1]">
                 <ImageView :src="get_file_type_icon(detect_file_type(item[1]))" />
                 <div class="data">
                     <p class="title" v-html="item[0]"></p>
@@ -40,6 +40,7 @@ export enum EFileType {
     SketchfabModel = 'sketchfab-model',
     AndroidApk = 'android-apk',
     WindowsExe = 'windows-exe',
+    MacosDMG = 'macos-dmg',
 }
 
 export default mixins(BaseComponent).extend({
@@ -109,6 +110,10 @@ export default mixins(BaseComponent).extend({
                 return EFileType.WindowsExe;
             }
 
+            if (url.endsWith('.dmg')) {
+                return EFileType.MacosDMG;
+            }
+
             if (url.includes('github.com')) {
                 return EFileType.GithubRepo;
             }
@@ -140,11 +145,13 @@ export default mixins(BaseComponent).extend({
                 case EFileType.Audio: {
                     return 'assets/icons/file_audio_01.png'
                 }
-                case EFileType.Audio: {
-                    return 'assets/icons/file_audio_01.png'
-                }
                 case EFileType.Mail: {
                     return 'assets/icons/file_mailto_01.png'
+                }
+                case EFileType.WindowsExe:
+                case EFileType.AndroidApk:
+                case EFileType.MacosDMG: {
+                    return 'assets/icons/file_windows_app_01.png'
                 }
                 // case EFileType.GithubRepo: {
                 //     return 'assets/icons/file_github_01.png'
@@ -205,12 +212,13 @@ export default mixins(BaseComponent).extend({
             }
 
             .data {
-                flex-grow: 1;
+                flex-shrink: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: flex-start;
                 height: 100%;
+                overflow: hidden;
 
                 .title {
                     font-weight: bold;
@@ -254,7 +262,7 @@ export default mixins(BaseComponent).extend({
                 }
             }
 
-            &[data-file-type="github-repo"]{
+            &[data-file-type="github-repo"] {
                 border-color: #683493;
             }
         }
