@@ -250,7 +250,7 @@ applets:
 
   - route: *about_route
     tags: ["project", "3d", "three", "gl", "application", "windows", "macos", "linux"]
-    category: ["project"]
+    category: ["package"]
     title: "preview3d"
     preview: "assets/preview/preview3d_01.png"
     summary: "assets/docs/preview3d.txt"
