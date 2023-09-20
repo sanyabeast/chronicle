@@ -1,0 +1,2 @@
+
+Around a decade ago, I embarked on a JavaScript experiment - the "Match-3 Game" project. This early project, though admittedly with messy code, holds immense value in my journey. It was my first step into the world of game development, faithfully recreating the classic match-3 puzzle genre. It symbolizes my initial skills and passion, laying the foundation for my future projects and growth.
