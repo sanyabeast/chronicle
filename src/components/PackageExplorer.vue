@@ -1,7 +1,7 @@
 <template>
     <div class="package-explorer" ref="root">
         <div class="files" v-if="package_data">
-            <a class="file" v-for="(item, index) in package_data.files" :key="`file_${index}`" :title="item[1]"
+            <a class="file" v-for="(item, index) in package_data" :key="`file_${index}`" :title="item[1]"
                 target="_blank" :data-file-type="detect_file_type(item[1])" :href="item[1]">
                 <ImageView :src="get_file_type_icon(detect_file_type(item[1]))" />
                 <div class="data">
@@ -33,6 +33,7 @@ export enum EFileType {
     Video = 'video',
     Audio = 'audio',
     Text = 'text',
+    Mail = 'mail',
     Markdown = 'markdown',
     GithubRepo = 'github-repo',
     WikipediaArticle = 'wikipedia-article',
@@ -78,6 +79,10 @@ export default mixins(BaseComponent).extend({
 
             if (url.endsWith('.md')) {
                 return EFileType.Markdown;
+            }
+
+            if (url.startsWith('mailto:')) {
+                return EFileType.Mail;
             }
 
             if (url.endsWith('.txt')) {
@@ -135,6 +140,12 @@ export default mixins(BaseComponent).extend({
                 case EFileType.Audio: {
                     return 'assets/icons/file_audio_01.png'
                 }
+                case EFileType.Audio: {
+                    return 'assets/icons/file_audio_01.png'
+                }
+                case EFileType.Mail: {
+                    return 'assets/icons/file_mailto_01.png'
+                }
                 // case EFileType.GithubRepo: {
                 //     return 'assets/icons/file_github_01.png'
                 // }
@@ -167,29 +178,68 @@ export default mixins(BaseComponent).extend({
     }
 
     .files {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+        display: grid;
+        grid-column-gap: 8px;
+        grid-row-gap: 8px;
+        grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
 
         .file {
             display: flex;
             flex-direction: row;
             align-items: center;
-            flex-wrap: wrap;
             justify-content: flex-start;
-            min-height: 48px;
+            height: 56px;
             color: #fff;
-            margin-bottom: 8px;
-            padding: 0 8px;
-            background: rgb(0, 0, 0);
-            background: linear-gradient(100deg, rgba(0, 0, 0, 1) 0%, rgba(46, 46, 46, 1) 100%);
+            padding: 0 16px;
+            background: rgb(13, 13, 13);
             border: 1px solid #262626;
             overflow: hidden;
             position: relative;
+            text-decoration: none;
+
+            .image-view {
+                width: 32px;
+                height: 32px;
+                margin-right: 16px;
+                background-color: #000;
+            }
+
+            .data {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                height: 100%;
+
+                .title {
+                    font-weight: bold;
+                    margin: 0;
+                    overflow: hidden;
+                    max-width: 80%;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    flex-shrink: 1;
+                    text-decoration: none;
+                }
+
+                .path {
+                    margin: 0;
+                    margin-top: -8px;
+                    color: #aaa;
+                    overflow: hidden;
+                    max-width: 80%;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-size: @font-size-xs;
+                    flex-shrink: 1;
+                    text-decoration: none;
+                }
+            }
 
             &:after {
                 content: "";
-                background-color: rgb(255, 0, 0);
+                background-color: rgb(255, 255, 255);
                 position: absolute;
                 left: 0;
                 top: 0;
@@ -204,59 +254,8 @@ export default mixins(BaseComponent).extend({
                 }
             }
 
-            &[data-file-type="text"] {
-                // background-color: #242020;
-            }
-
-            &[data-file-type="markdown"] {
-                // background-color: #282525;
-            }
-
-
-            &[data-file-type="image"],
-            &[data-file-type="video"],
-            &[data-file-type="audio"] {
-                background: rgb(0, 0, 0);
-                background: linear-gradient(100deg, rgba(0, 0, 0, 1) 0%, rgba(52, 42, 55, 1) 100%);
-            }
-
-            &[data-file-type="link"] {
-                // background-color: #242328;
-            }
-
-            .image-view {
-                width: 32px;
-                height: 32px;
-                margin-right: 16px;
-                background-color: #000;
-            }
-
-            .data {
-                flex-grow: 1;
-                display: flex;
-                flex-wrap: wrap;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                height: 100%;
-
-                .title {
-                    font-weight: bold;
-                    margin: 0;
-                    overflow: hidden;
-                    max-width: 33%;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-
-                .path {
-                    color: #aaa;
-                    margin: 0;
-                    overflow: hidden;
-                    max-width: 33%;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
+            &[data-file-type="github-repo"]{
+                border-color: #683493;
             }
         }
     }
@@ -265,18 +264,5 @@ export default mixins(BaseComponent).extend({
 
 @media screen and (max-width: 1400px) {}
 
-@media screen and (max-width: 600px) {
-
-    .package-explorer .files .file {
-        padding: 8px 16px;
-        flex-wrap: nowrap;
-
-        .data {
-            flex-wrap: nowrap;
-            flex-direction: column;
-            align-items: flex-start;
-            height: 100%;
-        }
-    }
-}
+@media screen and (max-width: 600px) {}
 </style>

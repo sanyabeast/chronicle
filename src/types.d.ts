@@ -11,12 +11,6 @@ declare module 'gif.js.optimized' {
     // export = SomeLibFunctionOrClass;
 }
 
-declare interface IPackageData {
-    files: string[][] | null
-    title: string | null
-    summary: string | null
-    avatar: string | null
-}
 
 declare interface IAppletData {
     route: {
@@ -25,7 +19,7 @@ declare interface IAppletData {
         component: any
         props: boolean
     }
-    index?: number
+    index?: string
     summary?: string
     document?: string
     tags: string[]
@@ -56,7 +50,7 @@ declare module "*.yaml" {
 declare module "@/router/config.yaml" {
     const value: {
         packages: {
-            [x: string]: IPackageData
+            [x: string]: string[][]
         }
         applets: IAppletData[],
         urls: {

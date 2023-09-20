@@ -73,6 +73,10 @@ export default mixins(BaseComponent).extend({
     overflow: hidden;
     position: relative;
     line-height: 2em;
+
+    p {
+        margin: 0;
+    }
 }
 </style>
   

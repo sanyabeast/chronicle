@@ -13,7 +13,7 @@
                     :class="{ no_preview: !applet_item.preview }"
                     v-for="(applet_item, index) in get_category_applets(category_item)" :key="`cat_${index}`"
                     :to="get_route_link(applet_item)">
-                    <ImageView v-if="applet_item.preview != undefined" :src="applet_item.preview" />
+                    <ImageView v-if="need_show_preview(applet_item)" :src="applet_item.preview" />
                     <div class="fader"></div>
                     <h3 v-html="get_item_title(applet_item)"></h3>
                 </router-link>
@@ -146,6 +146,7 @@ export default mixins(BaseComponent).extend({
     },
     props: {},
     computed: {
+
         applets() {
             return applets;
         },
@@ -180,6 +181,12 @@ export default mixins(BaseComponent).extend({
     },
     methods: {
         get_random_web_color: get_random_web_color,
+        need_show_preview(applet_data: IAppletData): boolean {
+            if (applet_data.category.length === 0 || applet_data.category.indexOf(EAppletCategory.Service) > -1) {
+                return false;
+            }
+            return applet_data.preview && applet_data.preview.length > 0;
+        },
         get_thumb_bg_color(item: IAppletData) {
             if (!this.is_mobile) {
                 return '#000';
@@ -496,6 +503,7 @@ export default mixins(BaseComponent).extend({
 
                 &:hover {
                     transform: none;
+
                     .fader {
                         opacity: 0;
                     }

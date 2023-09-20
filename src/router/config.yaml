@@ -33,25 +33,6 @@ shaders:
       u_resolution: [1, 1]
       u_color: [1, 0, 0]
 
-packages:
-  sample:
-    title: "Sample Directory"
-    summary: "assets/docs/telechart.txt"
-    avatar: "assets/image/pattern.png"
-    files:
-      - ["Readme", "sample.txt"]
-      - ["Readme2", "sample2.md"]
-      - ["Personal Photo 1", "pic01.jpg"]
-      - ["Personal Photo 2", "pic02.png"]
-      - ["Personal Video 3", "pic03.mp4"]
-      - ["Personal Video 4", "pic04.webm"]
-      - ["Personal Audio 5", "pic05.mp3"]
-      - ["Some File", "pic02"]
-      - [github, https://github.com/sanyabeast/brickscape]
-  brickscape:
-    files:
-      - [github, https://github.com/sanyabeast/brickscape]
-
 # web-frame urls
 urls:
   brickscape: https://sanyabeast.github.io/brickscape/dist/index.html
@@ -64,15 +45,29 @@ urls:
   plot3: projects/plot/index.html
   middlenight: projects/middlenight/index.html
   random_wikipedia: https://en.wikipedia.org/wiki/Special:Random
+  mailto: mailto:a.gvrnsk@gmail.com?subject=chronicle
+
+packages:
+  sample:
+    - ["Readme", "sample.txt"]
+    - ["Readme2", "sample2.md"]
+    - ["Personal Photo 1", "pic01.jpg"]
+    - ["Personal Photo 2", "pic02.png"]
+    - ["Personal Video 3", "pic03.mp4"]
+    - ["Personal Video 4", "pic04.webm"]
+    - ["Personal Audio 5", "pic05.mp3"]
+    - ["Some File", "pic02"]
+    - [github, https://github.com/sanyabeast/brickscape]
+    - [mail, mailto:a.gvrnsk@gmail.com?subject=chronicle]
+  brickscape:
+    - [source code, https://github.com/sanyabeast/brickscape]
+
 # route presets
 route_presets:
-  noop_route: &noop_route
+  about_route: &about_route
     path: "/"
-    name: "noop"
-  home_route: &home_route
-    path: "/"
-    name: "home"
-    component: Home
+    name: "about"
+    component: AboutPage
   webframe_route: &webframe_route
     path: "/web/:url?"
     name: "webframe"
@@ -90,15 +85,22 @@ route_presets:
     props: true
 # applets
 applets:
-  - route: *home_route
+  - route: *about_route
     tags: []
     category: ["service"]
     summary: assets/docs/about.txt
+    preview: assets/pimp_002.png
+    package:
+      - [source code, https://github.com/sanyabeast/chronicle]
+      - [github profile, https://github.com/sanyabeast]
+      - [e-mail, mailto:a.gvrnsk@gmail.com?subject=chronicle]
+      - [linkedin, https://www.linkedin.com/in/sanyabeast/]
+      - [sketchfab, https://sketchfab.com/sanchibbo/models]
     title: "About"
 
   - route: *webframe_route
     tags: []
-    title: ""
+    title: "The Internet"
     category: ["service"]
     props:
       url: random_wikipedia
@@ -120,6 +122,7 @@ applets:
     document: "assets/docs/brickscape.md"
     preview: "assets/preview/hexworld_a1.png"
     summary: "assets/docs/brickscape.txt"
+    package: brickscape
     props:
       url: brickscape
 
@@ -130,6 +133,8 @@ applets:
     preview: "assets/preview/match3_a1.png"
     summary: "assets/docs/match3.txt"
     document: "assets/docs/match3.md"
+    package:
+      - [source code, https://github.com/sanyabeast/match3]
     props:
       url: match3
 
@@ -216,21 +221,21 @@ applets:
   - route: *model_viewer_route
     tags: ["service"]
     category: ["service"]
-    title: "Model Viewer"
+    title: "3D Model View"
     summary: "assets/docs/model-viewer.txt"
     document: "assets/docs/model-viewer.md"
     props:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"
 
-  - route: *noop_route
+  - route: *about_route
     tags: ["service"]
     category: ["service"]
-    # 
-    preview: "assets/preview/middlenight_a1.png"
+    #
+    preview: "assets/image/pattern.png"
     summary: "assets/docs/model-viewer.txt"
     document: "assets/docs/model-viewer.md"
-    # 
+    #
     title: "Packages Example"
     package: sample
 
@@ -241,6 +246,6 @@ applets:
       props: true
     tags: ["service"]
     category: ["service"]
-    title: "ShaderView"
+    title: "Shader View"
     props:
       shader_id: starscape

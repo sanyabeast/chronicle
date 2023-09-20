@@ -82,6 +82,7 @@ export default mixins(BaseComponent).extend({
 
     p {
         color: #eee;
+        margin-bottom: 1em;
     }
 
     ul,
@@ -97,6 +98,10 @@ export default mixins(BaseComponent).extend({
             display: flex;
             flex-direction: row;
             align-items: center;
+
+            p {
+                margin: 0;
+            }
 
             &:before {
                 content: "•";

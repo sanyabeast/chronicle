@@ -9,7 +9,7 @@
                 </div>
                 <div class="avatar">
                     <ImageView v-if="applet_data.preview" :src="applet_data.preview" />
-                    <router-link v-if="applet_data.route.name !== 'noop'" class="button launch" :to="applet_route_link">
+                    <router-link v-if="applet_data.route.name !== 'about'" class="button launch" :to="applet_route_link">
                         <p>Launch</p>
                     </router-link>
                 </div>
@@ -19,11 +19,7 @@
                     <p v-html="`${item}`" :style="{ color: `${get_bright_web_color(item)}` }"></p>
                 </div>
             </div>
-
-
-
             <Showdown v-if="applet_data.document" :src="applet_data.document" />
-
             <div v-if="false" class="document-placeholder">
                 <i></i>
                 <i></i>
@@ -334,6 +330,15 @@ export default mixins(BaseComponent).extend({
         }
 
     }
+
+    .text-view {
+        padding-bottom: 16px;
+        border-bottom: 1px dotted #373737;
+    }
+
+    .package-explorer {
+        margin-top: 16px;
+    }
 }
 
 @media screen and (max-width: 1400px) {
@@ -405,7 +410,7 @@ export default mixins(BaseComponent).extend({
         grid-row: 1;
         grid-column: 1;
         font-size: @font-size-xl;
-        font-family: @font-family-sans;
+        // font-family: @font-family-sans;
     }
 
     .applet-launcher .launcher .brief .placeholder {

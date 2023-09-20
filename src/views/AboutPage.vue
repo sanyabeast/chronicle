@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="about-page">
     <div class="content">
       <TextView src="assets/docs/about.txt">
         <div class="avatars">
@@ -14,7 +14,7 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-  name: 'Home',
+  name: 'AboutPage',
   data() {
     return {
       avatar_index: 0,
@@ -31,7 +31,7 @@ export default Vue.extend({
 <style lang="less">
 @import url('@/assets/index.less');
 
-.view.home {
+.about-page {
 
   text-align: center;
   display: flex;
@@ -99,7 +99,7 @@ export default Vue.extend({
 
 /* Media query for screens less than 600px */
 @media screen and (max-width: 600px) {
-  .view.home {
+  .about-page {
     justify-content: flex-start;
   }
 }

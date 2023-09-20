@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import { isObject, isString, map, uniqBy } from "lodash"
+import { isArray, isObject, isString, map, uniqBy } from "lodash"
 import config from '@/router/config.yaml'
 import { to_snake_case } from '@/tools'
 
@@ -14,7 +14,7 @@ export enum EAppletCategory {
 
 const components = {
   AppletLauncher: () => import('../views/AppletLauncher.vue'),
-  Home: () => import('../views/Home.vue'),
+  AboutPage: () => import('../views/AboutPage.vue'),
   WebFrame: () => import('../views/WebFrame.vue'),
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
   AppletsCatalog: () => import('../views/AppletsCatalog.vue'),
@@ -29,7 +29,6 @@ let applets = config.applets as IAppletData[]
 applets.forEach((d, i) => {
   d.index = to_snake_case(d.title);
   if (isString(d.route.component)) {
-    console.log(d.route.component)
     d.route.component = components[d.route.component]
     if (d.props) {
       for (let key in d.props) {
@@ -38,6 +37,11 @@ applets.forEach((d, i) => {
         }
       }
     }
+  }
+
+  if (isArray(d.package)) {
+    config.packages[d.index] = d.package
+    d.package = d.index
   }
 })
 

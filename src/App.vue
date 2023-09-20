@@ -47,6 +47,7 @@ import Cookies from './components/Cookies.vue';
 import mixins from 'vue-typed-mixins';
 import BaseComponent from './components/BaseComponent.vue';
 import { get_current_year } from './tools';
+import { urls } from './router';
 
 export default mixins(BaseComponent).extend({
   name: 'App',
@@ -54,7 +55,7 @@ export default mixins(BaseComponent).extend({
     return {
       career_start_date: 2013,
       href: location.host,
-      mail_link: 'mailto:a.gvrnsk@gmail.com?subject=chronicle'
+      mail_link: urls.mailto
     }
   },
   components: { ImageLink, Cookies },

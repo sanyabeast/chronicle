@@ -142,7 +142,7 @@ export function get_current_year() {
     return currentYear;
 }
 
-export function to_snake_case(str) {
+export function to_snake_case(str: string): string {
     return str
         // Convert to lowercase
         .toLowerCase()
