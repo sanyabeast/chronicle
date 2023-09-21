@@ -260,3 +260,15 @@ applets:
       - [macos, https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d-1.0.11.dmg]
       - [source code, https://github.com/sanyabeast/preview_3d]
 
+  - route: *about_route
+    tags: ["article", "psp2", "psvita", "playstation", "homebrew", "unity"]
+    category: ["article"]
+    title: "PSP2 Unity Homebrew Development"
+    document: "assets/articles/psp2dev.md"
+    package: 
+      - [SDK, https://drive.google.com/file/d/19qK0DQi0L0-NS5-N939Ky3HzNskRVyEZ/view?usp=sharing]
+      - [Unity Editor, https://unity.com/releases/editor/archive#download-archive-2019]
+      - [Vita Support for Unity, https://archive.org/details/unitypsvitasupport]
+      - [Silica's VPK Tool, assets/misc/SilicaVPK.py]
+      - [Patcher, https://www.google.com/search?q=UniPatcher2018_v1.exe]
+

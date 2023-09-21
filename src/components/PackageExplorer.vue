@@ -34,6 +34,7 @@ export enum EFileType {
     Audio = 'audio',
     Text = 'text',
     Mail = 'mail',
+    GoogleLink = 'google-link',
     Markdown = 'markdown',
     GithubRepo = 'github-repo',
     WikipediaArticle = 'wikipedia-article',
@@ -41,6 +42,8 @@ export enum EFileType {
     AndroidApk = 'android-apk',
     WindowsExe = 'windows-exe',
     MacosDMG = 'macos-dmg',
+    LocalFile = 'local-file',
+    PythonScript = 'python-script',
 }
 
 export default mixins(BaseComponent).extend({
@@ -78,12 +81,28 @@ export default mixins(BaseComponent).extend({
             console.dir(url)
             let result = EFileType.Link
 
-            if (url.endsWith('.md')) {
-                return EFileType.Markdown;
-            }
-
             if (url.startsWith('mailto:')) {
                 return EFileType.Mail;
+            }
+
+            if (url.includes('github.com')) {
+                return EFileType.GithubRepo;
+            }
+
+            if (url.includes('wikipedia.org')) {
+                return EFileType.WikipediaArticle;
+            }
+
+            if (url.includes('sketchfab.com')) {
+                return EFileType.SketchfabModel;
+            }
+            
+            if (url.includes('google.com')) {
+                return EFileType.GoogleLink;
+            }
+            
+            if (url.endsWith('.md')) {
+                return EFileType.Markdown;
             }
 
             if (url.endsWith('.txt')) {
@@ -114,16 +133,12 @@ export default mixins(BaseComponent).extend({
                 return EFileType.MacosDMG;
             }
 
-            if (url.includes('github.com')) {
-                return EFileType.GithubRepo;
+            if (url.endsWith('.py')) {
+                return EFileType.PythonScript;
             }
 
-            if (url.includes('wikipedia.org')) {
-                return EFileType.WikipediaArticle;
-            }
-
-            if (url.includes('sketchfab.com')) {
-                return EFileType.SketchfabModel;
+            if (url.startsWith('assets/')) {
+                return EFileType.LocalFile;
             }
 
             return result
@@ -148,10 +163,22 @@ export default mixins(BaseComponent).extend({
                 case EFileType.Mail: {
                     return 'assets/icons/file_mailto_01.png'
                 }
+                case EFileType.PythonScript: {
+                    return 'assets/icons/file_python_01.png'
+                }
+                case EFileType.GoogleLink: {
+                    return 'assets/icons/file_google_01.png'
+                }
+                case EFileType.GithubRepo: {
+                    return 'assets/icons/file_github_01.png'
+                }
                 case EFileType.WindowsExe:
                 case EFileType.AndroidApk:
                 case EFileType.MacosDMG: {
                     return 'assets/icons/file_windows_app_01.png'
+                }
+                case EFileType.LocalFile: {
+                    return 'assets/icons/file_local_01.png'
                 }
                 // case EFileType.GithubRepo: {
                 //     return 'assets/icons/file_github_01.png'

@@ -109,6 +109,15 @@ export default mixins(BaseComponent).extend({
                         order: true
                     },
                     {
+                        include: [EAppletCategory.Article],
+                        title: "articles",
+                        fold: true,
+                        filter: false,
+                        if_search: true,
+                        if_no_search: true,
+                        order: true
+                    },
+                    {
                         include: [EAppletCategory.Service],
                         title: "service",
                         fold: true,
@@ -343,6 +352,8 @@ export default mixins(BaseComponent).extend({
                 background: @color-background;
                 text-transform: capitalize;
                 font-family: @font-family-condensed;
+                max-width: 100%;
+                text-align: center;
             }
         }
 

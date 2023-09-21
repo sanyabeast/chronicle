@@ -75,6 +75,7 @@ export default mixins(BaseComponent).extend({
     line-height: 1.5em;
 
     * {
+        display: block;
         user-select: text;
         max-width: 100%;
         word-wrap: break-word;
@@ -95,9 +96,7 @@ export default mixins(BaseComponent).extend({
 
         li {
             color: #eee;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+
 
             p {
                 margin: 0;
@@ -124,6 +123,7 @@ export default mixins(BaseComponent).extend({
 
     a,
     a strong {
+        display: inline;
         background-color: @color-background;
         color: @color-accent;
         font-weight: 900;
@@ -148,7 +148,6 @@ export default mixins(BaseComponent).extend({
         background-color: @color-background;
         font-family: @font-family-sans;
         font-weight: bold;
-        display: inline-block;
     }
 
     pre {
@@ -167,6 +166,7 @@ export default mixins(BaseComponent).extend({
         background-color: @color-background;
         border: 2px solid @color-background;
         margin: 8px;
+        display: inline-block;
 
         &:first-child {
             margin-left: 0;

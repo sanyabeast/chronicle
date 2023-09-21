@@ -10,6 +10,7 @@ export enum EAppletCategory {
   Lab = 'lab',
   Service = 'service',
   Package = 'package',
+  Article = 'article'
 }
 
 const components = {
