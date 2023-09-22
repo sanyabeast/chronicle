@@ -3,9 +3,6 @@ shaders:
     fragment: assets/shader/sample.frag
     vertex: assets/shader/fullscreen_plane.vert
     uniforms:
-      u_time: 0
-      u_mouse: [0, 0]
-      u_resolution: [1, 1]
       u_color: [1, 0, 0]
   polar_picture_tool:
     fragment: assets/shader/polar_picture_tool.frag
@@ -19,19 +16,19 @@ shaders:
     fragment: assets/shader/starscape.frag
     vertex: assets/shader/fullscreen_plane.vert
     uniforms:
-      u_time: 0
-      u_mouse: [0, 0]
-      u_resolution: [1, 1]
       u_color: [1, 0, 0]
 
   arctic_lights:
     fragment: assets/shader/arctic_lights.frag
     vertex: assets/shader/fullscreen_plane.vert
     uniforms:
-      u_time: 0
-      u_mouse: [0, 0]
-      u_resolution: [1, 1]
       u_color: [1, 0, 0]
+
+  retroid_maker:
+    fragment: assets/shader/retroid.frag
+    vertex: assets/shader/fullscreen_plane.vert
+    uniforms:
+      u_map: 'assets/image/uv_checker_001.jpg'
 
 # web-frame urls
 urls:
@@ -74,7 +71,7 @@ route_presets:
     component: WebFrame
     props: true
   applet_launcher_route: &applet_launcher_route
-    path: "/applet/:applet?"
+    path: "/applet-info/:applet?"
     name: "applet-launcher"
     component: AppletLauncher
     props: true
@@ -120,7 +117,7 @@ applets:
     category: []
     title: "Applet Launcher"
     props: {}
-  
+
   - route: *webframe_route
     tags: ["extras", "experiment", "voxels", "procedural", "three"]
     title: "Brickscape [Demo]"
@@ -249,15 +246,31 @@ applets:
       shader_id: starscape
 
   - route: *about_route
-    tags: ["project", "3d", "three", "gl", "application", "windows", "macos", "linux"]
+    tags:
+      [
+        "project",
+        "3d",
+        "three",
+        "gl",
+        "application",
+        "windows",
+        "macos",
+        "linux",
+      ]
     category: ["package"]
     title: "preview3d"
     preview: "assets/preview/preview3d_01.png"
     summary: "assets/docs/preview3d.txt"
-    package: 
+    package:
       - [releases, https://github.com/sanyabeast/preview_3d/releases]
-      - [windows, https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d.Setup.1.0.11.exe]
-      - [macos, https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d-1.0.11.dmg]
+      - [
+          windows,
+          https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d.Setup.1.0.11.exe,
+        ]
+      - [
+          macos,
+          https://github.com/sanyabeast/preview_3d/releases/download/1.0.11/preview_3d-1.0.11.dmg,
+        ]
       - [source code, https://github.com/sanyabeast/preview_3d]
 
   - route: *about_route
@@ -265,10 +278,25 @@ applets:
     category: ["article"]
     title: "PSP2 Unity Homebrew Development"
     document: "assets/articles/psp2dev.md"
-    package: 
-      - [SDK, https://drive.google.com/file/d/19qK0DQi0L0-NS5-N939Ky3HzNskRVyEZ/view?usp=sharing]
-      - [Unity Editor, https://unity.com/releases/editor/archive#download-archive-2019]
+    package:
+      - [
+          SDK,
+          https://drive.google.com/file/d/19qK0DQi0L0-NS5-N939Ky3HzNskRVyEZ/view?usp=sharing,
+        ]
+      - [
+          Unity Editor,
+          https://unity.com/releases/editor/archive#download-archive-2019,
+        ]
       - [Vita Support for Unity, https://archive.org/details/unitypsvitasupport]
       - [Silica's VPK Tool, assets/misc/SilicaVPK.py]
       - [Patcher, https://www.google.com/search?q=UniPatcher2018_v1.exe]
 
+  - route:
+      name: "RetroidMaker"
+      path: "/applet/retroid-maker"
+      component: RetroidMaker
+      props: true
+    tags: ["experiment", "game", "three", "gl", "shader", "utils"]
+    category: ["experiment"]
+    title: "Retroid Maker"
+    preview: "assets/image/pattern.png"

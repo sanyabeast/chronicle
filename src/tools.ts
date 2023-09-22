@@ -1,6 +1,8 @@
 
-import { isArray, isString, map } from 'lodash';
+import { isArray, isNil, isNumber, isString, isUndefined, map } from 'lodash';
 import * as THREE from 'three';
+
+const mock_texture = new THREE.Texture();
 
 export function get_random_web_color(seed: String) {
     // Array of web colors
@@ -165,11 +167,11 @@ export async function load_texture(src: string): Promise<THREE.Texture> {
     })
 }
 
-export async function create_shader_material(shader_data: IShaderData): THREE.ShaderMaterial {
+export async function create_shader_material(shader_data: IShaderData, extra_uniforms?: {}): THREE.ShaderMaterial {
     console.log(`Creating shader material`, shader_data)
     const uniforms = {
-        ...THREE.UniformsLib['lights'],
         ...shader_data.uniforms,
+        ...extra_uniforms
     };
 
     let uniform_data = {}
@@ -179,8 +181,10 @@ export async function create_shader_material(shader_data: IShaderData): THREE.Sh
             uniform_data[key] = { value: await load_texture(value) }
         } else if (isArray(value)) {
             uniform_data[key] = { value: new THREE.Vector3(...value) }
-        } else {
+        } else if (isNumber(value)) {
             uniform_data[key] = { value }
+        } else if (isNil(value)) {
+            uniform_data[key] = { value: mock_texture, type: 't' }
         }
     }
 
@@ -196,4 +200,17 @@ export async function create_shader_material(shader_data: IShaderData): THREE.Sh
         console.error(err);
         throw err;
     }
+}
+
+export function file_to_blob_url(file: File) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            resolve(event.target.result);
+        };
+        reader.onerror = (event) => {
+            reject(event);
+        };
+        reader.readAsDataURL(file);
+    });
 }

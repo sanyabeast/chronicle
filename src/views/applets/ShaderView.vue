@@ -1,6 +1,7 @@
 <template>
     <div :class="{ mobile: is_mobile }" class="shader-view" @mousemove="handle_mousemove">
-        <ThreeRenderer ref="three_renderer" :download_image_name="download_image_name">
+        <ThreeRenderer :force_width="force_width" :force_height="force_height" ref="three_renderer"
+            :download_image_name="download_image_name">
         </ThreeRenderer>
     </div>
     <!-- Other components and UI elements -->
@@ -37,8 +38,17 @@ export default mixins(BaseComponent).extend({
             type: String,
             default: 'sample'
         },
+        force_width: {
+            type: Number,
+            default: 0,
+        },
+        force_height: {
+            type: Number,
+            default: 0,
+        },
     },
     mounted() {
+        console.log("ShaderView inited, using shader", this.shader_id);
         this.init()
 
     },
@@ -51,10 +61,18 @@ export default mixins(BaseComponent).extend({
             this.plane.material.uniforms.u_mouse.value.y = this.mouse_pos.y;
         },
         async init() {
-            let plane_geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-            let plane_material = await create_shader_material(shaders[this.shader_id]);
+            if (!shaders[this.shader_id]) {
+                throw new Error(`Shader ${this.shader_id} not found`)
+            }
 
-            let plane = this.plane = new THREE.Mesh(plane_geometry, plane_material);
+            let geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+            let material = this.material = await create_shader_material(shaders[this.shader_id], {
+                u_time: 0,
+                u_resolution: [0, 0],
+                u_mouse: [0, 0],
+            });
+
+            let plane = this.plane = new THREE.Mesh(geometry, material);
             this.$refs.three_renderer.scene.add(plane);
             this.$refs.three_renderer.on_render = this.on_render
         },

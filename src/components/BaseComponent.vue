@@ -39,6 +39,7 @@ export default Vue.extend({
             // override this method to update the route
             throw new Error("update_route not implemented");
         },
+
     }
 })
 </script>

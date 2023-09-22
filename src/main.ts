@@ -10,6 +10,8 @@ Vue.component('ImageView', () => import('./components/ImageView.vue'))
 Vue.component('Showdown', () => import('./components/Showdown.vue'))
 Vue.component('ThreeRenderer', () => import('./components/ThreeRenderer.vue'))
 Vue.component('PackageExplorer', () => import('./components/PackageExplorer.vue'))
+Vue.component('ShaderView', () => import('./views/applets/ShaderView.vue'))
+Vue.component('DragAndDropManager', () => import('./components/DragAndDropManager.vue'))
 
 new Vue({
   router,

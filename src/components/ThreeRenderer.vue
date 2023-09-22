@@ -1,7 +1,10 @@
 <template>
-    <div class="renderer_container" ref="renderer_container">
+    <div class="renderer_container" ref="renderer_container" :class="{ 'fit-height': fit_height }">
         <div class="controls" v-if="show_controls">
             <p class="button" @click="save_as_image">download as image</p>
+            <p class="renderer-size">
+                {{ `resolution: ${this.width}x${this.height}` }}
+            </p>
             <slot></slot>
         </div>
     </div>
@@ -15,6 +18,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MapControls } from 'three/examples/jsm/controls/MapControls.js'
 import BaseComponent from './BaseComponent.vue';
 import { Component } from 'vue';
+import { isNumber } from 'lodash';
 
 
 export interface IThreeRendererProps {
@@ -33,6 +37,8 @@ export interface IThreeRendererData {
     camera?: THREE.PerspectiveCamera;
     renderer?: THREE.WebGLRenderer;
     controls?: OrbitControls | MapControls | null;
+    forced_aspect?: number;
+    container_aspect?: number;
 }
 
 export interface IThreeRendererMethods {
@@ -60,10 +66,20 @@ export default mixins(BaseComponent).extend({
         return {
             width: 100,
             height: 100,
-            raf_id: null
+            raf_id: null,
+            forced_aspect: 1,
+            container_aspect: 1
         };
     },
     props: {
+        force_width: {
+            type: Number,
+            default: 0,
+        },
+        force_height: {
+            type: Number,
+            default: 0,
+        },
         camera_fov: {
             type: Number,
             default: 45,
@@ -116,6 +132,11 @@ export default mixins(BaseComponent).extend({
                 this.set_rendering_mode(val)
             },
             immediate: true
+        }
+    },
+    computed: {
+        fit_height(): boolean {
+            return this.forced_aspect < this.container_aspect
         }
     },
     beforeDestroy() {
@@ -202,12 +223,22 @@ export default mixins(BaseComponent).extend({
                 prev_frame_date = now;
 
                 let bounds = this.$refs.renderer_container.getBoundingClientRect();
+                let rect = {
+                    x: bounds.left,
+                    y: bounds.top,
+                    width: this.force_width > 0 ? Math.ceil(this.force_width) : Math.ceil(bounds.width),
+                    height: this.force_height > 0 ? Math.ceil(this.force_height) : Math.ceil(bounds.height)
+                }
+
+                this.forced_aspect = rect.width / rect.height
+                this.container_aspect = bounds.width / bounds.height
+
                 let size_changed = false
 
-                if (bounds.width > 0 && bounds.height > 0) {
-                    size_changed = bounds.width !== this.width || bounds.height !== this.height
-                    this.width = bounds.width;
-                    this.height = bounds.height;
+                if (rect.width > 0 && rect.height > 0) {
+                    size_changed = rect.width !== this.width || rect.height !== this.height
+                    this.width = rect.width;
+                    this.height = rect.height;
                 }
 
                 if (size_changed) {
@@ -253,6 +284,19 @@ export default mixins(BaseComponent).extend({
     height: 100%;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    &.fit-height canvas {
+        width: auto !important;
+        height: 100% !important;
+    }
 
     .controls {
         position: absolute;

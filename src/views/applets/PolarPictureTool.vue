@@ -103,9 +103,6 @@ export default mixins(BaseComponent).extend({
         };
     },
     computed: {
-        is_mobile() {
-            return this.$store.state.is_mobile_device;
-        },
         tiling_label() {
             switch (this.tiling) {
                 case 0: {
@@ -350,8 +347,7 @@ export default mixins(BaseComponent).extend({
         box-sizing: border-box;
         top: 0;
         left: 0;
-        z-index: 1;
-        cursor: pointer;
+        pointer-events: none;
         z-index: 2;
 
         transition: all 0.2s ease-in-out;
@@ -371,6 +367,8 @@ export default mixins(BaseComponent).extend({
         }
 
         &.dragging {
+            pointer-events: all;
+
             &:after {
                 opacity: 0.4;
                 transition: all 0.2s ease-in-out;

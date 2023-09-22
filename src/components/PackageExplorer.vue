@@ -53,11 +53,11 @@ export default mixins(BaseComponent).extend({
         return {};
     },
     mounted() {
-        this.update_data()
+
     },
     watch: {
         package() {
-            this.update_data()
+
         }
     },
     computed: {
@@ -96,11 +96,11 @@ export default mixins(BaseComponent).extend({
             if (url.includes('sketchfab.com')) {
                 return EFileType.SketchfabModel;
             }
-            
+
             if (url.includes('google.com')) {
                 return EFileType.GoogleLink;
             }
-            
+
             if (url.endsWith('.md')) {
                 return EFileType.Markdown;
             }
@@ -188,12 +188,6 @@ export default mixins(BaseComponent).extend({
                 }
             }
         },
-        update_data() {
-            if (this.package) {
-                this.package_data = packages[this.package]
-            }
-
-        }
     }
 })
 

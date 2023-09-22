@@ -127,7 +127,7 @@ export default mixins(BaseComponent).extend({
                         order: true
                     },
                     {
-                        include: [EAppletCategory.Project, EAppletCategory.Demo, EAppletCategory.Package, EAppletCategory.Lab, EAppletCategory.Service],
+                        include: [EAppletCategory.Project, EAppletCategory.Demo, EAppletCategory.Package, EAppletCategory.Lab, EAppletCategory.Experiment, EAppletCategory.Service],
                         title: "everything",
                         fold: true,
                         filter: false,
@@ -204,7 +204,7 @@ export default mixins(BaseComponent).extend({
             }
         },
         get_route_link(item: IAppletData): string {
-            return `/applet/${item.index}`;
+            return `/applet-info/${item.index}`;
         },
         get_item_title(item: IAppletData) {
             if (item.title.length > 0) {
@@ -479,7 +479,8 @@ export default mixins(BaseComponent).extend({
                 grid-template-columns: 32px 1fr;
                 grid-template-rows: 1fr;
                 width: 100%;
-                height: 32px;
+                min-height: 32px;
+                height: auto;
                 align-items: center;
                 padding: 0;
                 border: none;

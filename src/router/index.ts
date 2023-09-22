@@ -8,6 +8,7 @@ export enum EAppletCategory {
   Project = 'project',
   Demo = 'demo',
   Lab = 'lab',
+  Experiment = 'experiment',
   Service = 'service',
   Package = 'package',
   Article = 'article'
@@ -20,7 +21,8 @@ const components = {
   ModelViewer3D: () => import('../views/ModelViewer3D.vue'),
   AppletsCatalog: () => import('../views/AppletsCatalog.vue'),
   PolarPictureTool: () => import('../views/applets/PolarPictureTool.vue'),
-  ShaderView: () => import('../views/applets/ShaderView.vue')
+  ShaderView: () => import('../views/applets/ShaderView.vue'),
+  RetroidMaker: () => import('../views/applets/RetroidMaker.vue'),
 }
 
 Vue.use(VueRouter)
@@ -30,12 +32,16 @@ let applets = config.applets as IAppletData[]
 applets.forEach((d, i) => {
   d.index = to_snake_case(d.title);
   if (isString(d.route.component)) {
+    if (!components[d.route.component]) {
+      throw new Error(`Component ${d.route.component} not found`)
+    }
     d.route.component = components[d.route.component]
-    if (d.props) {
-      for (let key in d.props) {
-        if (isObject(d.props[key])) {
-          d.props[key] = JSON.stringify(d.props[key])
-        }
+  }
+
+  if (d.props) {
+    for (let key in d.props) {
+      if (isObject(d.props[key])) {
+        d.props[key] = JSON.stringify(d.props[key])
       }
     }
   }
