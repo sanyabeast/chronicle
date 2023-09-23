@@ -364,7 +364,7 @@ export default mixins(BaseComponent).extend({
         }
 
         .applet-thumb:hover {
-            transform: translateY(-4px);
+            // transform: translateY(-4px);
 
             .fader {
                 opacity: 0.25;

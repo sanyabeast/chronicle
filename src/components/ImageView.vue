@@ -7,7 +7,6 @@
   
 <script lang="ts">
 
-import Vue from 'vue';
 import mixins from 'vue-typed-mixins';
 import Preloader, { ELoaderType } from './Preloader.vue';
 import BaseComponent from './BaseComponent.vue';
@@ -63,6 +62,7 @@ export default mixins(BaseComponent).extend({
     position: relative;
 
     img {
+        pointer-events: none;
         width: 100%;
         height: auto;
 
