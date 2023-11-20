@@ -2,7 +2,9 @@
 
 This module implements a maze generation algorithm in TypeScript. It consists of several classes and enums which work together to create and manage a maze.
 
-![User navigation](assets/docs/image/mazegen/mazegen.gif "User navigation")
+
+![User navigation](assets/docs/image/mazegen/mazegen2.gif "User navigation")
+
 
 
 ## Enums
@@ -83,6 +85,9 @@ Maze generation is based on random selection of cells and walls, controlled by t
 
 The algorithm creates paths by removing walls between cells and marks special cells as start, end, loops, shortcuts, etc., based on the generation logic.
 The module allows for customization of the maze's complexity and structure through various parameters like sparseness and dead ends ratio.
+
+![User navigation](assets/docs/image/mazegen/mazegen.gif "User navigation")
+
 
 ## Usage Example
 
