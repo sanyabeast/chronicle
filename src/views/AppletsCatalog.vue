@@ -91,6 +91,15 @@ export default mixins(BaseComponent).extend({
                         order: true
                     },
                     {
+                        include: [EAppletCategory.Tool],
+                        title: "tools",
+                        fold: false,
+                        filter: false,
+                        if_search: true,
+                        if_no_search: true,
+                        order: true
+                    },
+                    {
                         include: [EAppletCategory.Lab],
                         title: "experiments",
                         fold: true,

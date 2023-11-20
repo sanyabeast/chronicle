@@ -11,7 +11,8 @@ export enum EAppletCategory {
   Experiment = 'experiment',
   Service = 'service',
   Package = 'package',
-  Article = 'article'
+  Article = 'article',
+  Tool = 'tool',
 }
 
 const components = {

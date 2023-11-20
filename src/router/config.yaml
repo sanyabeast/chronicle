@@ -209,7 +209,7 @@ applets:
       props: true
     summary: "assets/docs/polar_picture_tool.txt"
     tags: ["three", "gl", "tool", "shader", "utils", "image"]
-    category: ["project", "experiment"]
+    category: ["tool", "experiment"]
     title: "Polar Picture Tool"
     preview: "assets/preview/polar_image_a1.png"
     props:
@@ -257,7 +257,7 @@ applets:
         "macos",
         "linux",
       ]
-    category: ["package"]
+    category: ["tool", "package"]
     title: "preview3d"
     preview: "assets/preview/preview3d_01.png"
     summary: "assets/docs/preview3d.txt"
@@ -307,7 +307,7 @@ applets:
       component: MazeGenerator
       props: true
     tags: ["experiment", "utils", "canvas2d", "algorithm"]
-    category: ["experiment"]
+    category: ["tool", "experiment"]
     summary: "assets/docs/maze_generator.txt"
     document: "assets/docs/maze_generator.md"
     title: "Maze Generator"
