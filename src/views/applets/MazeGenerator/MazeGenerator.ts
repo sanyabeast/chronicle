@@ -250,7 +250,7 @@ export class MazeGenerator {
             let closed_neighbours = cell.get_closed_neighbours();
             if (closed_neighbours.length > 1) {
                 let random_neighbour = closed_neighbours[Math.floor(this.rand.random() * closed_neighbours.length)];
-                if (Math.random() < this.shortcuts_ratio) {
+                if (this.rand.random() < this.shortcuts_ratio) {
                     cell.remove_wall_between(random_neighbour);
                     cell.category = ECellCategory.Shortcut;
                 }
