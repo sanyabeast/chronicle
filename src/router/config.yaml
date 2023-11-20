@@ -28,7 +28,7 @@ shaders:
     fragment: assets/shader/retroid.frag
     vertex: assets/shader/fullscreen_plane.vert
     uniforms:
-      u_map: 'assets/image/uv_checker_001.jpg'
+      u_map: "assets/image/uv_checker_001.jpg"
 
 # web-frame urls
 urls:
@@ -306,7 +306,9 @@ applets:
       path: "/applet/maze-generator"
       component: MazeGenerator
       props: true
-    tags: ["experiment", "utils"]
+    tags: ["experiment", "utils", "canvas2d", "algorithm"]
     category: ["experiment"]
+    summary: "assets/docs/maze_generator.txt"
+    document: "assets/docs/maze_generator.md"
     title: "Maze Generator"
     preview: "assets/preview/maze_generator.png"

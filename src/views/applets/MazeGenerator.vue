@@ -11,7 +11,7 @@ import Vue from 'vue';
 import emoji_data from '@/assets/emoji.json'
 import { orderBy, sortBy } from 'lodash';
 import Tweakpane from '@/components/Tweakpane.vue';
-import { MazeGenerator, ECellType, ICellData } from './MazeGenerator/MazeGenerator'
+import { MazeGenerator, ECellCategory, MazeCell, ECellAccessibilityLevel } from './MazeGenerator/MazeGenerator'
 
 
 const wall_color = '#ffffff';
@@ -116,6 +116,15 @@ export default Vue.extend({
             this.maze_generator.generate();
         });
 
+        pane.addBinding(this.maze_generator, 'shortcuts_ratio', {
+            label: 'Shortcuts Ratio',
+            min: 0,
+            max: 1,
+            step: 0.001,
+        }).on('change', () => {
+            this.maze_generator.generate();
+        });
+
         pane.addBlade({
             view: 'list',
             label: 'Generation Order',
@@ -129,12 +138,6 @@ export default Vue.extend({
             this.maze_generator.generation_order = ev.value;
             this.maze_generator.generate();
         });
-
-
-        pane.addBinding(this.maze_generator, 'longest_path', {
-            label: 'Longest Path',
-            readonly: true
-        })
 
 
         pane.addBlade({
@@ -187,35 +190,45 @@ export default Vue.extend({
             const cell_size = this.adapt.size / this.maze_generator.grid_size;
             this.maze_generator.cells.forEach(cells => {
                 cells.forEach(cell_data => {
-                    // shortcut marker
-                    if (cell_data.type === ECellType.Start) {
-                        this.draw_cell_label(cell_data, "START", "#8bc34a")
-                    }
-
-                    if (cell_data.type === ECellType.End) {
-                        this.draw_cell_label(cell_data, "FINISH", "#ff5722")
-                    }
-
-                    if (cell_data.type === ECellType.Shortcut) {
-                        this.draw_cell_label(cell_data, "SHRTCUT", "#4caf50")
-                    }
-
-                    if (cell_data.is_dead_end() && cell_data.type !== ECellType.Start && cell_data.type !== ECellType.End) {
-                        this.draw_cell_label(cell_data, "dead", "#454545")
-                    }
-
-                    if (cell_data.is_fork()) {
-                        this.draw_cell_label(cell_data, "fork", "#454545")
-                    }
-
-                    if (cell_data.is_crossroad()) {
-                        this.draw_cell_label(cell_data, "cross", "#454545")
+                    switch (cell_data.category) {
+                        case ECellCategory.Start: {
+                            this.draw_cell_label(cell_data, "START", "#8bc34a")
+                            break;
+                        }
+                        case ECellCategory.End: {
+                            this.draw_cell_label(cell_data, "FINISH", "#ff5722")
+                            break;
+                        }
+                        case ECellCategory.Shortcut: {
+                            this.draw_cell_label(cell_data, "shortcut", "#4f4937")
+                            break;
+                        }
+                        case ECellCategory.Loop: {
+                            this.draw_cell_label(cell_data, "loop", "#2b4964")
+                            break;
+                        }
+                        default: {
+                            switch (cell_data.walls_count) {
+                                case ECellAccessibilityLevel.DeadEnd: {
+                                    this.draw_cell_label(cell_data, "dead", "#454545")
+                                    break;
+                                }
+                                case ECellAccessibilityLevel.Fork: {
+                                    this.draw_cell_label(cell_data, "fork", "#454545")
+                                    break;
+                                }
+                                case ECellAccessibilityLevel.Crossroad: {
+                                    this.draw_cell_label(cell_data, "cross", "#454545")
+                                    break;
+                                }
+                            }
+                        }
                     }
                 })
             })
 
         },
-        draw_cell_label(cell_data: ICellData, label: string, color: string) {
+        draw_cell_label(cell_data: MazeCell, label: string, color: string) {
             const cell_size = this.adapt.size / this.maze_generator.grid_size;
             const x = cell_data.x * cell_size + this.adapt.translate.x;
             const y = cell_data.y * cell_size + this.adapt.translate.y;
@@ -228,7 +241,7 @@ export default Vue.extend({
             this.context2d.fillStyle = color;
             this.context2d.fillText(label, x + cell_size / 2, y + cell_size / 2);
         },
-        draw_cell(cell_data: ICellData) {
+        draw_cell(cell_data: MazeCell) {
 
             const cell_size = this.adapt.size / this.maze_generator.grid_size;
             const x = cell_data.x * cell_size + this.adapt.translate.x;
@@ -240,68 +253,70 @@ export default Vue.extend({
 
             this.context2d.fillStyle = wall_color;
 
-            if (cell_data.type === ECellType.Start || cell_data.type === ECellType.End) {
+            if (cell_data.category === ECellCategory.Start || cell_data.category === ECellCategory.End) {
                 this.context2d.fillStyle = "#142f1e";
                 this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
             } else {
-                if (cell_data.is_isolated()) {
-                    this.context2d.fillStyle = "#050505";
-                    this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
-                    return;
-                }
-                // debug floors
-                if (cell_data.is_dead_end()) {
-                    this.context2d.fillStyle = "#2f1414";
-                    this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
+                switch (cell_data.walls_count) {
+                    case ECellAccessibilityLevel.Isolated: {
+                        this.context2d.fillStyle = "#050505";
+                        this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
+                        return;
+                        break;
+                    }
+                    case ECellAccessibilityLevel.DeadEnd: {
+                        this.context2d.fillStyle = "#2f1414";
+                        break;
+                    }
+                    case ECellAccessibilityLevel.Transitive: {
+                        this.context2d.fillStyle = "#191919";
+                        break;
+                    }
+                    case ECellAccessibilityLevel.Fork: {
+                        this.context2d.fillStyle = "#26142f";
+                        break;
+                    }
+                    case ECellAccessibilityLevel.Crossroad: {
+                        this.context2d.fillStyle = "#2f142f";
+                        break;
+                    }
+
                 }
 
-                if (cell_data.is_transitive()) {
-                    this.context2d.fillStyle = "#191919";
-                    this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
-                }
-            }
-
-            if (cell_data.is_fork()) {
-                this.context2d.fillStyle = "#26142f";
-                this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
-            }
-
-            if (cell_data.is_crossroad()) {
-                this.context2d.fillStyle = "#2f142f";
                 this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
             }
             // debug walls
             if (cell_data.walls.top) {
-                this.context2d.fillStyle = "#ff0000";
+                this.context2d.fillStyle = "hsl(0deg 50% 50%)";
                 this.context2d.fillRect(x, y + dx, cell_size, this.wall_width);
             }
 
             if (cell_data.walls.right) {
-                this.context2d.fillStyle = "#ffff00";
+                this.context2d.fillStyle = "hsl(90deg 50% 50%)";
                 this.context2d.fillRect(x + cell_size - dx, y, this.wall_width, cell_size);
             }
 
             if (cell_data.walls.bottom) {
-                this.context2d.fillStyle = "#ff0055";
+                this.context2d.fillStyle = "hsl(180deg 50% 50%)";
                 this.context2d.fillRect(x, y + cell_size - dx, cell_size, this.wall_width);
             }
 
             if (cell_data.walls.left) {
-                this.context2d.fillStyle = "#ffaa00";
+                this.context2d.fillStyle = "hsl(270deg 50% 50%)";
                 this.context2d.fillRect(x + dx, y, this.wall_width, cell_size);
             }
 
         },
         /*drawing route path using canvas2d line and .siblings property of each cell*/
-        draw_path(start_cell: ICellData = this.maze_generator.start_cell) {
+        draw_path(start_cell: MazeCell = this.maze_generator.start_cell) {
             this.draw_path_fragment(start_cell);
             this.maze_generator.reset_visited()
         },
-        draw_path_fragment(cell: ICellData) {
+        draw_path_fragment(cell: MazeCell) {
             if (cell.visited) {
                 return
             }
-            cell.siblings.forEach((cell2) => {
+            cell.get_open_neighbours().forEach((cell2) => {
                 this.context2d.strokeStyle = `hsl(0, 0%, ${(1 - (cell.index / this.maze_generator.max_cells_count)) * 100}%)`;
                 this.context2d.lineWidth = (1 - Math.pow((cell.index / this.maze_generator.longest_path), 2)) * 4 * this.path_width;
                 this.context2d.beginPath();

@@ -155,7 +155,6 @@ export default mixins(BaseComponent).extend({
     },
     props: {},
     computed: {
-
         applets() {
             return applets;
         },

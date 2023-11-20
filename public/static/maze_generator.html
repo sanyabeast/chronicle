@@ -241,7 +241,79 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Maze Generator</h1><img src="/chronicle/dist/assets/preview/maze_generator.png" alt="Maze Generator"></img><a class="applet-launch" href="/chronicle/dist/#/applet/maze-generator">Launch</a><p class="no-content">No summary available</p></div><div></div><div class="applet-document no-content">No document available</div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Maze Generator</h1><img src="/chronicle/dist/assets/preview/maze_generator.png" alt="Maze Generator"></img><a class="applet-launch" href="/chronicle/dist/#/applet/maze-generator">Launch</a><p>This module implements a maze generation algorithm in TypeScript. It consists of several classes and enums which work together to create and manage a maze.</p></div><div></div><div class="applet-document"><h1 id="mazegeneration">Maze Generation</h1>
+<p>This module implements a maze generation algorithm in TypeScript. It consists of several classes and enums which work together to create and manage a maze.</p>
+<p><img src="assets/docs/image/mazegen/mazegen.gif" alt="User navigation" title="User navigation" /></p>
+<h2 id="enums">Enums</h2>
+<h3 id="ecellcategory">ECellCategory</h3>
+<p>Defines categories for maze cells:</p>
+<ul>
+<li><code>Empty</code></li>
+<li><code>Default</code></li>
+<li><code>Shortcut</code></li>
+<li><code>Loop</code></li>
+<li><code>Start</code></li>
+<li><code>End</code></li>
+</ul>
+<h3 id="ecellaccessibilitylevel">ECellAccessibilityLevel</h3>
+<p>Describes the accessibility level of a cell within the maze:</p>
+<ul>
+<li><code>Crossroad</code></li>
+<li><code>Fork</code></li>
+<li><code>Transitive</code></li>
+<li><code>DeadEnd</code></li>
+<li><code>Isolated</code></li>
+</ul>
+<h3 id="egenerationorder">EGenerationOrder</h3>
+<p>Specifies the order in which cells are processed during generation:</p>
+<ul>
+<li><code>Pop</code></li>
+<li><code>Shift</code></li>
+</ul>
+<h2 id="classes">Classes</h2>
+<h3 id="mazecell">MazeCell</h3>
+<p>Represents a single cell within the maze.</p>
+<h4 id="properties">Properties</h4>
+<ul>
+<li><code>index</code>: Optional index of the cell.</li>
+<li><code>x, y</code>: Coordinates of the cell in the maze.</li>
+<li><code>walls</code>: Object defining the presence of walls around the cell.</li>
+<li><code>hovered</code>: Boolean indicating if the cell is currently hovered over.</li>
+<li><code>category</code>: Category of the cell from ECellCategory.</li>
+<li><code>visited</code>: Boolean indicating if the cell has been visited during generation or traversal.</li>
+</ul>
+<h4 id="methods">Methods</h4>
+<ul>
+<li><code>get_closed_neighbours()</code>: Returns a list of adjacent cells that are separated by walls.</li>
+<li><code>get_open_neighbours()</code>: Returns a list of adjacent cells that are not separated by walls.</li>
+<li><code>get_all_neighbours()</code>: Returns all adjacent cells regardless of walls.</li>
+<li><code>remove_wall_between()</code>, <code>add_wall_between()</code>, <code>set_wall_between()</code>: Manage walls between cells.</li>
+<li><code>get_wall_between()</code>: Determines if there is a wall between the current cell and another cell.</li>
+</ul>
+<h3 id="mazegenerator">MazeGenerator</h3>
+<p>Responsible for generating and managing the maze structure.</p>
+<h4 id="properties-1">Properties</h4>
+<ul>
+<li><code>cells</code>: Two-dimensional array of MazeCell.</li>
+<li><code>start_cell</code>, <code>end_cell</code>: MazeCell instances marking the start and end of the maze.</li>
+</ul>
+<p>Configuration parameters like seed, <code>grid_size</code>, <code>sparseness</code>, <code>dead_ends_ratio</code>, <code>shortcuts_ratio</code>, and <code>generation_order</code>.</p>
+<h4 id="methods-1">Methods</h4>
+<ul>
+<li><code>generate()</code>: Initializes and generates the maze.</li>
+<li><code>find_cells_with_accessibility()</code>: Finds cells with a specific accessibility level.</li>
+<li><code>reset_visited()</code>: Resets the visited property of all cells.</li>
+<li><code>for_each_cell()</code>: Executes a callback function on each cell in the maze.</li>
+</ul>
+<h2 id="functionalityoverview">Functionality Overview</h2>
+<p>The MazeGenerator class initializes a grid of MazeCell objects based on the specified grid size.
+Maze generation is based on random selection of cells and walls, controlled by the seed property for reproducible results.</p>
+<p>The algorithm creates paths by removing walls between cells and marks special cells as start, end, loops, shortcuts, etc., based on the generation logic.
+The module allows for customization of the maze's complexity and structure through various parameters like sparseness and dead ends ratio.</p>
+<h2 id="usageexample">Usage Example</h2>
+<p>To use this module, you would typically create an instance of MazeGenerator, configure the desired properties, and call the generate() method to create a maze. You can then interact with the maze through the MazeCell objects, examining their properties and relationships to navigate or modify the maze.</p>
+<p><img src="assets/question_mark_01.png" alt="User navigation" title="User navigation" /> </p>
+<p>Got a Question? <a href="mailto:a.gvrnsk@gmail.com?subject=chronicle">@sanyabeast</a></p></div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
 </body>
 
 </html>

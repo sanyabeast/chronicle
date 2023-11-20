@@ -1,40 +1,22 @@
 
+import { filter, map } from 'lodash';
 import rand_gen from 'random-seed'
 
-export enum ECellType {
+export enum ECellCategory {
     Empty,
     Default,
     Shortcut,
+    Loop,
     Start,
     End,
 }
 
-export interface ICellData {
-    maze_generator?: MazeGenerator;
-    x: number;
-    y: number;
-    walls: {
-        top: boolean;
-        right: boolean;
-        bottom: boolean;
-        left: boolean;
-    },
-    hovered: boolean;
-    visited: boolean;
-    type: ECellType;
-    index?: number;
-    next_cell?: ICellData;
-    siblings?: ICellData[];
-    get_walled_neighbours(): ICellData[];
-    is_isolated(): boolean;
-    is_transitive(): boolean;
-    is_fork(): boolean;
-    is_crossroad(): boolean;
-    is_dead_end(): boolean;
-    get_neighbours(cells): ICellData[];
-    distance_to(cell: ICellData): number;
-    remove_wall(cell2: ICellData): void;
-    get walls_count(): number;
+export enum ECellAccessibilityLevel {
+    Crossroad,
+    Fork,
+    Transitive,
+    DeadEnd,
+    Isolated,
 }
 
 export enum EGenerationOrder {
@@ -42,55 +24,90 @@ export enum EGenerationOrder {
     Shift
 }
 
-export class QuadCell implements ICellData {
-    maze_generator?: MazeGenerator;
-    constructor(maze_generator: MazeGenerator, x: number, y: number, type: ECellType = ECellType.Empty) {
+export class MazeCell {
+    constructor(maze_generator: MazeGenerator, x: number, y: number, category: ECellCategory = ECellCategory.Empty) {
         this.maze_generator = maze_generator;
-        this.siblings = [];
         this.walls = { top: true, right: true, bottom: true, left: true }
         this.x = x;
         this.y = y;
         this.hovered = false;
         this.visited = false;
-        this.type = type;
+        this.category = category;
     }
-    get_walled_neighbours(): ICellData[] {
-        let cells = this.maze_generator.cells
-        let result = []
-        if (this.x > 0 && this.is_walled_cell(cells[this.x - 1][this.y])) {
-            result.push(cells[this.x - 1][this.y]);
-        }
-        if (this.y > 0 && this.is_walled_cell(cells[this.x][this.y - 1])) {
-            result.push(cells[this.x][this.y - 1]);
-        }
-        if (this.x < cells.length - 1 && this.is_walled_cell(cells[this.x + 1][this.y])) {
-            result.push(cells[this.x + 1][this.y]);
-        }
-        if (this.y < cells.length - 1 && this.is_walled_cell(cells[this.x][this.y + 1])) {
-            result.push(cells[this.x][this.y + 1]);
-        }
-        return result;
-    }
-    siblings?: ICellData[];
-    index?: number;
-    next_cell?: ICellData;
-    get walls_count(): number {
+
+    // PROPS
+
+    public index?: number;
+    public x: number;
+    public y: number;
+    public walls = null;
+    public hovered: boolean;
+    public category: ECellCategory;
+    public visited: boolean;
+
+    protected maze_generator?: MazeGenerator;
+    protected neighbours_offsets = [
+        { x: -1, y: 0 },
+        { x: 0, y: -1 },
+        { x: 1, y: 0 },
+        { x: 0, y: 1 },
+    ]
+
+    public get walls_count(): number {
         let result = 0;
-        if (this.walls.top) {
-            result++;
-        }
-        if (this.walls.right) {
-            result++;
-        }
-        if (this.walls.bottom) {
-            result++;
-        }
-        if (this.walls.left) {
-            result++;
-        }
+        if (this.walls.top) result++;
+        if (this.walls.right) result++;
+        if (this.walls.bottom) result++;
+        if (this.walls.left) result++;
         return result;
     }
-    is_walled_cell(cell2: ICellData): boolean {
+
+    // METHODS
+    public get_closed_neighbours(): MazeCell[] {
+        return filter(this.get_all_neighbours(), (cell) => {
+            return this.get_wall_between(cell)
+        })
+    }
+    public get_open_neighbours(): MazeCell[] {
+        return filter(this.get_all_neighbours(), (cell) => {
+            return !this.get_wall_between(cell)
+        })
+    }
+    public get_all_neighbours(): MazeCell[] {
+        let cells = this.maze_generator.cells;
+        return filter(
+            map(this.neighbours_offsets, (offset, index) => { return this.get_neighbour_cell(index) }),
+            (cell) => { return cell !== null }
+        )
+    }
+    public remove_wall_between(cell2: MazeCell): void {
+        this.set_wall_between(cell2, false);
+    }
+    public add_wall_between(cell2: MazeCell): void {
+        this.set_wall_between(cell2, true);
+    }
+    public set_wall_between(cell2: MazeCell, value: boolean): void {
+        let cell1 = this
+        let x = cell1.x - cell2.x;
+        let y = cell1.y - cell2.y;
+
+        if (x === 1) {
+            cell1.walls.left = value;
+            cell2.walls.right = value;
+        } else if (x === -1) {
+            cell1.walls.right = value;
+            cell2.walls.left = value;
+        }
+
+        if (y === 1) {
+            cell1.walls.top = value;
+            cell2.walls.bottom = value;
+        } else if (y === -1) {
+            cell1.walls.bottom = value;
+            cell2.walls.top = value;
+        }
+    }
+    public get_wall_between(cell2: MazeCell): boolean {
         let x = this.x - cell2.x;
         let y = this.y - cell2.y;
 
@@ -106,109 +123,52 @@ export class QuadCell implements ICellData {
             return this.walls.bottom;
         }
     }
-    remove_wall(cell2: ICellData): void {
-        let cell1 = this
-        let x = cell1.x - cell2.x;
-        let y = cell1.y - cell2.y;
+    protected get_neighbour_cell(offset: number) {
+        if (offset < 0 || offset > 3) {
+            throw new Error("offset must be between 0 and 3");
+        }
+        let x = this.x + this.neighbours_offsets[offset].x
+        let y = this.y + this.neighbours_offsets[offset].y
 
-        this.siblings.push(cell2);
-
-        if (x === 1) {
-            cell1.walls.left = false;
-            cell2.walls.right = false;
-        } else if (x === -1) {
-            cell1.walls.right = false;
-            cell2.walls.left = false;
+        if (x < 0 || x >= this.maze_generator.grid_size || y < 0 || y >= this.maze_generator.grid_size) {
+            return null
         }
 
-        if (y === 1) {
-            cell1.walls.top = false;
-            cell2.walls.bottom = false;
-        } else if (y === -1) {
-            cell1.walls.bottom = false;
-            cell2.walls.top = false;
-        }
+        return this.maze_generator.cells[x][y]
     }
-    get_neighbours(cells: ICellData[][]): ICellData[] {
-        let result = []
-        if (this.x > 0) {
-            result.push(cells[this.x - 1][this.y]);
-        }
-        if (this.y > 0) {
-            result.push(cells[this.x][this.y - 1]);
-        }
-        if (this.x < cells.length - 1) {
-            result.push(cells[this.x + 1][this.y]);
-        }
-        if (this.y < cells.length - 1) {
-            result.push(cells[this.x][this.y + 1]);
-        }
-        return result;
-    }
-    distance_to(cell: ICellData): number {
-        return Math.abs(this.x - cell.x) + Math.abs(this.y - cell.y);
-    }
-    is_isolated(): boolean {
-        return this.walls_count === 4;
-    }
-    is_transitive(): boolean {
-        return this.walls_count === 2;
-    }
-    is_dead_end(): boolean {
-        return this.walls_count === 3;
-    }
-    is_fork(): boolean {
-        return this.walls_count === 1;
-    }
-    is_crossroad(): boolean {
-        return this.walls_count === 0;
-    }
-    x: number;
-    y: number;
-    walls = null;
-    hovered: boolean;
-    visited: boolean;
-    type: ECellType;
+
 
 }
 
 export class MazeGenerator {
     constructor() {
         this.cells = []
-        this.path = []
     }
 
-    cells: ICellData[][]
-    start_cell: ICellData
-    end_cell: ICellData
-    rand
-    seed: number = 4680
-    grid_size: number = 4
-    sparseness: number = 0.5
-    dead_ends_ratio: number = 0.5
-    longest_path: number = 0
-    path: []
-    generation_order: EGenerationOrder = EGenerationOrder.Shift
+    //  PROPS
+    public cells: MazeCell[][]
+    public start_cell: MazeCell
+    public end_cell: MazeCell
 
-    get max_cells_count() {
+    public seed: number = 4680
+    public grid_size: number = 4
+    public sparseness: number = 0.5
+    public dead_ends_ratio: number = 0.75
+    public shortcuts_ratio: number = 0.2
+    public generation_order: EGenerationOrder = EGenerationOrder.Shift
+
+    protected rand
+
+    public get max_cells_count() {
         return this.grid_size * this.grid_size;
     }
+    // METHODS
 
     protected update_generator() {
         this.rand = rand_gen.create(this.seed)
     }
-    protected get_random_cell(): ICellData {
+    protected get_random_cell(): MazeCell {
         return this.cells[Math.floor(this.rand.random() * this.grid_size)][Math.floor(this.rand.random() * this.grid_size)];
-    }
-    protected get_path_coordinates(start_cell: ICellData) {
-        let path = [];
-        let current_cell = start_cell;
-        path.push(current_cell);
-        while (current_cell.next_cell) {
-            current_cell = current_cell.next_cell;
-            path.push(current_cell);
-        }
-        return path;
     }
     protected initialize() {
         this.update_generator();
@@ -217,7 +177,7 @@ export class MazeGenerator {
         for (let i = 0; i < this.grid_size; i++) {
             this.cells[i] = [];
             for (let j = 0; j < this.grid_size; j++) {
-                this.cells[i][j] = new QuadCell(this, i, j, ECellType.Empty)
+                this.cells[i][j] = new MazeCell(this, i, j, ECellCategory.Empty)
             }
         }
     }
@@ -226,9 +186,10 @@ export class MazeGenerator {
 
         let stack = [];
         let current_cell = this.start_cell = this.get_random_cell();
+        let end_cell = current_cell;
         current_cell.index = 0;
         current_cell.visited = true;
-        current_cell.type = ECellType.Start;
+        current_cell.category = ECellCategory.Start;
         stack.push(current_cell);
 
         while (stack.length > 0) {
@@ -237,16 +198,17 @@ export class MazeGenerator {
                 break;
             }
 
-            let neighbours = current_cell.get_neighbours(this.cells);
+            let neighbours = current_cell.get_all_neighbours();
             let unvisited_neighbours = neighbours.filter(cell => cell.visited === false);
 
             if (unvisited_neighbours.length > 0) {
                 let random_neighbour = unvisited_neighbours[Math.floor(this.rand.random() * unvisited_neighbours.length)];
-                current_cell.remove_wall(random_neighbour);
+                current_cell.remove_wall_between(random_neighbour);
                 random_neighbour.visited = true;
                 random_neighbour.index = current_cell.index + 1;
                 stack.push(random_neighbour);
                 current_cell = random_neighbour;
+                end_cell = current_cell;
             } else {
                 switch (this.generation_order) {
                     case EGenerationOrder.Pop: {
@@ -262,59 +224,68 @@ export class MazeGenerator {
             }
         }
 
-        let end_cell = this.end_cell = this.get_max_index_cell();
-        this.longest_path = this.end_cell.index;
-        end_cell.type = ECellType.End;
+        end_cell.category = ECellCategory.End;
+        this.end_cell = end_cell;
 
-        let dead_ends = this.get_dead_ends();
+        // DEAD ENDS
+        let dead_ends = this.find_cells_with_accessibility(ECellAccessibilityLevel.DeadEnd);
         dead_ends.forEach(cell => {
             if (this.rand.random() > (this.dead_ends_ratio)) {
-                if (cell.type === ECellType.Start || cell.type === ECellType.End) {
+                if (cell.category === ECellCategory.Start || cell.category === ECellCategory.End) {
                     return
                 }
 
-                let walled_neighbours = cell.get_walled_neighbours(this.cells);
+                let walled_neighbours = cell.get_closed_neighbours(this.cells);
                 console.log(walled_neighbours)
                 let random_neighbour = walled_neighbours[Math.floor(this.rand.random() * walled_neighbours.length)];
 
-                // if (random_neighbour.type === ECellType.Start || random_neighbour.type === ECellType.End) {
-                //     return
-                // }
-
-                cell.remove_wall(random_neighbour);
-                cell.type = ECellType.Shortcut;
+                cell.remove_wall_between(random_neighbour);
+                cell.category = ECellCategory.Loop;
             }
+        })
 
+        // SHORTCUTS
+        let transitive_cells = this.find_cells_with_accessibility(ECellAccessibilityLevel.Transitive);
+        transitive_cells.forEach(cell => {
+            let closed_neighbours = cell.get_closed_neighbours();
+            if (closed_neighbours.length > 1) {
+                let random_neighbour = closed_neighbours[Math.floor(this.rand.random() * closed_neighbours.length)];
+                if (Math.random() < this.shortcuts_ratio) {
+                    cell.remove_wall_between(random_neighbour);
+                    cell.category = ECellCategory.Shortcut;
+                }
+            }
+        })
+
+        this.for_each_cell((cell) => {
+            if (cell.walls_count === ECellAccessibilityLevel.Isolated) {
+                cell.category = ECellCategory.Empty;
+            }
         })
 
         this.reset_visited()
     }
-    protected get_max_index_cell(): ICellData {
-        let current_cell = this.start_cell;
-        this.cells.forEach(cells => {
-            cells.forEach(cell => {
-                if (cell.index > current_cell.index) {
-                    current_cell = cell;
-                }
-            })
-        })
-        return current_cell;
-    }
-    public get_dead_ends() {
+    find_cells_with_accessibility(level: ECellAccessibilityLevel) {
         let result = [];
-        this.cells.forEach(cells => {
-            cells.forEach(cell => {
-                if (cell.is_dead_end()) {
-                    result.push(cell);
-                }
-            })
+        this.for_each_cell((cell) => {
+            if (cell.walls_count === level) {
+                result.push(cell);
+            }
         })
+
         return result;
     }
+
     public reset_visited() {
+        this.for_each_cell((cell) => {
+            cell.visited = false;
+        })
+    }
+
+    protected for_each_cell(callback: (cell: MazeCell) => void) {
         this.cells.forEach(cells => {
             cells.forEach(cell => {
-                cell.visited = false;
+                callback(cell);
             })
         })
     }

@@ -109,6 +109,11 @@ export default mixins(BaseComponent).extend({
         }
     }
 
+    code {
+        display: inline;
+        color: #ffaf96;
+    }
+
     li a {
         color: #4caf50;
     }
