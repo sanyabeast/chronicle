@@ -300,3 +300,13 @@ applets:
     category: ["experiment"]
     title: "Retroid Maker"
     preview: "assets/image/pattern.png"
+
+  - route:
+      name: "MazeGenerator"
+      path: "/applet/maze-generator"
+      component: MazeGenerator
+      props: true
+    tags: ["experiment", "utils"]
+    category: ["experiment"]
+    title: "Maze Generator"
+    preview: "assets/preview/maze_generator.png"
