@@ -1,0 +1,39 @@
+<template>
+    <div class="canvas2d">
+        <canvas ref="canvas"></canvas>
+    </div>
+</template>
+  
+<script lang="ts">
+import Vue from 'vue';
+
+// Map grayscale values to ASCII characters
+function grayToAscii(gray: number) {
+    const asciiChars = ' .:-=+*%@#';  // Adjust this string for desired ASCII representation
+    const index = Math.round(gray / 255 * (asciiChars.length - 1));
+    return asciiChars[index];
+}
+
+export default Vue.extend({
+    name: 'Canvas2d',
+    data() {
+        return {
+
+        }
+    },
+    props: {
+
+    },
+    mounted() {
+
+    },
+    methods: {
+    }
+});
+</script>
+  
+  <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style  lang="less">
+.canvas2d {}
+</style>
+  
