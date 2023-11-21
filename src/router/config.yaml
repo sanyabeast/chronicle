@@ -303,7 +303,7 @@ applets:
 
   - route:
       name: "MazeGenerator"
-      path: "/applet/maze-generator"
+      path: "/applet/maze-generator/:seed"
       component: MazeGenerator
       props: true
     tags: ["experiment", "utils", "canvas2d", "algorithm"]
@@ -312,3 +312,5 @@ applets:
     document: "assets/docs/maze_generator.md"
     title: "Maze Generator"
     preview: "assets/preview/maze_generator.png"
+    props: 
+      seed: random

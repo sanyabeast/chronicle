@@ -5,7 +5,64 @@ This module implements a maze generation algorithm in TypeScript. It consists of
 
 ![User navigation](assets/docs/image/mazegen/mazegen2.gif "User navigation")
 
+# Maze Generator User Manual
 
+Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.
+
+## Getting Started
+
+To begin generating your maze, adjust the following parameters according to your needs:
+
+### Parameters Panel
+
+- **Walls Padding**: Controls the space between the walls of the maze.
+- **Walls Width**: Sets the thickness of the walls.
+- **Path Width**: Adjusts the width of the paths within the maze.
+- **Grid Size**: Determines the complexity of the maze by setting the number of cells.
+- **Sparseness**: Controls how sparse the maze is; a higher value means fewer walls.
+- **Dead-Ends Ratio**: Sets the frequency of dead-ends in the maze.
+- **Shortcuts Ratio**: Adjusts the likelihood of shortcuts appearing in the maze.
+
+![Parameter Panel](assets/docs/image/mazegen/mazegen_gui_1.jpg "Parameter Panel")
+
+### Generation Options
+
+- **Generation Order**: Choose the algorithm for maze generation from the dropdown (e.g., `Shift`, `Pop`).
+- **Generation Seed**: Enter a number to use as a seed for the maze generation. This allows for reproducible results.
+
+## Using the Applet
+
+After setting your desired parameters:
+
+1. Click on `Generate maze` to create a new maze.
+2. The maze will be rendered in the main viewport.
+
+### Understanding the Maze
+
+The maze is comprised of different elements:
+
+- **Start**: Marked with a `START` label, this is the entry point of the maze.
+- **Finish**: Marked with a `FINISH` label, this is the goal or exit point of the maze.
+- **Walls**: Indicated by colored lines, these are the barriers that form the paths of the maze.
+- **Paths**: The open spaces between walls where movement is possible.
+- **Dead-Ends**: Paths that lead to a closed end.
+- **Forks**: Points where the path splits into two or more directions.
+- **Shortcuts**: Direct paths that provide a quicker route through the maze.
+- **Crossroads**: Points where multiple paths intersect.
+
+![Viewport](assets/docs/image/mazegen/mazegen_main_1.jpg "Viewport")
+
+## Tips and Tricks
+
+- Experiment with different `Generation Seed` values to create unique mazes.
+- Use the `Shortcuts Ratio` sparingly to maintain the challenge of the maze.
+- Adjust the `Walls Width` and `Path Width` for a more intricate or more navigable maze, depending on your preference.
+
+---
+
+Enjoy creating your mazes with the Maze Generator!
+
+# API Reference
 
 ## Enums
 

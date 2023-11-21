@@ -1,7 +1,7 @@
 <template>
     <div class="canvas2d">
         <canvas ref="canvas"></canvas>
-        <div class="debug-layer">
+        <div v-if="show_debug" class="debug-layer">
             <div>
                 <p>frames rendered</p>
                 <p v-html="`${this.stats.frames_rendered}`">
@@ -60,7 +60,12 @@ export default Vue.extend({
             }
         }
     },
-    props: {},
+    props: {
+        show_debug: {
+            type: Boolean,
+            default: false
+        }
+    },
     mounted() {
         this.resolution = window.devicePixelRatio || 1;
 
@@ -190,7 +195,7 @@ export default Vue.extend({
                 this.canvas.height = this.hidden_canvas.height = this.height = new_height;
                 this.aspect_ratio = this.width / this.height;
                 this.compute_viewport();
-                
+
                 if (emit_event) {
                     this.$emit('resize', { width: this.width, height: this.height });
                 }

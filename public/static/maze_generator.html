@@ -241,9 +241,57 @@
         window.adjustLinksAndImages = adjustLinksAndImages;
     </script>
 
-    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Maze Generator</h1><img src="/chronicle/dist/assets/preview/maze_generator.png" alt="Maze Generator"></img><a class="applet-launch" href="/chronicle/dist/#/applet/maze-generator">Launch</a><p></p></div><div></div><div class="applet-document"><h1 id="mazegeneration">Maze Generation</h1>
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Maze Generator</h1><img src="/chronicle/dist/assets/preview/maze_generator.png" alt="Maze Generator"></img><a class="applet-launch" href="/chronicle/dist/#/applet/maze-generator/random">Launch</a><p>Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.</p></div><div></div><div class="applet-document"><h1 id="mazegeneration">Maze Generation</h1>
 <p>This module implements a maze generation algorithm in TypeScript. It consists of several classes and enums which work together to create and manage a maze.</p>
 <p><img src="assets/docs/image/mazegen/mazegen2.gif" alt="User navigation" title="User navigation" /></p>
+<h1 id="mazegeneratorusermanual">Maze Generator User Manual</h1>
+<p>Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.</p>
+<h2 id="gettingstarted">Getting Started</h2>
+<p>To begin generating your maze, adjust the following parameters according to your needs:</p>
+<h3 id="parameterspanel">Parameters Panel</h3>
+<ul>
+<li><strong>Walls Padding</strong>: Controls the space between the walls of the maze.</li>
+<li><strong>Walls Width</strong>: Sets the thickness of the walls.</li>
+<li><strong>Path Width</strong>: Adjusts the width of the paths within the maze.</li>
+<li><strong>Grid Size</strong>: Determines the complexity of the maze by setting the number of cells.</li>
+<li><strong>Sparseness</strong>: Controls how sparse the maze is; a higher value means fewer walls.</li>
+<li><strong>Dead-Ends Ratio</strong>: Sets the frequency of dead-ends in the maze.</li>
+<li><strong>Shortcuts Ratio</strong>: Adjusts the likelihood of shortcuts appearing in the maze.</li>
+</ul>
+<p><img src="assets/docs/image/mazegen/mazegen_gui_1.jpg" alt="Parameter Panel" title="Parameter Panel" /></p>
+<h3 id="generationoptions">Generation Options</h3>
+<ul>
+<li><strong>Generation Order</strong>: Choose the algorithm for maze generation from the dropdown (e.g., <code>Shift</code>, <code>Pop</code>).</li>
+<li><strong>Generation Seed</strong>: Enter a number to use as a seed for the maze generation. This allows for reproducible results.</li>
+</ul>
+<h2 id="usingtheapplet">Using the Applet</h2>
+<p>After setting your desired parameters:</p>
+<ol>
+<li>Click on <code>Generate maze</code> to create a new maze.</li>
+<li>The maze will be rendered in the main viewport.</li>
+</ol>
+<h3 id="understandingthemaze">Understanding the Maze</h3>
+<p>The maze is comprised of different elements:</p>
+<ul>
+<li><strong>Start</strong>: Marked with a <code>START</code> label, this is the entry point of the maze.</li>
+<li><strong>Finish</strong>: Marked with a <code>FINISH</code> label, this is the goal or exit point of the maze.</li>
+<li><strong>Walls</strong>: Indicated by colored lines, these are the barriers that form the paths of the maze.</li>
+<li><strong>Paths</strong>: The open spaces between walls where movement is possible.</li>
+<li><strong>Dead-Ends</strong>: Paths that lead to a closed end.</li>
+<li><strong>Forks</strong>: Points where the path splits into two or more directions.</li>
+<li><strong>Shortcuts</strong>: Direct paths that provide a quicker route through the maze.</li>
+<li><strong>Crossroads</strong>: Points where multiple paths intersect.</li>
+</ul>
+<p><img src="assets/docs/image/mazegen/mazegen_main_1.jpg" alt="Viewport" title="Viewport" /></p>
+<h2 id="tipsandtricks">Tips and Tricks</h2>
+<ul>
+<li>Experiment with different <code>Generation Seed</code> values to create unique mazes.</li>
+<li>Use the <code>Shortcuts Ratio</code> sparingly to maintain the challenge of the maze.</li>
+<li>Adjust the <code>Walls Width</code> and <code>Path Width</code> for a more intricate or more navigable maze, depending on your preference.</li>
+</ul>
+<hr />
+<p>Enjoy creating your mazes with the Maze Generator!</p>
+<h1 id="apireference">API Reference</h1>
 <h2 id="enums">Enums</h2>
 <h3 id="ecellcategory">ECellCategory</h3>
 <p>Defines categories for maze cells:</p>

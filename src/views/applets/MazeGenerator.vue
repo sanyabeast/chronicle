@@ -1,31 +1,108 @@
 <template>
     <div class="maze-generator" @contextmenu.prevent="">
         <Tweakpane ref="tweakpane"></Tweakpane>
-        <Canvas2D ref="canvas" @resize="render"></Canvas2D>
+        <Canvas2D ref="canvas" @resize="render" :show_debug="true"></Canvas2D>
     </div>
 </template>
 <script lang="ts">
+
 import Vue from 'vue';
 import Tweakpane from '@/components/Tweakpane.vue';
 import { MazeGenerator, ECellCategory, MazeCell, ECellAccessibilityLevel } from './MazeGenerator/MazeGenerator'
 import Canvas2D from '@/components/Canvas2D.vue';
+import mixins from 'vue-typed-mixins'
+import BaseComponent from '@/components/BaseComponent.vue';
+import { debounce, isNumber, throttle } from 'lodash';
 
+export enum EColorScheme {
+    ProgrammerView,
+    MidnightContrast,
+    Midnight
+}
 
-export default Vue.extend({
-    name: "MazeGenerator",
-    computed: {
-
+const color_schemes = {
+    [EColorScheme.ProgrammerView]: {
+        background: '#050505', // '#000000
+        floor_start_and_end: '#142f1e', // '#000000
+        floor_isolated: "#050505",
+        floor_dead_end: "#2f1414",
+        floor_transitive: "#191919",
+        fork_floor: "#26142f",
+        crossroad_floor: "#2f142f",
+        wall_north: "hsl(0deg 50% 50%)",
+        wall_east: "hsl(90deg 50% 50%)",
+        wall_south: "hsl(180deg 50% 50%)",
+        wall_west: "hsl(270deg 50% 50%)",
+        label_start: "#8bc34a",
+        label_end: "#ff5722",
+        label_shortcut: "#4f4937",
+        label_loop: "#2b4964",
+        label_dead_end: "#454545",
+        label_fork: "#454545",
+        label_crossroad: "#454545",
+        label_background: '#000000'
     },
+    [EColorScheme.MidnightContrast]: {
+        background: '#0d1117', // A very dark gray for high contrast with wall colors
+        floor_start_and_end: '#58a6ff', // A bright blue to stand out for 'Start' and 'End'
+        floor_isolated: "#161b22", // A slightly lighter shade of the background for empty cells
+        floor_dead_end: "#ff7b72", // A soft red to indicate dead ends without overwhelming
+        floor_transitive: "#30363d", // Medium gray to indicate passable pathways
+        fork_floor: "#a371f7", // A gentle purple to denote forks in the maze
+        crossroad_floor: "#a371f7", // A strong blue to indicate crossroads clearly
+        wall_north: "hsl(210deg 100% 70%)", // Bright blue for north walls
+        wall_east: "hsl(45deg 100% 60%)", // A golden hue for east walls
+        wall_south: "hsl(140deg 100% 60%)", // Lively green for south walls
+        wall_west: "hsl(330deg 100% 70%)", // Pink for west walls
+        label_start: "#7ee787", // A vibrant green for the 'Start' label
+        label_end: "#ff6e6e", // A striking red for the 'End' label
+        label_shortcut: "#f2cc60", // Yellow for shortcuts to draw attention
+        label_loop: "#56d4dd", // Cyan for loops for a calming effect
+        label_dead_end: "#ff8585", // A lighter red for dead-end labels for readability
+        label_fork: "#bf91f3", // A lighter purple for fork labels
+        label_crossroad: "#4c9aff", // A different shade of blue for crossroad labels
+        label_background: '#21262d' // A dark slate for label backgrounds for contrast
+    },
+    [EColorScheme.Midnight]: {
+        background: '#252a33', // A deep charcoal gray for subtle contrast with wall colors
+        floor_start_and_end: '#3d72b4', // A toned-down blue for a less stark 'Start' and 'End'
+        floor_isolated: "#1f232b", // A gray that's slightly lighter than the background for empty cells
+        floor_dead_end: "#e58a67", // Muted terracotta for indicating dead ends less dramatically
+        floor_transitive: "#3e4451", // Dark gray for passable pathways that blend with the surroundings
+        fork_floor: "#8675a9", // A dusky purple for a less vivid presentation of forks
+        crossroad_floor: "#8675a9", // A desaturated blue for a less prominent indication of crossroads
+        wall_north: "hsl(210deg 80% 50%)", // Less bright blue for north walls
+        wall_east: "hsl(45deg 80% 50%)", // Softer golden for east walls
+        wall_south: "hsl(140deg 80% 50%)", // Soft green for south walls
+        wall_west: "hsl(330deg 80% 50%)", // Plum for west walls
+        label_start: "#68a97b", // Olive green for the 'Start' label
+        label_end: "#e57373", // Soft red for the 'End' label
+        label_shortcut: "#e0ca68", // Muted yellow for shortcuts
+        label_loop: "#68a0b0", // Soft teal for loops
+        label_dead_end: "#e59797", // Blush pink for dead-end labels
+        label_fork: "#a094c7", // Lavender for fork labels
+        label_crossroad: "#6094cc", // Softened blue for crossroad labels
+        label_background: '#2d313a' // Dark gray for label backgrounds that reduce contrast
+    }
+}
+
+export default mixins(BaseComponent).extend({
+    name: "MazeGenerator",
+    computed: {},
     props: {
-        category: String
+        category: String,
+        seed: {
+            type: String,
+            default: 0
+        }
     },
     components: { Tweakpane, Canvas2D },
     data() {
         return {
-            bg_color: '#050505', // '#000000
             wall_width: 0.01,
             path_width: 0.01,
-            wall_padding: 0.03
+            wall_padding: 0.03,
+            current_color_scheme: EColorScheme.Midnight,
         }
     },
     mounted() {
@@ -33,6 +110,16 @@ export default Vue.extend({
         this.render = this.render.bind(this);
         this.canvas = this.$refs.canvas
         this.maze_generator = new MazeGenerator();
+
+        // parsing seed
+        if (!isNaN(parseInt(this.seed))) {
+            console.log(`seed not random: ${this.seed}`)
+            this.maze_generator.seed = parseInt(this.seed);
+        } else {
+            console.log(`seed: random`)
+            this.set_random_seed()
+        }
+
         this.maze_generator.generate()
         this.update_canvas()
         this.setup_tweakpane()
@@ -44,7 +131,7 @@ export default Vue.extend({
     methods: {
         render() {
             if (this.canvas) {
-                this.canvas.clear(this.bg_color)
+                this.canvas.clear(color_schemes[this.current_color_scheme].background)
 
                 this.draw_cells()
                 this.draw_path();
@@ -59,10 +146,8 @@ export default Vue.extend({
             this.canvas.resize_canvas();
         },
         draw_cells() {
-            this.maze_generator.cells.forEach(cells => {
-                cells.forEach(cell => {
-                    this.draw_cell(cell);
-                })
+            this.maze_generator.for_each_cell((cell) => {
+                this.draw_cell(cell);
             })
         },
         draw_lables() {
@@ -71,33 +156,33 @@ export default Vue.extend({
                 cells.forEach(cell_data => {
                     switch (cell_data.category) {
                         case ECellCategory.Start: {
-                            this.draw_cell_label(cell_data, "START", "#8bc34a")
+                            this.draw_cell_label(cell_data, "START", color_schemes[this.current_color_scheme].label_start)
                             break;
                         }
                         case ECellCategory.End: {
-                            this.draw_cell_label(cell_data, "FINISH", "#ff5722")
+                            this.draw_cell_label(cell_data, "FINISH", color_schemes[this.current_color_scheme].label_end)
                             break;
                         }
                         case ECellCategory.Shortcut: {
-                            this.draw_cell_label(cell_data, "shortcut", "#4f4937")
+                            this.draw_cell_label(cell_data, "shortcut", color_schemes[this.current_color_scheme].label_shortcut)
                             break;
                         }
                         case ECellCategory.Loop: {
-                            this.draw_cell_label(cell_data, "loop", "#2b4964")
+                            this.draw_cell_label(cell_data, "loop", color_schemes[this.current_color_scheme].label_loop)
                             break;
                         }
                         default: {
                             switch (cell_data.walls_count) {
                                 case ECellAccessibilityLevel.DeadEnd: {
-                                    this.draw_cell_label(cell_data, "dead", "#454545")
+                                    this.draw_cell_label(cell_data, "dead", color_schemes[this.current_color_scheme].label_dead_end)
                                     break;
                                 }
                                 case ECellAccessibilityLevel.Fork: {
-                                    this.draw_cell_label(cell_data, "fork", "#454545")
+                                    this.draw_cell_label(cell_data, "fork", color_schemes[this.current_color_scheme].label_fork)
                                     break;
                                 }
                                 case ECellAccessibilityLevel.Crossroad: {
-                                    this.draw_cell_label(cell_data, "cross", "#454545")
+                                    this.draw_cell_label(cell_data, "cross", color_schemes[this.current_color_scheme].label_crossroad)
                                     break;
                                 }
                             }
@@ -118,7 +203,7 @@ export default Vue.extend({
                 y: y + 1 / 2 - label_size.height * 1.1,
                 width: label_size.width * 1.1,
                 height: 1 / 8,
-                fill_color: '#000000'
+                fill_color: color_schemes[this.current_color_scheme].label_background
             });
 
             this.canvas.draw_text({
@@ -145,7 +230,7 @@ export default Vue.extend({
                     y: y + dx,
                     width: 1 - dx * 2,
                     height: 1 - dx * 2,
-                    fill_color: "#142f1e"
+                    fill_color: color_schemes[this.current_color_scheme].floor_start_and_end
                 });
             } else {
                 switch (cell_data.walls_count) {
@@ -155,7 +240,7 @@ export default Vue.extend({
                             y: y + dx,
                             width: 1 - dx * 2,
                             height: 1 - dx * 2,
-                            fill_color: "#050505"
+                            fill_color: color_schemes[this.current_color_scheme].floor_isolated
                         });
                         return;
                         break;
@@ -166,7 +251,7 @@ export default Vue.extend({
                             y: y + dx,
                             width: 1 - dx * 2,
                             height: 1 - dx * 2,
-                            fill_color: "#2f1414"
+                            fill_color: color_schemes[this.current_color_scheme].floor_dead_end
                         });
                         break;
                     }
@@ -176,7 +261,7 @@ export default Vue.extend({
                             y: y + dx,
                             width: 1 - dx * 2,
                             height: 1 - dx * 2,
-                            fill_color: "#191919"
+                            fill_color: color_schemes[this.current_color_scheme].floor_transitive
                         });
                         break;
                     }
@@ -186,7 +271,7 @@ export default Vue.extend({
                             y: y + dx,
                             width: 1 - dx * 2,
                             height: 1 - dx * 2,
-                            fill_color: "#26142f"
+                            fill_color: color_schemes[this.current_color_scheme].fork_floor
                         });
                         break;
                     }
@@ -196,7 +281,7 @@ export default Vue.extend({
                             y: y + dx,
                             width: 1 - dx * 2,
                             height: 1 - dx * 2,
-                            fill_color: "#2f142f"
+                            fill_color: color_schemes[this.current_color_scheme].crossroad_floor
                         });
                         break;
                     }
@@ -218,7 +303,7 @@ export default Vue.extend({
                             y: y + dx
                         }
                     ],
-                    stroke_color: "hsl(0deg 50% 50%)",
+                    stroke_color: color_schemes[this.current_color_scheme].wall_north,
                     line_width: this.wall_width
 
                 })
@@ -236,7 +321,7 @@ export default Vue.extend({
                             y: y + 1
                         }
                     ],
-                    stroke_color: "hsl(90deg 50% 50%)",
+                    stroke_color: color_schemes[this.current_color_scheme].wall_east,
                     line_width: this.wall_width
 
                 })
@@ -254,7 +339,7 @@ export default Vue.extend({
                             y: y + 1 - dx
                         }
                     ],
-                    stroke_color: "hsl(180deg 50% 50%)",
+                    stroke_color: color_schemes[this.current_color_scheme].wall_south,
                     line_width: this.wall_width
 
                 })
@@ -272,7 +357,7 @@ export default Vue.extend({
                             y: y + 1
                         }
                     ],
-                    stroke_color: "hsl(270deg 50% 50%)",
+                    stroke_color: color_schemes[this.current_color_scheme].wall_west,
                     line_width: this.wall_width
 
                 })
@@ -300,12 +385,15 @@ export default Vue.extend({
                             y: cell2.y + 0.5
                         }
                     ],
-                    stroke_color: `hsl(0, 0%, ${((cell.index / this.maze_generator.end_cell.index)) * 75 + 25}%)`,
+                    stroke_color: `hsl(0, 0%, ${((cell.distance / this.maze_generator.end_cell.distance)) * 75 + 25}%)`,
                     line_width: this.path_width
                 })
                 cell.visited = true;
                 this.draw_path_fragment(cell2);
             })
+        },
+        set_random_seed() {
+            this.maze_generator.seed = Math.floor(Math.random() * 10000);
         },
         setup_tweakpane() {
             let pane = this.$refs.tweakpane.pane;
@@ -350,11 +438,11 @@ export default Vue.extend({
                 min: 2,
                 max: 20,
                 step: 1,
-            }).on('change', () => {
+            }).on('change', throttle(() => {
                 this.update_canvas()
                 this.maze_generator.generate();
                 this.render()
-            });
+            }, 1000 / 15));
 
 
             pane.addBinding(this.maze_generator, 'sparseness', {
@@ -362,30 +450,30 @@ export default Vue.extend({
                 min: 0,
                 max: 1,
                 step: 0.001,
-            }).on('change', () => {
+            }).on('change', throttle(() => {
                 this.maze_generator.generate();
                 this.render()
-            });
+            }, 1000 / 15));
 
             pane.addBinding(this.maze_generator, 'dead_ends_ratio', {
                 label: 'Dead-Ends Ratio',
                 min: 0,
                 max: 1,
                 step: 0.001,
-            }).on('change', () => {
+            }).on('change', throttle(() => {
                 this.maze_generator.generate();
                 this.render()
-            });
+            }, 1000 / 15));
 
             pane.addBinding(this.maze_generator, 'shortcuts_ratio', {
                 label: 'Shortcuts Ratio',
                 min: 0,
                 max: 1,
                 step: 0.001,
-            }).on('change', () => {
+            }).on('change', throttle(() => {
                 this.maze_generator.generate();
                 this.render()
-            });
+            }, 1000 / 15));
 
             pane.addBlade({
                 view: 'list',
@@ -395,10 +483,24 @@ export default Vue.extend({
                     { text: 'Shift', value: 1 }
                 ],
                 value: 1,
-            }).on('change', (ev) => {
+            }).on('change', throttle((ev) => {
                 console.log(ev.value)
                 this.maze_generator.generation_order = ev.value;
                 this.maze_generator.generate();
+                this.render()
+            }, 1000 / 15));
+
+            pane.addBlade({
+                view: 'list',
+                label: 'Generation Order',
+                options: [
+                    { text: 'ProgrammerView', value: 0 },
+                    { text: 'MidnightContrast', value: 1 },
+                    { text: 'Midnight', value: 2 },
+                ],
+                value: 2,
+            }).on('change', (ev) => {
+                this.current_color_scheme = ev.value;
                 this.render()
             });
 
@@ -412,15 +514,19 @@ export default Vue.extend({
                 min: 0,
                 max: 10000,
                 step: 1,
-            }).on('change', () => {
+            }).on('change', throttle(() => {
                 this.maze_generator.generate();
                 this.render()
-            });
+
+                this.update_route({
+                    seed: this.maze_generator.seed.toString()
+                })
+            }, 1000 / 15));
 
             pane.addButton({
                 title: 'Generate maze',
             }).on('click', () => {
-                this.maze_generator.seed = Math.floor(Math.random() * 10000);
+                this.set_random_seed()
                 this.maze_generator.generate();
                 this.$refs.tweakpane.pane.refresh();
                 this.render()

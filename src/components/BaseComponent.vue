@@ -35,9 +35,14 @@ export default Vue.extend({
             console.log("route_back");
             this.$router.back()
         },
+        // update the route with the given params
         update_route(params) {
-            // override this method to update the route
-            throw new Error("update_route not implemented");
+            return this.$router.replace({
+                name: this.$router.currentRoute.name,
+                params: params
+            }).catch(err => {
+                console.warn("update_route error", err);
+            })
         },
 
     }

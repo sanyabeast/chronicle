@@ -11,8 +11,9 @@
 
 import * as THREE from 'three';
 import mixins from 'vue-typed-mixins'
-import ThreeRenderer from '../../components/ThreeRenderer.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
+import ThreeRenderer from '../../components/ThreeRenderer.vue';
+
 import read_text_file from '@/tools';
 import load_texture from '@/tools';
 import { create_shader_material } from '@/tools';

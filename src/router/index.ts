@@ -4,6 +4,7 @@ import { isArray, isObject, isString, map, uniqBy } from "lodash"
 import config from '@/router/config.yaml'
 import { to_snake_case } from '@/tools'
 
+
 export enum EAppletCategory {
   Project = 'project',
   Demo = 'demo',

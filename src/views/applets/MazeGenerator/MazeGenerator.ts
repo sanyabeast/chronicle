@@ -24,8 +24,6 @@ export enum EGenerationOrder {
     Shift
 }
 
-
-
 export class MazeCell {
     constructor(maze_generator: MazeGenerator, x: number, y: number, category: ECellCategory = ECellCategory.Empty) {
         this.maze_generator = maze_generator;
@@ -38,7 +36,8 @@ export class MazeCell {
 
     // PROPS
 
-    public index?: number;
+    public index: number
+    public distance?: number;
     public x: number;
     public y: number;
     public walls: { north: boolean, east: boolean, south: boolean, west: boolean } = null;
@@ -64,8 +63,8 @@ export class MazeCell {
 
     // METHODS
     public get_closed_neighbours(): MazeCell[] {
-        return filter(this.get_all_neighbours(), (cell) => {
-            return this.get_wall_between(cell)
+        return filter(this.get_all_neighbours(), (cell: MazeCell) => {
+            return this.get_wall_between(cell) && cell.walls_count !== ECellAccessibilityLevel.Isolated
         })
     }
     public get_open_neighbours(): MazeCell[] {
@@ -157,6 +156,8 @@ export class MazeGenerator {
     public shortcuts_ratio: number = 0.2
     public generation_order: EGenerationOrder = EGenerationOrder.Shift
 
+    protected current_cell_index: number = 0
+
     protected seeded_random
 
     public get max_cells_count() {
@@ -172,6 +173,7 @@ export class MazeGenerator {
     }
     protected initialize() {
         this.update_generator();
+        this.current_cell_index = 0;
         this.cells = [];
 
         for (let i = 0; i < this.grid_size; i++) {
@@ -187,7 +189,8 @@ export class MazeGenerator {
         let stack = [];
         let current_cell = this.start_cell = this.get_random_cell();
         let end_cell = current_cell;
-        current_cell.index = 0;
+        current_cell.distance = 0;
+        current_cell.index = this.current_cell_index;
         current_cell.visited = true;
         current_cell.category = ECellCategory.Start;
         stack.push(current_cell);
@@ -204,7 +207,8 @@ export class MazeGenerator {
                 let random_neighbour = unvisited_neighbours[Math.floor(this.seeded_random() * unvisited_neighbours.length)];
                 current_cell.remove_wall_between(random_neighbour);
                 random_neighbour.visited = true;
-                random_neighbour.index = current_cell.index + 1;
+                random_neighbour.distance = current_cell.distance + 1;
+                random_neighbour.index = this.current_cell_index++;
                 stack.push(random_neighbour);
                 current_cell = random_neighbour;
                 end_cell = current_cell;
@@ -234,11 +238,14 @@ export class MazeGenerator {
                     return
                 }
 
-                let walled_neighbours = cell.get_closed_neighbours(this.cells);
-                let random_neighbour = walled_neighbours[Math.floor(this.seeded_random() * walled_neighbours.length)];
+                let closed_neighbours = cell.get_closed_neighbours(this.cells);
 
-                cell.remove_wall_between(random_neighbour);
-                cell.category = ECellCategory.Loop;
+                if (closed_neighbours.length > 0) {
+                    let random_neighbour = closed_neighbours[Math.floor(this.seeded_random() * closed_neighbours.length)];
+
+                    cell.remove_wall_between(random_neighbour);
+                    cell.category = ECellCategory.Loop;
+                }
             }
         })
 
@@ -246,6 +253,7 @@ export class MazeGenerator {
         let transitive_cells = this.find_cells_with_accessibility(ECellAccessibilityLevel.Transitive);
         transitive_cells.forEach(cell => {
             let closed_neighbours = cell.get_closed_neighbours();
+
             if (closed_neighbours.length > 1) {
                 let random_neighbour = closed_neighbours[Math.floor(this.seeded_random() * closed_neighbours.length)];
                 if (this.seeded_random() < this.shortcuts_ratio) {
