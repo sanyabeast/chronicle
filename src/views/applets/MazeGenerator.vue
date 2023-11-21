@@ -1,20 +1,15 @@
 <template>
-    <div class="maze-generator" @mousemove="handle_mousemove" @contextmenu.prevent="">
+    <div class="maze-generator" @contextmenu.prevent="">
         <Tweakpane ref="tweakpane"></Tweakpane>
-        <div class="canvas-wrapper">
-            <canvas ref="canvas"></canvas>
-        </div>
+        <Canvas2D ref="canvas" @resize="render"></Canvas2D>
     </div>
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import emoji_data from '@/assets/emoji.json'
-import { orderBy, sortBy } from 'lodash';
 import Tweakpane from '@/components/Tweakpane.vue';
 import { MazeGenerator, ECellCategory, MazeCell, ECellAccessibilityLevel } from './MazeGenerator/MazeGenerator'
+import Canvas2D from '@/components/Canvas2D.vue';
 
-
-const wall_color = '#ffffff';
 
 export default Vue.extend({
     name: "MazeGenerator",
@@ -24,160 +19,44 @@ export default Vue.extend({
     props: {
         category: String
     },
-    components: { Tweakpane },
+    components: { Tweakpane, Canvas2D },
     data() {
         return {
             bg_color: '#050505', // '#000000
-            adapt: {
-                size: 0,
-                padding: 16,
-                translate: {
-                    x: 0,
-                    y: 0
-                }
-            },
-            wall_width: 3,
-            current_width: 0,
-            current_height: 0,
-            path_width: 1,
-            context2d: null,
+            wall_width: 0.01,
+            path_width: 0.01,
             wall_padding: 0.03
         }
     },
     mounted() {
         (window as any).maze_generator = this;
-
         this.render = this.render.bind(this);
-        this.context2d = this.$refs.canvas.getContext('2d');
-        this.resize_canvas();
-        window.addEventListener('resize', this.resize_canvas.bind(this));
+        this.canvas = this.$refs.canvas
         this.maze_generator = new MazeGenerator();
-        // this.fill_with_random_cells();
-
         this.maze_generator.generate()
-
-        let pane = this.$refs.tweakpane.pane;
-
-        pane.addBlade({
-            view: 'separator',
-        });
-
-
-        pane.addBinding(this, 'wall_padding', {
-            label: 'Walls Padding',
-            min: 0,
-            max: 0.2,
-            step: 0.01,
-        })
-
-        pane.addBinding(this, 'wall_width', {
-            label: 'Walls Width',
-            min: 0.1,
-            max: 5,
-            step: 0.01,
-        })
-
-        pane.addBinding(this, 'path_width', {
-            label: 'Path Width',
-            min: 0.1,
-            max: 5,
-            step: 0.01,
-        })
-
-        pane.addBlade({
-            view: 'separator',
-        });
-
-        pane.addBinding(this.maze_generator, 'grid_size', {
-            label: 'Grid Size',
-            min: 2,
-            max: 20,
-            step: 1,
-        }).on('change', () => {
-            this.maze_generator.generate();
-        });
-
-
-        pane.addBinding(this.maze_generator, 'sparseness', {
-            label: 'Sparseness',
-            min: 0,
-            max: 1,
-            step: 0.001,
-        }).on('change', () => {
-            this.maze_generator.generate();
-        });
-
-        pane.addBinding(this.maze_generator, 'dead_ends_ratio', {
-            label: 'Dead-Ends Ratio',
-            min: 0,
-            max: 1,
-            step: 0.001,
-        }).on('change', () => {
-            this.maze_generator.generate();
-        });
-
-        pane.addBinding(this.maze_generator, 'shortcuts_ratio', {
-            label: 'Shortcuts Ratio',
-            min: 0,
-            max: 1,
-            step: 0.001,
-        }).on('change', () => {
-            this.maze_generator.generate();
-        });
-
-        pane.addBlade({
-            view: 'list',
-            label: 'Generation Order',
-            options: [
-                { text: 'Pop', value: 0 },
-                { text: 'Shift', value: 1 }
-            ],
-            value: 1,
-        }).on('change', (ev) => {
-            console.log(ev.value)
-            this.maze_generator.generation_order = ev.value;
-            this.maze_generator.generate();
-        });
-
-
-        pane.addBlade({
-            view: 'separator',
-        });
-
-        pane.addBinding(this.maze_generator, 'seed', {
-            label: 'Seed',
-            min: 0,
-            max: 10000,
-            step: 1,
-        }).on('change', () => {
-            this.maze_generator.generate();
-        });
-
-        pane.addButton({
-            title: 'Generate maze',
-        }).on('click', () => {
-            this.maze_generator.seed = Math.floor(Math.random() * 10000);
-            this.maze_generator.generate();
-            this.$refs.tweakpane.pane.refresh();
-        });
-
-
-        requestAnimationFrame(this.render);
+        this.update_canvas()
+        this.setup_tweakpane()
+        this.render()
     },
     beforeDestroy() {
-        window.removeEventListener('resize', this.resize_canvas.bind(this));
         (window as any).maze_generator = null;
     },
     methods: {
         render() {
-            requestAnimationFrame(this.render);
+            if (this.canvas) {
+                this.canvas.clear(this.bg_color)
 
-            this.context2d.fillStyle = this.bg_color;
-            this.context2d.fillRect(0, 0, this.current_width, this.current_height);
+                this.draw_cells()
+                this.draw_path();
+                this.draw_lables();
 
-            this.draw_cells()
-            this.draw_path();
-            this.draw_lables();
+                this.canvas.render()
+            }
+        },
+        update_canvas() {
+            this.canvas.viewport.width = this.maze_generator.grid_size;
+            this.canvas.viewport.height = this.maze_generator.grid_size;
+            this.canvas.resize_canvas();
         },
         draw_cells() {
             this.maze_generator.cells.forEach(cells => {
@@ -187,7 +66,7 @@ export default Vue.extend({
             })
         },
         draw_lables() {
-            const cell_size = this.adapt.size / this.maze_generator.grid_size;
+
             this.maze_generator.cells.forEach(cells => {
                 cells.forEach(cell_data => {
                     switch (cell_data.category) {
@@ -229,81 +108,174 @@ export default Vue.extend({
 
         },
         draw_cell_label(cell_data: MazeCell, label: string, color: string) {
-            const cell_size = this.adapt.size / this.maze_generator.grid_size;
-            const x = cell_data.x * cell_size + this.adapt.translate.x;
-            const y = cell_data.y * cell_size + this.adapt.translate.y;
+            const x = cell_data.x;
+            const y = cell_data.y;
 
-            this.context2d.textAlign = "center";
-            this.context2d.font = `${cell_size / 8}px monospace`;
-            let text_measurement = this.context2d.measureText(label);
-            this.context2d.fillStyle = '#000000'
-            this.context2d.fillRect(x + cell_size / 2 - (text_measurement.width * 1.1) / 2, y + cell_size / 2 - 8, text_measurement.width * 1.1, (cell_size / 8));
-            this.context2d.fillStyle = color;
-            this.context2d.fillText(label, x + cell_size / 2, y + cell_size / 2);
+            let label_size = this.canvas.measure_text({ text: label, font_family: 'monospace', font_size: 1 / 8 });
+
+            this.canvas.draw_rect({
+                x: x + 1 / 2 - (label_size.width * 1.1) / 2,
+                y: y + 1 / 2 - label_size.height * 1.1,
+                width: label_size.width * 1.1,
+                height: 1 / 8,
+                fill_color: '#000000'
+            });
+
+            this.canvas.draw_text({
+                x: x + 1 / 2,
+                y: y + 1 / 2,
+                text: label,
+                fill_color: color,
+                font_family: 'monospace',
+                font_size: 1 / 8,
+                text_align: 'center',
+                max_width: 1
+            })
         },
         draw_cell(cell_data: MazeCell) {
-
-            const cell_size = this.adapt.size / this.maze_generator.grid_size;
-            const x = cell_data.x * cell_size + this.adapt.translate.x;
-            const y = cell_data.y * cell_size + this.adapt.translate.y;
+            const x = cell_data.x;
+            const y = cell_data.y;
 
 
-            let dx = this.wall_padding * (this.adapt.size / this.maze_generator.grid_size)
-
-
-            this.context2d.fillStyle = wall_color;
+            let dx = this.wall_padding
 
             if (cell_data.category === ECellCategory.Start || cell_data.category === ECellCategory.End) {
-                this.context2d.fillStyle = "#142f1e";
-                this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
+                this.canvas.draw_rect({
+                    x: x + dx,
+                    y: y + dx,
+                    width: 1 - dx * 2,
+                    height: 1 - dx * 2,
+                    fill_color: "#142f1e"
+                });
             } else {
                 switch (cell_data.walls_count) {
                     case ECellAccessibilityLevel.Isolated: {
-                        this.context2d.fillStyle = "#050505";
-                        this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
+                        this.canvas.draw_rect({
+                            x: x + dx,
+                            y: y + dx,
+                            width: 1 - dx * 2,
+                            height: 1 - dx * 2,
+                            fill_color: "#050505"
+                        });
                         return;
                         break;
                     }
                     case ECellAccessibilityLevel.DeadEnd: {
-                        this.context2d.fillStyle = "#2f1414";
+                        this.canvas.draw_rect({
+                            x: x + dx,
+                            y: y + dx,
+                            width: 1 - dx * 2,
+                            height: 1 - dx * 2,
+                            fill_color: "#2f1414"
+                        });
                         break;
                     }
                     case ECellAccessibilityLevel.Transitive: {
-                        this.context2d.fillStyle = "#191919";
+                        this.canvas.draw_rect({
+                            x: x + dx,
+                            y: y + dx,
+                            width: 1 - dx * 2,
+                            height: 1 - dx * 2,
+                            fill_color: "#191919"
+                        });
                         break;
                     }
                     case ECellAccessibilityLevel.Fork: {
-                        this.context2d.fillStyle = "#26142f";
+                        this.canvas.draw_rect({
+                            x: x + dx,
+                            y: y + dx,
+                            width: 1 - dx * 2,
+                            height: 1 - dx * 2,
+                            fill_color: "#26142f"
+                        });
                         break;
                     }
                     case ECellAccessibilityLevel.Crossroad: {
-                        this.context2d.fillStyle = "#2f142f";
+                        this.canvas.draw_rect({
+                            x: x + dx,
+                            y: y + dx,
+                            width: 1 - dx * 2,
+                            height: 1 - dx * 2,
+                            fill_color: "#2f142f"
+                        });
                         break;
                     }
 
                 }
 
-                this.context2d.fillRect(x + dx, y, cell_size - dx, cell_size - dx);
+
             }
             // debug walls
-            if (cell_data.walls.top) {
-                this.context2d.fillStyle = "hsl(0deg 50% 50%)";
-                this.context2d.fillRect(x, y + dx, cell_size, this.wall_width);
+            if (cell_data.walls.north) {
+                this.canvas.draw_line({
+                    points: [
+                        {
+                            x: x,
+                            y: y + dx
+                        },
+                        {
+                            x: x + 1,
+                            y: y + dx
+                        }
+                    ],
+                    stroke_color: "hsl(0deg 50% 50%)",
+                    line_width: this.wall_width
+
+                })
             }
 
-            if (cell_data.walls.right) {
-                this.context2d.fillStyle = "hsl(90deg 50% 50%)";
-                this.context2d.fillRect(x + cell_size - dx, y, this.wall_width, cell_size);
+            if (cell_data.walls.east) {
+                this.canvas.draw_line({
+                    points: [
+                        {
+                            x: x + 1 - dx,
+                            y: y
+                        },
+                        {
+                            x: x + 1 - dx,
+                            y: y + 1
+                        }
+                    ],
+                    stroke_color: "hsl(90deg 50% 50%)",
+                    line_width: this.wall_width
+
+                })
             }
 
-            if (cell_data.walls.bottom) {
-                this.context2d.fillStyle = "hsl(180deg 50% 50%)";
-                this.context2d.fillRect(x, y + cell_size - dx, cell_size, this.wall_width);
+            if (cell_data.walls.south) {
+                this.canvas.draw_line({
+                    points: [
+                        {
+                            x: x,
+                            y: y + 1 - dx
+                        },
+                        {
+                            x: x + 1,
+                            y: y + 1 - dx
+                        }
+                    ],
+                    stroke_color: "hsl(180deg 50% 50%)",
+                    line_width: this.wall_width
+
+                })
             }
 
-            if (cell_data.walls.left) {
-                this.context2d.fillStyle = "hsl(270deg 50% 50%)";
-                this.context2d.fillRect(x + dx, y, this.wall_width, cell_size);
+            if (cell_data.walls.west) {
+                this.canvas.draw_line({
+                    points: [
+                        {
+                            x: x + dx,
+                            y: y
+                        },
+                        {
+                            x: x + dx,
+                            y: y + 1
+                        }
+                    ],
+                    stroke_color: "hsl(270deg 50% 50%)",
+                    line_width: this.wall_width
+
+                })
             }
 
         },
@@ -317,42 +289,144 @@ export default Vue.extend({
                 return
             }
             cell.get_open_neighbours().forEach((cell2) => {
-                this.context2d.strokeStyle = `hsl(0, 0%, ${(1 - (cell.index / this.maze_generator.max_cells_count)) * 100}%)`;
-                this.context2d.lineWidth = (1 - Math.pow((cell.index / this.maze_generator.longest_path), 2)) * 4 * this.path_width;
-                this.context2d.beginPath();
-                this.context2d.moveTo(cell.x * this.adapt.size / this.maze_generator.grid_size + this.adapt.translate.x + this.adapt.size / this.maze_generator.grid_size / 2, cell.y * this.adapt.size / this.maze_generator.grid_size + this.adapt.translate.y + this.adapt.size / this.maze_generator.grid_size / 2);
-                this.context2d.lineTo(cell2.x * this.adapt.size / this.maze_generator.grid_size + this.adapt.translate.x + this.adapt.size / this.maze_generator.grid_size / 2, cell2.y * this.adapt.size / this.maze_generator.grid_size + this.adapt.translate.y + this.adapt.size / this.maze_generator.grid_size / 2);
-                this.context2d.stroke();
+                this.canvas.draw_line({
+                    points: [
+                        {
+                            x: cell.x + 0.5,
+                            y: cell.y + 0.5
+                        },
+                        {
+                            x: cell2.x + 0.5,
+                            y: cell2.y + 0.5
+                        }
+                    ],
+                    stroke_color: `hsl(0, 0%, ${((cell.index / this.maze_generator.end_cell.index)) * 75 + 25}%)`,
+                    line_width: this.path_width
+                })
                 cell.visited = true;
                 this.draw_path_fragment(cell2);
             })
         },
-        resize_canvas() {
-            if (this.$refs.canvas) {
-                this.$refs.canvas.width = this.$refs.canvas.clientWidth;
-                this.$refs.canvas.height = this.$refs.canvas.clientHeight;
+        setup_tweakpane() {
+            let pane = this.$refs.tweakpane.pane;
 
-                this.current_height = this.$refs.canvas.clientHeight;
-                this.current_width = this.$refs.canvas.clientWidth;
+            pane.addBlade({
+                view: 'separator',
+            });
 
-                this.adapt.size = Math.min(this.current_width, this.current_height) - this.adapt.padding * 2;
-                this.adapt.translate.x = (this.current_width - this.adapt.size) / 2;
-                this.adapt.translate.y = (this.current_height - this.adapt.size) / 2;
-            }
-        },
-        handle_mousemove(event: MouseEvent) {
-            const cell_size = this.adapt.size / this.maze_generator.grid_size;
-            const x = event.offsetX - this.adapt.translate.x;
-            const y = event.offsetY - this.adapt.translate.y;
-
-            const cell_x = Math.floor(x / cell_size);
-            const cell_y = Math.floor(y / cell_size);
-
-            this.maze_generator.cells.forEach(cell => {
-                cell.hovered = cell.x === cell_x && cell.y === cell_y;
+            pane.addBinding(this, 'wall_padding', {
+                label: 'Walls Padding',
+                min: 0,
+                max: 0.2,
+                step: 0.01,
+            }).on('change', () => {
+                this.render()
             })
-        },
 
+            pane.addBinding(this, 'wall_width', {
+                label: 'Walls Width',
+                min: 0.001,
+                max: 0.05,
+                step: 0.01,
+            }).on('change', () => {
+                this.render()
+            })
+
+            pane.addBinding(this, 'path_width', {
+                label: 'Path Width',
+                min: 0.01,
+                max: 0.25,
+                step: 0.01,
+            }).on('change', () => {
+                this.render()
+            })
+
+            pane.addBlade({
+                view: 'separator',
+            });
+
+            pane.addBinding(this.maze_generator, 'grid_size', {
+                label: 'Grid Size',
+                min: 2,
+                max: 20,
+                step: 1,
+            }).on('change', () => {
+                this.update_canvas()
+                this.maze_generator.generate();
+                this.render()
+            });
+
+
+            pane.addBinding(this.maze_generator, 'sparseness', {
+                label: 'Sparseness',
+                min: 0,
+                max: 1,
+                step: 0.001,
+            }).on('change', () => {
+                this.maze_generator.generate();
+                this.render()
+            });
+
+            pane.addBinding(this.maze_generator, 'dead_ends_ratio', {
+                label: 'Dead-Ends Ratio',
+                min: 0,
+                max: 1,
+                step: 0.001,
+            }).on('change', () => {
+                this.maze_generator.generate();
+                this.render()
+            });
+
+            pane.addBinding(this.maze_generator, 'shortcuts_ratio', {
+                label: 'Shortcuts Ratio',
+                min: 0,
+                max: 1,
+                step: 0.001,
+            }).on('change', () => {
+                this.maze_generator.generate();
+                this.render()
+            });
+
+            pane.addBlade({
+                view: 'list',
+                label: 'Generation Order',
+                options: [
+                    { text: 'Pop', value: 0 },
+                    { text: 'Shift', value: 1 }
+                ],
+                value: 1,
+            }).on('change', (ev) => {
+                console.log(ev.value)
+                this.maze_generator.generation_order = ev.value;
+                this.maze_generator.generate();
+                this.render()
+            });
+
+
+            pane.addBlade({
+                view: 'separator',
+            });
+
+            pane.addBinding(this.maze_generator, 'seed', {
+                label: 'Seed',
+                min: 0,
+                max: 10000,
+                step: 1,
+            }).on('change', () => {
+                this.maze_generator.generate();
+                this.render()
+            });
+
+            pane.addButton({
+                title: 'Generate maze',
+            }).on('click', () => {
+                this.maze_generator.seed = Math.floor(Math.random() * 10000);
+                this.maze_generator.generate();
+                this.$refs.tweakpane.pane.refresh();
+                this.render()
+            });
+
+        }
     },
 
 })
@@ -367,7 +441,7 @@ export default Vue.extend({
     grid-gap: 16px;
     overflow: hidden;
 
-    .canvas-wrapper {
+    .canvas2d {
         display: flex;
         overflow: hidden;
         border: 1px dotted #1d1d1d;
@@ -376,12 +450,6 @@ export default Vue.extend({
             width: 100%;
             height: 100%;
         }
-    }
-
-    .tweakpane {
-        // position: absolute;
-        // top: 32px;
-        // left: 16px;
     }
 }
 
@@ -398,7 +466,7 @@ export default Vue.extend({
         grid-template-columns: 1fr;
         grid-template-rows: 2fr 1fr;
 
-        .canvas-wrapper {
+        .canvas2d {
             grid-row: 1;
 
         }

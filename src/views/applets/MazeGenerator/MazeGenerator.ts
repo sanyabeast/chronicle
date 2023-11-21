@@ -1,6 +1,6 @@
 
 import { filter, map } from 'lodash';
-import rand_gen from 'random-seed'
+import Alea from 'alea'
 
 export enum ECellCategory {
     Empty,
@@ -24,13 +24,14 @@ export enum EGenerationOrder {
     Shift
 }
 
+
+
 export class MazeCell {
     constructor(maze_generator: MazeGenerator, x: number, y: number, category: ECellCategory = ECellCategory.Empty) {
         this.maze_generator = maze_generator;
-        this.walls = { top: true, right: true, bottom: true, left: true }
+        this.walls = { north: true, east: true, south: true, west: true }
         this.x = x;
         this.y = y;
-        this.hovered = false;
         this.visited = false;
         this.category = category;
     }
@@ -40,8 +41,7 @@ export class MazeCell {
     public index?: number;
     public x: number;
     public y: number;
-    public walls = null;
-    public hovered: boolean;
+    public walls: { north: boolean, east: boolean, south: boolean, west: boolean } = null;
     public category: ECellCategory;
     public visited: boolean;
 
@@ -55,10 +55,10 @@ export class MazeCell {
 
     public get walls_count(): number {
         let result = 0;
-        if (this.walls.top) result++;
-        if (this.walls.right) result++;
-        if (this.walls.bottom) result++;
-        if (this.walls.left) result++;
+        if (this.walls.north) result++;
+        if (this.walls.east) result++;
+        if (this.walls.south) result++;
+        if (this.walls.west) result++;
         return result;
     }
 
@@ -92,19 +92,19 @@ export class MazeCell {
         let y = cell1.y - cell2.y;
 
         if (x === 1) {
-            cell1.walls.left = value;
-            cell2.walls.right = value;
+            cell1.walls.west = value;
+            cell2.walls.east = value;
         } else if (x === -1) {
-            cell1.walls.right = value;
-            cell2.walls.left = value;
+            cell1.walls.east = value;
+            cell2.walls.west = value;
         }
 
         if (y === 1) {
-            cell1.walls.top = value;
-            cell2.walls.bottom = value;
+            cell1.walls.north = value;
+            cell2.walls.south = value;
         } else if (y === -1) {
-            cell1.walls.bottom = value;
-            cell2.walls.top = value;
+            cell1.walls.south = value;
+            cell2.walls.north = value;
         }
     }
     public get_wall_between(cell2: MazeCell): boolean {
@@ -112,15 +112,15 @@ export class MazeCell {
         let y = this.y - cell2.y;
 
         if (x === 1) {
-            return this.walls.left;
+            return this.walls.west;
         } else if (x === -1) {
-            return this.walls.right;
+            return this.walls.east;
         }
 
         if (y === 1) {
-            return this.walls.top;
+            return this.walls.north;
         } else if (y === -1) {
-            return this.walls.bottom;
+            return this.walls.south;
         }
     }
     protected get_neighbour_cell(offset: number) {
@@ -150,14 +150,14 @@ export class MazeGenerator {
     public start_cell: MazeCell
     public end_cell: MazeCell
 
-    public seed: number = 4680
+    public seed: number = 0
     public grid_size: number = 4
     public sparseness: number = 0.5
     public dead_ends_ratio: number = 0.75
     public shortcuts_ratio: number = 0.2
     public generation_order: EGenerationOrder = EGenerationOrder.Shift
 
-    protected rand
+    protected seeded_random
 
     public get max_cells_count() {
         return this.grid_size * this.grid_size;
@@ -165,10 +165,10 @@ export class MazeGenerator {
     // METHODS
 
     protected update_generator() {
-        this.rand = rand_gen.create(this.seed)
+        this.seeded_random = Alea(this.seed.toString())
     }
     protected get_random_cell(): MazeCell {
-        return this.cells[Math.floor(this.rand.random() * this.grid_size)][Math.floor(this.rand.random() * this.grid_size)];
+        return this.cells[Math.floor(this.seeded_random() * this.grid_size)][Math.floor(this.seeded_random() * this.grid_size)];
     }
     protected initialize() {
         this.update_generator();
@@ -194,7 +194,6 @@ export class MazeGenerator {
 
         while (stack.length > 0) {
             if (current_cell.index >= Math.max(1, (1 - this.sparseness) * this.max_cells_count)) {
-                console.log(`sparseness reached: ${current_cell.index} / ${this.sparseness * this.max_cells_count}, max_cells_count: ${this.max_cells_count}`)
                 break;
             }
 
@@ -202,7 +201,7 @@ export class MazeGenerator {
             let unvisited_neighbours = neighbours.filter(cell => cell.visited === false);
 
             if (unvisited_neighbours.length > 0) {
-                let random_neighbour = unvisited_neighbours[Math.floor(this.rand.random() * unvisited_neighbours.length)];
+                let random_neighbour = unvisited_neighbours[Math.floor(this.seeded_random() * unvisited_neighbours.length)];
                 current_cell.remove_wall_between(random_neighbour);
                 random_neighbour.visited = true;
                 random_neighbour.index = current_cell.index + 1;
@@ -230,14 +229,13 @@ export class MazeGenerator {
         // DEAD ENDS
         let dead_ends = this.find_cells_with_accessibility(ECellAccessibilityLevel.DeadEnd);
         dead_ends.forEach(cell => {
-            if (this.rand.random() > (this.dead_ends_ratio)) {
+            if (this.seeded_random() > (this.dead_ends_ratio)) {
                 if (cell.category === ECellCategory.Start || cell.category === ECellCategory.End) {
                     return
                 }
 
                 let walled_neighbours = cell.get_closed_neighbours(this.cells);
-                console.log(walled_neighbours)
-                let random_neighbour = walled_neighbours[Math.floor(this.rand.random() * walled_neighbours.length)];
+                let random_neighbour = walled_neighbours[Math.floor(this.seeded_random() * walled_neighbours.length)];
 
                 cell.remove_wall_between(random_neighbour);
                 cell.category = ECellCategory.Loop;
@@ -249,8 +247,8 @@ export class MazeGenerator {
         transitive_cells.forEach(cell => {
             let closed_neighbours = cell.get_closed_neighbours();
             if (closed_neighbours.length > 1) {
-                let random_neighbour = closed_neighbours[Math.floor(this.rand.random() * closed_neighbours.length)];
-                if (this.rand.random() < this.shortcuts_ratio) {
+                let random_neighbour = closed_neighbours[Math.floor(this.seeded_random() * closed_neighbours.length)];
+                if (this.seeded_random() < this.shortcuts_ratio) {
                     cell.remove_wall_between(random_neighbour);
                     cell.category = ECellCategory.Shortcut;
                 }

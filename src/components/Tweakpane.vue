@@ -44,6 +44,9 @@ export default Vue.extend({
 @import url('@/assets/index.less');
 
 .tweakpane {
+    * {
+        color: #555555;
+    }
 
     .tp-lblv_l,
     .tp-rotv_c,
@@ -51,6 +54,10 @@ export default Vue.extend({
     .tp-rotv {
         font-family: @font-family-condensed !important;
         font-size: 10px;
+    }
+
+    .tp-sldv_k::after {
+        border-radius: 50%;
     }
 }
 
