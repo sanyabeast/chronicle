@@ -278,6 +278,7 @@ applets:
     category: ["article"]
     title: "PSP2 Unity Homebrew Development"
     document: "assets/articles/psp2dev.md"
+    preview: "assets/preview/psp2dev.png"
     package:
       - [
           SDK,

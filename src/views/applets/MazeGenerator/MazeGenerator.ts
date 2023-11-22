@@ -135,8 +135,6 @@ export class MazeCell {
 
         return this.maze_generator.cells[x][y]
     }
-
-
 }
 
 export class MazeGenerator {
@@ -157,7 +155,6 @@ export class MazeGenerator {
     public generation_order: EGenerationOrder = EGenerationOrder.Shift
 
     protected current_cell_index: number = 0
-
     protected seeded_random
 
     public get max_cells_count() {
@@ -188,7 +185,7 @@ export class MazeGenerator {
 
         let stack = [];
         let current_cell = this.start_cell = this.get_random_cell();
-        let end_cell = current_cell;
+        let end_cell: MazeCell = current_cell;
         current_cell.distance = 0;
         current_cell.index = this.current_cell_index;
         current_cell.visited = true;
@@ -211,7 +208,7 @@ export class MazeGenerator {
                 random_neighbour.index = this.current_cell_index++;
                 stack.push(random_neighbour);
                 current_cell = random_neighbour;
-                end_cell = current_cell;
+                end_cell = current_cell.distance > end_cell.distance ? current_cell : end_cell;
             } else {
                 switch (this.generation_order) {
                     case EGenerationOrder.Pop: {

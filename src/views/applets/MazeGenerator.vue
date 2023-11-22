@@ -65,12 +65,12 @@ const color_schemes = {
     },
     [EColorScheme.Midnight]: {
         background: '#252a33', // A deep charcoal gray for subtle contrast with wall colors
-        floor_start_and_end: '#3d72b4', // A toned-down blue for a less stark 'Start' and 'End'
+        floor_start_and_end: '#3b5440', // A toned-down blue for a less stark 'Start' and 'End'
         floor_isolated: "#1f232b", // A gray that's slightly lighter than the background for empty cells
-        floor_dead_end: "#e58a67", // Muted terracotta for indicating dead ends less dramatically
+        floor_dead_end: "#513e3e", // Muted terracotta for indicating dead ends less dramatically
         floor_transitive: "#3e4451", // Dark gray for passable pathways that blend with the surroundings
-        fork_floor: "#8675a9", // A dusky purple for a less vivid presentation of forks
-        crossroad_floor: "#8675a9", // A desaturated blue for a less prominent indication of crossroads
+        fork_floor: "#4c424c", // A dusky purple for a less vivid presentation of forks
+        crossroad_floor: "#413e51", // A desaturated blue for a less prominent indication of crossroads
         wall_north: "hsl(210deg 80% 50%)", // Less bright blue for north walls
         wall_east: "hsl(45deg 80% 50%)", // Softer golden for east walls
         wall_south: "hsl(140deg 80% 50%)", // Soft green for south walls
@@ -385,7 +385,7 @@ export default mixins(BaseComponent).extend({
                             y: cell2.y + 0.5
                         }
                     ],
-                    stroke_color: `hsl(0, 0%, ${((cell.distance / this.maze_generator.end_cell.distance)) * 75 + 25}%)`,
+                    stroke_color: `hsl(0, 0%, ${((cell.distance / this.maze_generator.end_cell.distance)) * 100}%)`,
                     line_width: this.path_width
                 })
                 cell.visited = true;
@@ -570,7 +570,7 @@ export default mixins(BaseComponent).extend({
 
     .maze-generator {
         grid-template-columns: 1fr;
-        grid-template-rows: 2fr 1fr;
+        grid-template-rows: 3fr 2fr;
 
         .canvas2d {
             grid-row: 1;
