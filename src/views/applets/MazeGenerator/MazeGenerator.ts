@@ -43,6 +43,7 @@ export class MazeCell {
     public walls: { north: boolean, east: boolean, south: boolean, west: boolean } = null;
     public category: ECellCategory;
     public visited: boolean;
+    public route: number;
 
     protected maze_generator?: MazeGenerator;
     protected neighbours_offsets = [
@@ -155,13 +156,14 @@ export class MazeGenerator {
     public generation_order: EGenerationOrder = EGenerationOrder.Shift
 
     protected current_cell_index: number = 0
-    protected seeded_random
+    protected seeded_random;
+    public routes: MazeCell[][] = []
 
     public get max_cells_count() {
         return this.grid_size * this.grid_size;
     }
-    // METHODS
 
+    // METHODS
     protected update_generator() {
         this.seeded_random = Alea(this.seed.toString())
     }
@@ -172,6 +174,7 @@ export class MazeGenerator {
         this.update_generator();
         this.current_cell_index = 0;
         this.cells = [];
+        this.routes = [];
 
         for (let x = 0; x < this.grid_size; x++) {
             this.cells[x] = [];
@@ -192,8 +195,16 @@ export class MazeGenerator {
         current_cell.category = ECellCategory.Start;
         stack.push(current_cell);
 
+        let route = []
+
         while (stack.length > 0) {
+            route.push(current_cell);
+
             if (current_cell.index >= Math.max(1, (1 - this.sparseness) * this.max_cells_count)) {
+                if (route.length > 1) {
+                    this.routes.push(route);
+                }
+                route = []
                 break;
             }
 
@@ -205,7 +216,7 @@ export class MazeGenerator {
                 current_cell.remove_wall_between(random_neighbour);
                 random_neighbour.visited = true;
                 random_neighbour.distance = current_cell.distance + 1;
-                random_neighbour.index = this.current_cell_index++;
+                random_neighbour.index = ++this.current_cell_index;
                 stack.push(random_neighbour);
                 current_cell = random_neighbour;
                 end_cell = current_cell.distance > end_cell.distance ? current_cell : end_cell;
@@ -221,7 +232,10 @@ export class MazeGenerator {
                     }
                 }
 
-                console.log(current_cell)
+                if (route.length > 1) {
+                    this.routes.push(route);
+                }
+                route = []
             }
         }
 
@@ -263,6 +277,7 @@ export class MazeGenerator {
                 if (this.seeded_random() < this.shortcuts_ratio) {
                     cell.remove_wall_between(random_neighbour);
                     cell.category = ECellCategory.Shortcut;
+                    this.routes.push([cell, random_neighbour]);
                 }
             }
         })
@@ -312,6 +327,9 @@ export class MazeGenerator {
                     distance: cell.distance,
                     index: cell.index,
                 }
+            }),
+            routes: map(this.routes, route => {
+                return map(route, cell => cell.index)
             }),
             start: this.start_cell.index,
             end: this.end_cell.index,

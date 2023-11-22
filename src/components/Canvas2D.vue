@@ -1,5 +1,6 @@
 <template>
-    <div class="canvas2d">
+    <div class="canvas2d" @mousemove="handle_mousemove" @mousedown="user.pointer.is_down = true"
+        @mouseup="user.pointer.is_down = false">
         <canvas ref="canvas"></canvas>
         <div v-if="show_debug" class="debug-layer">
             <div>
@@ -54,7 +55,20 @@ export default Vue.extend({
                     scale: 1,
                 }
             },
-
+            user: {
+                pointer: {
+                    position: {
+                        x: 0,
+                        y: 0
+                    },
+                    is_down: false
+                },
+                scale: 1,
+                transform: {
+                    x: 0,
+                    y: 0
+                }
+            },
             stats: {
                 frames_rendered: 0
             }
@@ -64,7 +78,15 @@ export default Vue.extend({
         show_debug: {
             type: Boolean,
             default: false
-        }
+        },
+        allow_user_scale: {
+            type: Boolean,
+            default: false
+        },
+        allow_user_translate: {
+            type: Boolean,
+            default: false
+        },
     },
     mounted() {
         this.resolution = window.devicePixelRatio || 1;
@@ -77,12 +99,58 @@ export default Vue.extend({
 
         this.resize_canvas();
         this.resize_canvas = this.resize_canvas.bind(this);
+        this.handle_scroll = this.handle_scroll.bind(this);
+
         window.addEventListener('resize', this.resize_canvas);
+        window.addEventListener('mousewheel', this.handle_scroll, { passive: false });
+        window.addEventListener('keydown', this.handle_keypress);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.resize_canvas);
+        window.removeEventListener('mousewheel', this.handle_scroll);
+        window.removeEventListener('keydown', this.handle_keypress);
     },
     methods: {
+        handle_keypress(event) {
+            // reset user scale and transforms on 'space' key press
+            console.log(event)
+            if (event.code === 'Space') {
+                this.user.scale = 1;
+                this.user.transform.x = 0;
+                this.user.transform.y = 0;
+                this.compute_viewport();
+                this.$emit('update');
+            }
+        },
+        handle_mousemove(event: MouseEvent) {
+            this.user.pointer.position.x = event.offsetX;
+            this.user.pointer.position.y = event.offsetY;
+
+            if (this.user.pointer.is_down) {
+                if (this.allow_user_translate) {
+                    this.user.transform.x += event.movementX;
+                    this.user.transform.y += event.movementY;
+                    this.compute_viewport();
+                    this.$emit('update');
+                }
+            }
+        },
+        handle_scroll(event: WheelEvent) {
+            // altering scale considering mouse position
+            if (this.allow_user_scale) {
+                event.preventDefault();
+
+                let scale = this.user.scale + event.deltaY * -0.001;
+                // Restrict scale
+                scale = Math.min(Math.max(.125, scale), 4);
+
+                this.user.scale = scale;
+
+                // Compute ratios between old and new offsets
+                this.compute_viewport();
+                this.$emit('update');
+            }
+        },
         clear(clear_color: String) {
             this.hidden_context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.hidden_context.fillStyle = clear_color;
@@ -164,6 +232,8 @@ export default Vue.extend({
                 throw new Error('points are required');
             }
 
+
+
             if (points.length < 2) {
                 throw new Error('at least 2 points are required');
             }
@@ -197,7 +267,7 @@ export default Vue.extend({
                 this.compute_viewport();
 
                 if (emit_event) {
-                    this.$emit('resize', { width: this.width, height: this.height });
+                    this.$emit('update');
                 }
             }
         },
@@ -222,10 +292,14 @@ export default Vue.extend({
                 scale = padded_height / this.viewport.height;
             }
 
-            this.viewport.computed.scale = scale;
+            this.viewport.computed.scale = scale * this.user.scale;
             // centrizing virtual viewport
             this.viewport.computed.offset.x = (this.width - this.viewport.width * scale) / 2;
             this.viewport.computed.offset.y = (this.height - this.viewport.height * scale) / 2;
+
+            // applying user transform
+            this.viewport.computed.offset.x += this.user.transform.x;
+            this.viewport.computed.offset.y += this.user.transform.y;
         }
     }
 });

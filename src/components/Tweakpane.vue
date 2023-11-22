@@ -44,6 +44,7 @@ export default Vue.extend({
 @import url('@/assets/index.less');
 
 .tweakpane {
+
     .tp-lblv_l,
     .tp-rotv_c,
     .tp-fldv_c,
@@ -65,19 +66,40 @@ export default Vue.extend({
         color: #ffffff;
     }
 
-    .tp-p2dv_b, .tp-btnv_b, .tp-lstv_s {
+    .tp-p2dv_b,
+    .tp-btnv_b,
+    .tp-lstv_s {
         background-color: transparent;
         border-radius: 0;
         border: 1px solid #ffffff;
 
     }
 
-    .tp-lstv_s  {
+    .tp-lstv_s {
         color: var(--tp-button-background-color);
     }
 
-    .tp-p2dv_b:hover, .tp-btnv_b:hover, .tp-lstv_s:hover {
+    .tp-p2dv_b:hover,
+    .tp-btnv_b:hover,
+    .tp-lstv_s:hover {
         border: 1px solid #ff0000;
+    }
+
+    .tp-p2dv_b:active,
+    .tp-btnv_b:active,
+    .tp-lstv_s:active {
+        border: 1px solid #ff0000;
+        background-color: transparent !important;
+    }
+
+    .tp-p2dv_b:focus,
+    .tp-btnv_b:focus,
+    .tp-lstv_s:focus {
+        border: 1px solid #ff0000;
+        background-color: transparent !important;
+    }
+    option {
+        color: #000000;
     }
 }
 
@@ -85,9 +107,9 @@ export default Vue.extend({
     --tp-base-background-color: hsla(0, 0%, 11%, 0.3);
     --tp-base-shadow-color: hsla(0, 0%, 0%, 0.2);
     --tp-button-background-color: hsla(0, 0%, 80%, 1);
-    --tp-button-background-color-active: rgb(0, 0, 0);
-    --tp-button-background-color-focus: rgb(0, 0, 0);
-    --tp-button-background-color-hover: rgb(0, 0, 0);
+    --tp-button-background-color-active: rgb(255, 255, 255);
+    --tp-button-background-color-focus: rgb(255, 255, 255);
+    --tp-button-background-color-hover: rgb(255, 0, 0);
     --tp-button-foreground-color: hsla(0, 0%, 0%, 0.8);
     --tp-container-background-color: hsla(0, 0%, 0%, 0.3);
     --tp-container-background-color-active: hsla(0, 0%, 0%, 0.6);
@@ -99,11 +121,10 @@ export default Vue.extend({
     --tp-input-background-color-active: hsla(0, 0%, 0%, 0.6);
     --tp-input-background-color-focus: hsla(0, 0%, 0%, 0.5);
     --tp-input-background-color-hover: hsla(0, 0%, 0%, 0.4);
-    --tp-input-foreground-color: hsla(0, 100%, 50%, 0.75);
+    --tp-input-foreground-color: hsla(0, 100%, 50%, 1);
     --tp-label-foreground-color: hsla(0, 25%, 98%, 0.75);
     --tp-monitor-background-color: hsla(0, 0%, 0%, 0.3);
     --tp-monitor-foreground-color: hsla(0, 0%, 100%, 0.3);
 
-}
-</style>
+}</style>
   

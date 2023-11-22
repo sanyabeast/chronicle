@@ -1,7 +1,14 @@
 <template>
     <div class="maze-generator" @contextmenu.prevent="">
-        <Tweakpane ref="tweakpane"></Tweakpane>
-        <Canvas2D ref="canvas" @resize="render" :show_debug="true"></Canvas2D>
+        <div class="control-panel">
+            <Tweakpane ref="tweakpane"></Tweakpane>
+            <ul class="info">
+                <li>Use <i>Space</i> to reset user transformations</li>
+            </ul>
+        </div>
+        <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="false"
+            :allow_user_translate="true">
+        </Canvas2D>
     </div>
 </template>
 <script lang="ts">
@@ -12,7 +19,7 @@ import { MazeGenerator, ECellCategory, MazeCell, ECellAccessibilityLevel } from 
 import Canvas2D from '@/components/Canvas2D.vue';
 import mixins from 'vue-typed-mixins'
 import BaseComponent from '@/components/BaseComponent.vue';
-import { debounce, isNumber, throttle } from 'lodash';
+import { map, throttle } from 'lodash';
 
 export enum EColorScheme {
     ProgrammerView,
@@ -99,8 +106,8 @@ export default mixins(BaseComponent).extend({
     components: { Tweakpane, Canvas2D },
     data() {
         return {
-            wall_width: 0.01,
-            path_width: 0.01,
+            wall_width: 0.015,
+            path_width: 0.035,
             wall_padding: 0.03,
             current_color_scheme: EColorScheme.Midnight,
         }
@@ -136,6 +143,7 @@ export default mixins(BaseComponent).extend({
                 this.draw_cells()
                 this.draw_path();
                 this.draw_lables();
+                this.draw_indexes();
 
                 this.canvas.render()
             }
@@ -364,32 +372,52 @@ export default mixins(BaseComponent).extend({
             }
 
         },
-        /*drawing route path using canvas2d line and .siblings property of each cell*/
-        draw_path(start_cell: MazeCell = this.maze_generator.start_cell) {
-            this.draw_path_fragment(start_cell);
-            this.maze_generator.reset_visited()
+        draw_indexes() {
+            let dx = this.wall_padding
+
+            this.maze_generator.for_each_cell((cell) => {
+                this.canvas.draw_text({
+                    x: cell.x - dx + 1 - (1 / 16),
+                    y: cell.y - dx + 1 - (1 / 16),
+                    text: `idx: ${cell.index}`,
+                    fill_color: '#ffffff',
+                    font_family: 'monospace',
+                    font_size: 1 / 16,
+                    text_align: 'right',
+                    max_width: 1
+                })
+            })
+
+            this.maze_generator.for_each_cell((cell) => {
+                if (cell.category !== ECellCategory.Empty) {
+                    this.canvas.draw_text({
+                        x: cell.x + dx + (1 / 16),
+                        y: cell.y - dx + 1 - (1 / 16),
+                        text: `dst: ${cell.distance}`,
+                        fill_color: '#000000',
+                        font_family: 'monospace',
+                        font_size: 1 / 16,
+                        text_align: 'left',
+                        max_width: 1
+                    })
+                }
+            })
         },
-        draw_path_fragment(cell: MazeCell) {
-            if (cell.visited) {
-                return
-            }
-            cell.get_open_neighbours().forEach((cell2) => {
+        draw_path(start_cell: MazeCell = this.maze_generator.start_cell) {
+            let routes = this.maze_generator.routes;
+            routes.forEach((route: MazeCell[], route_index: number) => {
+                let points = map(route, (cell: MazeCell, distance: number) => {
+                    return {
+                        x: cell.x + 0.5,
+                        y: cell.y + 0.5
+                    }
+                })
+
                 this.canvas.draw_line({
-                    points: [
-                        {
-                            x: cell.x + 0.5,
-                            y: cell.y + 0.5
-                        },
-                        {
-                            x: cell2.x + 0.5,
-                            y: cell2.y + 0.5
-                        }
-                    ],
-                    stroke_color: `hsl(0, 0%, ${((cell.distance / this.maze_generator.end_cell.distance)) * 100}%)`,
+                    points: points,
+                    stroke_color: `hsl(${(route_index / routes.length) * 360 + 90}, 100%, 75%)`,
                     line_width: this.path_width
                 })
-                cell.visited = true;
-                this.draw_path_fragment(cell2);
             })
         },
         set_random_seed() {
@@ -402,36 +430,34 @@ export default mixins(BaseComponent).extend({
                 view: 'separator',
             });
 
-            pane.addBinding(this, 'wall_padding', {
-                label: 'Walls Padding',
+            pane.addBinding(this.maze_generator, 'seed', {
+                label: 'Seed',
                 min: 0,
-                max: 0.2,
-                step: 0.01,
-            }).on('change', () => {
+                max: 10000,
+                step: 1,
+            }).on('change', throttle(() => {
+                this.maze_generator.generate();
                 this.render()
-            })
 
-            pane.addBinding(this, 'wall_width', {
-                label: 'Walls Width',
-                min: 0.001,
-                max: 0.05,
-                step: 0.01,
-            }).on('change', () => {
-                this.render()
-            })
+                this.update_route({
+                    seed: this.maze_generator.seed.toString()
+                })
+            }, 1000 / 15));
 
-            pane.addBinding(this, 'path_width', {
-                label: 'Path Width',
-                min: 0.01,
-                max: 0.25,
-                step: 0.01,
-            }).on('change', () => {
+            pane.addButton({
+                title: 'Generate maze',
+            }).on('click', () => {
+                this.set_random_seed()
+                this.maze_generator.generate();
+                this.$refs.tweakpane.pane.refresh();
                 this.render()
-            })
+            });
 
             pane.addBlade({
                 view: 'separator',
             });
+
+
 
             pane.addBinding(this.maze_generator, 'grid_size', {
                 label: 'Grid Size',
@@ -490,9 +516,14 @@ export default mixins(BaseComponent).extend({
                 this.render()
             }, 1000 / 15));
 
+
+            pane.addBlade({
+                view: 'separator',
+            });
+
             pane.addBlade({
                 view: 'list',
-                label: 'Generation Order',
+                label: 'Theme',
                 options: [
                     { text: 'ProgrammerView', value: 0 },
                     { text: 'MidnightContrast', value: 1 },
@@ -505,32 +536,34 @@ export default mixins(BaseComponent).extend({
             });
 
 
-            pane.addBlade({
-                view: 'separator',
-            });
-
-            pane.addBinding(this.maze_generator, 'seed', {
-                label: 'Seed',
+            pane.addBinding(this, 'wall_padding', {
+                label: 'Walls Padding',
                 min: 0,
-                max: 10000,
-                step: 1,
-            }).on('change', throttle(() => {
-                this.maze_generator.generate();
+                max: 0.2,
+                step: 0.01,
+            }).on('change', () => {
                 this.render()
+            })
 
-                this.update_route({
-                    seed: this.maze_generator.seed.toString()
-                })
-            }, 1000 / 15));
-
-            pane.addButton({
-                title: 'Generate maze',
-            }).on('click', () => {
-                this.set_random_seed()
-                this.maze_generator.generate();
-                this.$refs.tweakpane.pane.refresh();
+            pane.addBinding(this, 'wall_width', {
+                label: 'Walls Width',
+                min: 0.001,
+                max: 0.05,
+                step: 0.01,
+            }).on('change', () => {
                 this.render()
-            });
+            })
+
+            pane.addBinding(this, 'path_width', {
+                label: 'Path Width',
+                min: 0.01,
+                max: 0.25,
+                step: 0.01,
+            }).on('change', () => {
+                this.render()
+            })
+
+
 
         }
     },
@@ -546,6 +579,31 @@ export default mixins(BaseComponent).extend({
     grid-template-columns: 240px 1fr;
     grid-gap: 16px;
     overflow: hidden;
+
+    .control-panel {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        border: 1px dotted #1d1d1d;
+
+        .info {
+            color: @color-accent;
+            list-style: square;
+            display: flex;
+            flex-direction: column;
+
+            li {
+                margin: 0;
+                font-size: 10px;
+                font-family: @font-family-monospace;
+
+                i {
+                    color: red;
+                    font-style: normal;
+                }
+            }
+        }
+    }
 
     .canvas2d {
         display: flex;
