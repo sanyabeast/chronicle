@@ -1,5 +1,5 @@
 
-import { filter, map } from 'lodash';
+import { filter, flatten, isUndefined, map } from 'lodash';
 import Alea from 'alea'
 
 export enum ECellCategory {
@@ -25,7 +25,7 @@ export enum EGenerationOrder {
 }
 
 export class MazeCell {
-    constructor(maze_generator: MazeGenerator, x: number, y: number, category: ECellCategory = ECellCategory.Empty) {
+    constructor(maze_generator: MazeGenerator, x: number, y: number, category: ECellCategory = ECellCategory.Default) {
         this.maze_generator = maze_generator;
         this.walls = { north: true, east: true, south: true, west: true }
         this.x = x;
@@ -173,10 +173,10 @@ export class MazeGenerator {
         this.current_cell_index = 0;
         this.cells = [];
 
-        for (let i = 0; i < this.grid_size; i++) {
-            this.cells[i] = [];
-            for (let j = 0; j < this.grid_size; j++) {
-                this.cells[i][j] = new MazeCell(this, i, j, ECellCategory.Empty)
+        for (let x = 0; x < this.grid_size; x++) {
+            this.cells[x] = [];
+            for (let y = 0; y < this.grid_size; y++) {
+                this.cells[x][y] = new MazeCell(this, x, y, ECellCategory.Default)
             }
         }
     }
@@ -221,11 +221,18 @@ export class MazeGenerator {
                     }
                 }
 
+                console.log(current_cell)
             }
         }
 
         end_cell.category = ECellCategory.End;
         this.end_cell = end_cell;
+
+        this.for_each_cell((cell) => {
+            if (isUndefined(cell.index)) {
+                cell.index = -1;
+            }
+        })
 
         // DEAD ENDS
         let dead_ends = this.find_cells_with_accessibility(ECellAccessibilityLevel.DeadEnd);
@@ -291,5 +298,23 @@ export class MazeGenerator {
                 callback(cell);
             })
         })
+    }
+
+    to_json() {
+        return {
+            grid: this.grid_size,
+            cells: map(flatten(this.cells), cell => {
+                return {
+                    x: cell.x,
+                    y: cell.y,
+                    walls: cell.walls,
+                    category: cell.category,
+                    distance: cell.distance,
+                    index: cell.index,
+                }
+            }),
+            start: this.start_cell.index,
+            end: this.end_cell.index,
+        }
     }
 }
