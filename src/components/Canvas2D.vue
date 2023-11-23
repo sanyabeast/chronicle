@@ -1,6 +1,6 @@
 <template>
     <div class="canvas2d" @mousemove="handle_mousemove" @mousedown="user.pointer.is_down = true"
-        @mouseup="user.pointer.is_down = false">
+        @mouseup="user.pointer.is_down = false" @contextmenu="handle_contextmenu">
         <canvas ref="canvas"></canvas>
         <div v-if="show_debug" class="debug-layer">
             <div>
@@ -87,6 +87,10 @@ export default Vue.extend({
             type: Boolean,
             default: false
         },
+        allow_context_menu: {
+            type: Boolean,
+            default: false
+        },
     },
     mounted() {
         this.resolution = window.devicePixelRatio || 1;
@@ -111,16 +115,24 @@ export default Vue.extend({
         window.removeEventListener('keydown', this.handle_keypress);
     },
     methods: {
+        handle_contextmenu(event) {
+            if (!this.allow_context_menu) {
+                event.preventDefault();
+            }
+        },
         handle_keypress(event) {
             // reset user scale and transforms on 'space' key press
             console.log(event)
             if (event.code === 'Space') {
-                this.user.scale = 1;
-                this.user.transform.x = 0;
-                this.user.transform.y = 0;
-                this.compute_viewport();
-                this.$emit('update');
+                this.reset_user_transform();
             }
+        },
+        reset_user_transform() {
+            this.user.scale = 1;
+            this.user.transform.x = 0;
+            this.user.transform.y = 0;
+            this.compute_viewport();
+            this.$emit('update');
         },
         handle_mousemove(event: MouseEvent) {
             this.user.pointer.position.x = event.offsetX;

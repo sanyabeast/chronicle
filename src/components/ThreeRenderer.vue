@@ -14,11 +14,9 @@
 
 import * as THREE from 'three';
 import mixins from 'vue-typed-mixins';
+import BaseComponent from './BaseComponent.vue';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { MapControls } from 'three/examples/jsm/controls/MapControls.js'
-import BaseComponent from './BaseComponent.vue';
-import { Component } from 'vue';
-import { isNumber } from 'lodash';
 
 
 export interface IThreeRendererProps {

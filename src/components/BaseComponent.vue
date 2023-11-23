@@ -44,7 +44,29 @@ export default Vue.extend({
                 console.warn("update_route error", err);
             })
         },
-
+        copy_to_clipboard(text) {
+            if (!navigator.clipboard) {
+                // Clipboard API not available, fall back to a more compatible method
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    const successful = document.execCommand('copy');
+                    const msg = successful ? 'successful' : 'unsuccessful';
+                    console.log('Fallback: Copying text command was ' + msg);
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                document.body.removeChild(textarea);
+            } else {
+                // Modern approach with Clipboard API
+                navigator.clipboard.writeText(text).then(
+                    () => console.log('Async: Copying to clipboard was successful!'),
+                    (err) => console.error('Async: Could not copy text: ', err)
+                );
+            }
+        }
     }
 })
 </script>

@@ -13,8 +13,6 @@ export interface TweakpaneData {
 
 }
 
-
-
 export default Vue.extend({
     name: 'Tweakpane',
     data(): TweakpaneData {

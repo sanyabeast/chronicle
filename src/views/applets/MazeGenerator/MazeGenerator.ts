@@ -319,6 +319,11 @@ export class MazeGenerator {
     to_json() {
         return {
             grid: this.grid_size,
+            routes: map(this.routes, route => {
+                return map(route, cell => cell.index)
+            }),
+            start: this.start_cell.index,
+            end: this.end_cell.index,
             cells: map(flatten(this.cells), cell => {
                 return {
                     x: cell.x,
@@ -329,11 +334,7 @@ export class MazeGenerator {
                     index: cell.index,
                 }
             }),
-            routes: map(this.routes, route => {
-                return map(route, cell => cell.index)
-            }),
-            start: this.start_cell.index,
-            end: this.end_cell.index,
+
         }
     }
 }

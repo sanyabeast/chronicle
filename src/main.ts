@@ -2,7 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import { router } from './router'
 import store from './store'
+import VueHighlightJS from 'vue-highlightjs'
+import 'highlight.js/styles/default.css' // or other highlight.js theme
 
+Vue.use(VueHighlightJS)
 Vue.config.productionTip = false
 
 Vue.component('TextView', () => import('./components/TextView.vue'))

@@ -1,5 +1,5 @@
 <template>
-    <div class="maze-generator" @contextmenu.prevent="">
+    <div class="maze-generator">
         <div class="control-panel">
             <Tweakpane ref="tweakpane"></Tweakpane>
             <ul class="info">
@@ -7,8 +7,9 @@
             </ul>
         </div>
         <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="false"
-            :allow_user_translate="true">
+            :allow_user_translate="true" :allow_context_menu="true">
         </Canvas2D>
+        <Syntax :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup" />
     </div>
 </template>
 <script lang="ts">
@@ -20,6 +21,7 @@ import Canvas2D from '@/components/Canvas2D.vue';
 import mixins from 'vue-typed-mixins'
 import BaseComponent from '@/components/BaseComponent.vue';
 import { map, throttle } from 'lodash';
+import Syntax from '@/components/Syntax.vue';
 
 export enum EColorScheme {
     ProgrammerView,
@@ -103,13 +105,15 @@ export default mixins(BaseComponent).extend({
             default: 0
         }
     },
-    components: { Tweakpane, Canvas2D },
+    components: { Tweakpane, Canvas2D, Syntax },
     data() {
         return {
             wall_width: 0.015,
             path_width: 0.035,
             wall_padding: 0.03,
             current_color_scheme: EColorScheme.Midnight,
+            json_data: {},
+            show_json_data_popup: false
         }
     },
     mounted() {
@@ -127,7 +131,7 @@ export default mixins(BaseComponent).extend({
             this.set_random_seed()
         }
 
-        this.maze_generator.generate()
+        this.generate()
         this.update_canvas()
         this.setup_tweakpane()
         this.render()
@@ -136,6 +140,10 @@ export default mixins(BaseComponent).extend({
         (window as any).maze_generator = null;
     },
     methods: {
+        generate() {
+            this.maze_generator.generate();
+            this.json_data = this.maze_generator.to_json();
+        },
         render() {
             if (this.canvas) {
                 this.canvas.clear(color_schemes[this.current_color_scheme].background)
@@ -436,7 +444,7 @@ export default mixins(BaseComponent).extend({
                 max: 10000,
                 step: 1,
             }).on('change', throttle(() => {
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
 
                 this.update_route({
@@ -448,7 +456,7 @@ export default mixins(BaseComponent).extend({
                 title: 'Generate maze',
             }).on('click', () => {
                 this.set_random_seed()
-                this.maze_generator.generate();
+                this.generate();
                 this.$refs.tweakpane.pane.refresh();
                 this.render()
             });
@@ -466,7 +474,7 @@ export default mixins(BaseComponent).extend({
                 step: 1,
             }).on('change', throttle(() => {
                 this.update_canvas()
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
             }, 1000 / 15));
 
@@ -477,7 +485,7 @@ export default mixins(BaseComponent).extend({
                 max: 1,
                 step: 0.001,
             }).on('change', throttle(() => {
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
             }, 1000 / 15));
 
@@ -487,7 +495,7 @@ export default mixins(BaseComponent).extend({
                 max: 1,
                 step: 0.001,
             }).on('change', throttle(() => {
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
             }, 1000 / 15));
 
@@ -497,7 +505,7 @@ export default mixins(BaseComponent).extend({
                 max: 1,
                 step: 0.001,
             }).on('change', throttle(() => {
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
             }, 1000 / 15));
 
@@ -512,10 +520,9 @@ export default mixins(BaseComponent).extend({
             }).on('change', throttle((ev) => {
                 console.log(ev.value)
                 this.maze_generator.generation_order = ev.value;
-                this.maze_generator.generate();
+                this.generate();
                 this.render()
             }, 1000 / 15));
-
 
             pane.addBlade({
                 view: 'separator',
@@ -534,7 +541,6 @@ export default mixins(BaseComponent).extend({
                 this.current_color_scheme = ev.value;
                 this.render()
             });
-
 
             pane.addBinding(this, 'wall_padding', {
                 label: 'Walls Padding',
@@ -563,8 +569,25 @@ export default mixins(BaseComponent).extend({
                 this.render()
             })
 
+            pane.addBlade({
+                view: 'separator',
+            });
 
+            pane.addButton({
+                title: 'Show JSON',
+            }).on('click', () => {
+                this.show_json_data_popup = true;
+            });
 
+            pane.addBlade({
+                view: 'separator',
+            });
+
+            pane.addButton({
+                title: 'Reset Viewport',
+            }).on('click', () => {
+                this.canvas.reset_user_transform()
+            });
         }
     },
 
