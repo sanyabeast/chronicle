@@ -48,7 +48,7 @@ export default Vue.extend({
     .tp-fldv_c,
     .tp-rotv {
         font-family: @font-family-monospace !important;
-        font-size: 9px;
+        font-size: 10px;
         border-radius: 0;
     }
 
@@ -96,6 +96,11 @@ export default Vue.extend({
         border: 1px solid #ff0000;
         background-color: transparent !important;
     }
+
+    .tp-btnv_b {
+        height: 32px;
+    }
+
     option {
         color: #000000;
     }

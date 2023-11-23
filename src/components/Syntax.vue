@@ -1,11 +1,13 @@
 <template>
-    <div class="syntax" :class="{ popup: popup }" @click.self="$emit('close')">
+    <div class="syntax" :class="{ popup: popup, closing: closing }" @click.self="$emit('close')"
+        @mouseover.self="closing = true" @mouseout.self="closing = false">
         <!-- If your source-code lives in a variable called 'sourcecode' -->
         <div class="content">
             <div class="popup-controls" v-if="popup">
                 <button class="copy" @click="copy_to_clipboard(sourcecode); show_copied_tooltip()"
                     :class="{ copied_tooltip: copied_tooltip }">copy</button>
-                <button class="close" @click="$emit('close')">close</button>
+                <button class="close" :class="{ closing: closing }" @click="$emit('close')" @mouseover.self="closing = true"
+                    @mouseout.self="closing = false">close</button>
             </div>
             <pre v-highlightjs="sourcecode"><code class="javascript"></code></pre>
         </div>
@@ -24,6 +26,7 @@ export default mixins(BaseComponent).extend({
     data() {
         return {
             copied_tooltip: false,
+            closing: false
         }
     },
     computed: {
@@ -75,9 +78,9 @@ export default mixins(BaseComponent).extend({
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(131, 131, 131, 0.32);
         z-index: 999;
         padding: 8px 0;
+        backdrop-filter: contrast(0.5) brightness(0.5) saturate(0);
 
         .content {
             width: 100%;
@@ -86,7 +89,6 @@ export default mixins(BaseComponent).extend({
             position: relative;
             border: 2px solid #454544;
             user-select: text;
-            border-radius: 32px;
             overflow: hidden;
 
             pre {
@@ -129,31 +131,38 @@ export default mixins(BaseComponent).extend({
                     border: 2px solid #8f8f8f;
                     margin-left: 8px;
                     font-family: 'IBM Plex Mono', sans-serif;
-                    border-radius: 8px;
                     font-weight: bold;
 
                     &:hover {
-                        color: rgb(255, 0, 0);
-                        border-color: red;
+                        color: @color-accent;
+                        border-color: @color-accent;
                     }
 
                     &.close {
                         border-right: none;
                         border-top: none;
-                        border-top-right-radius: 0%;
-                        border-top-left-radius: 0%;
-                        border-bottom-right-radius: 0%;
+
+                        &.closing {
+                            color: @color-accent;
+                            border-color: @color-accent;
+                        }
                     }
 
                     &.copy {
+                        @button-color: rgb(0, 174, 255);
+
                         border-top: none;
                         position: relative;
-                        border-top-left-radius: 0%;
-                        border-top-right-radius: 0%;
+
+                        &:hover {
+                            color: @button-color;
+                            border-color: @button-color;
+                        }
 
                         &.copied_tooltip {
-                            border-color: red;
-                            color: red;
+
+                            border-color: @button-color;
+                            color: @button-color;
 
                             &:before {
                                 content: "copied";
@@ -163,9 +172,8 @@ export default mixins(BaseComponent).extend({
                                 left: 50%;
                                 transform: translateX(-50%);
                                 background: #000000;
-                                color: #ff0000;
+                                color: @button-color;
                                 padding: 4px;
-                                border-radius: 4px;
                                 font-size: 10px;
                                 font-family: @font-family-monospace;
                                 z-index: 1;
@@ -174,6 +182,10 @@ export default mixins(BaseComponent).extend({
                     }
                 }
             }
+        }
+
+        &.closing {
+            .content {}
         }
     }
 }
@@ -186,6 +198,7 @@ export default mixins(BaseComponent).extend({
             &.popup {
                 background: rgb(45, 45, 45);
                 padding: 0;
+
                 .content {
                     width: 100%;
                     height: 100%;
