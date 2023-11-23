@@ -263,6 +263,7 @@ export class MazeGenerator {
 
                     cell.remove_wall_between(random_neighbour);
                     cell.category = ECellCategory.Loop;
+                    this.routes.push([cell, random_neighbour]);
                 }
             }
         })
