@@ -6,7 +6,7 @@
                 <li>Use <i>Space</i> to reset user transformations</li>
             </ul>
         </div>
-        <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="false"
+        <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="true"
             :allow_user_translate="true" :allow_context_menu="true">
         </Canvas2D>
         <Syntax :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup" />
@@ -384,16 +384,18 @@ export default mixins(BaseComponent).extend({
             let dx = this.wall_padding
 
             this.maze_generator.for_each_cell((cell) => {
-                this.canvas.draw_text({
-                    x: cell.x - dx + 1 - (1 / 16),
-                    y: cell.y - dx + 1 - (1 / 16),
-                    text: `idx: ${cell.index}`,
-                    fill_color: '#ffffff',
-                    font_family: 'monospace',
-                    font_size: 1 / 16,
-                    text_align: 'right',
-                    max_width: 1
-                })
+                if (cell.category !== ECellCategory.Empty) {
+                    this.canvas.draw_text({
+                        x: cell.x - dx + 1 - (1 / 16),
+                        y: cell.y - dx + 1 - (1 / 16),
+                        text: `idx: ${cell.index}`,
+                        fill_color: '#ffffff',
+                        font_family: 'monospace',
+                        font_size: 1 / 16,
+                        text_align: 'right',
+                        max_width: 1
+                    })
+                }
             })
 
             this.maze_generator.for_each_cell((cell) => {

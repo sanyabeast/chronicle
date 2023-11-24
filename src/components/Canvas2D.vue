@@ -47,13 +47,16 @@ export default Vue.extend({
                 width: 1,
                 height: 1,
                 padding: 16,
+                rect_size: 1,
                 computed: {
                     offset: {
                         x: 0,
                         y: 0
                     },
                     scale: 1,
-                }
+                },
+                min_scale: 0.125,
+                max_scale: 4
             },
             user: {
                 pointer: {
@@ -64,10 +67,11 @@ export default Vue.extend({
                     is_down: false
                 },
                 scale: 1,
-                transform: {
+                offset: {
                     x: 0,
                     y: 0
-                }
+                },
+
             },
             stats: {
                 frames_rendered: 0
@@ -106,12 +110,12 @@ export default Vue.extend({
         this.handle_scroll = this.handle_scroll.bind(this);
 
         window.addEventListener('resize', this.resize_canvas);
-        window.addEventListener('mousewheel', this.handle_scroll, { passive: false });
+        this.$el.addEventListener('mousewheel', this.handle_scroll, { passive: false });
         window.addEventListener('keydown', this.handle_keypress);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.resize_canvas);
-        window.removeEventListener('mousewheel', this.handle_scroll);
+        this.$el.removeEventListener('mousewheel', this.handle_scroll);
         window.removeEventListener('keydown', this.handle_keypress);
     },
     methods: {
@@ -122,26 +126,26 @@ export default Vue.extend({
         },
         handle_keypress(event) {
             // reset user scale and transforms on 'space' key press
-            console.log(event)
             if (event.code === 'Space') {
                 this.reset_user_transform();
             }
         },
         reset_user_transform() {
             this.user.scale = 1;
-            this.user.transform.x = 0;
-            this.user.transform.y = 0;
+            this.user.offset.x = 0;
+            this.user.offset.y = 0;
             this.compute_viewport();
             this.$emit('update');
         },
         handle_mousemove(event: MouseEvent) {
-            this.user.pointer.position.x = event.offsetX;
-            this.user.pointer.position.y = event.offsetY;
+            this.user.pointer.position.x = event.offsetX * this.resolution;
+            this.user.pointer.position.y = event.offsetY * this.resolution;
 
             if (this.user.pointer.is_down) {
                 if (this.allow_user_translate) {
-                    this.user.transform.x += event.movementX;
-                    this.user.transform.y += event.movementY;
+                    this.user.offset.x += (event.movementX * this.resolution) / this.viewport.computed.scale;
+                    this.user.offset.y += (event.movementY * this.resolution) / this.viewport.computed.scale;
+
                     this.compute_viewport();
                     this.$emit('update');
                 }
@@ -153,10 +157,31 @@ export default Vue.extend({
                 event.preventDefault();
 
                 let scale = this.user.scale + event.deltaY * -0.001;
+                // let mouse_position = this.screen_to_viewport({ x: event.offsetX, y: event.offsetY });
+
+
                 // Restrict scale
-                scale = Math.min(Math.max(.125, scale), 4);
+                scale = Math.min(Math.max(this.viewport.min_scale, scale), this.viewport.max_scale);
+
+                this.user.offset.x -= this.user.pointer.position.x / this.viewport.computed.scale;
+                this.user.offset.y -= this.user.pointer.position.y / this.viewport.computed.scale;
+
+                this.compute_viewport()
 
                 this.user.scale = scale;
+
+                this.compute_viewport()
+
+
+                // this.compute_viewport();
+
+                this.user.offset.x += this.user.pointer.position.x / this.viewport.computed.scale;
+                this.user.offset.y += this.user.pointer.position.y / this.viewport.computed.scale;
+
+                this.compute_viewport()
+
+                // this.user.offset.x -= extra_offset.x;
+                // this.user.offset.y -= extra_offset.y;
 
                 // Compute ratios between old and new offsets
                 this.compute_viewport();
@@ -173,8 +198,11 @@ export default Vue.extend({
                 throw new Error('x, y, width, height are required');
             }
 
-            x = x * this.viewport.computed.scale + this.viewport.computed.offset.x;
-            y = y * this.viewport.computed.scale + this.viewport.computed.offset.y;
+            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+
+            x = x * this.viewport.computed.scale + v_dx;
+            y = y * this.viewport.computed.scale + v_dy;
             width = width * this.viewport.computed.scale;
             height = height * this.viewport.computed.scale;
 
@@ -193,8 +221,11 @@ export default Vue.extend({
                 throw new Error('x, y, text are required');
             }
 
-            x = x * this.viewport.computed.scale + this.viewport.computed.offset.x;
-            y = y * this.viewport.computed.scale + this.viewport.computed.offset.y;
+            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+
+            x = x * this.viewport.computed.scale + v_dx;
+            y = y * this.viewport.computed.scale + v_dy;
 
             if (font_family || font_size || font_weight) {
                 font_family = font_family || 'sans-serif';
@@ -252,15 +283,18 @@ export default Vue.extend({
 
             this.hidden_context.beginPath();
 
+            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+
             this.hidden_context.moveTo(
-                points[0].x * this.viewport.computed.scale + this.viewport.computed.offset.x,
-                points[0].y * this.viewport.computed.scale + this.viewport.computed.offset.y
+                points[0].x * this.viewport.computed.scale + v_dx,
+                points[0].y * this.viewport.computed.scale + v_dy
             );
 
             for (let i = 1; i < points.length; i++) {
                 this.hidden_context.lineTo(
-                    points[i].x * this.viewport.computed.scale + this.viewport.computed.offset.x,
-                    points[i].y * this.viewport.computed.scale + this.viewport.computed.offset.y
+                    points[i].x * this.viewport.computed.scale + v_dx,
+                    points[i].y * this.viewport.computed.scale + v_dy
                 );
             }
 
@@ -300,18 +334,20 @@ export default Vue.extend({
 
             if (viewport_aspect_ratio > this.aspect_ratio) {
                 scale = padded_width / this.viewport.width;
+                this.viewport.rect_size = padded_width
             } else {
                 scale = padded_height / this.viewport.height;
+                this.viewport.rect_size = padded_height
             }
 
             this.viewport.computed.scale = scale * this.user.scale;
             // centrizing virtual viewport
-            this.viewport.computed.offset.x = (this.width - this.viewport.width * scale) / 2;
-            this.viewport.computed.offset.y = (this.height - this.viewport.height * scale) / 2;
+            // this.viewport.computed.offset.x = (this.width - this.viewport.width * scale) / 2;
+            // this.viewport.computed.offset.y = (this.height - this.viewport.height * scale) / 2;
 
             // applying user transform
-            this.viewport.computed.offset.x += this.user.transform.x;
-            this.viewport.computed.offset.y += this.user.transform.y;
+            this.viewport.computed.offset.x = this.user.offset.x;
+            this.viewport.computed.offset.y = this.user.offset.y;
         }
     }
 });
