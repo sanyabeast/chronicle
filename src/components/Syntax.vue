@@ -4,12 +4,13 @@
         <!-- If your source-code lives in a variable called 'sourcecode' -->
         <div class="content">
             <div class="popup-controls" v-if="popup">
-                <button class="copy" @click="copy_to_clipboard(sourcecode); show_copied_tooltip()"
+                <button class="download" @click="download_as_file(file_name, text_content)">download</button>
+                <button class="copy" @click="copy_to_clipboard(text_content); show_copied_tooltip()"
                     :class="{ copied_tooltip: copied_tooltip }">copy</button>
                 <button class="close" :class="{ closing: closing }" @click="$emit('close')" @mouseover.self="closing = true"
                     @mouseout.self="closing = false">close</button>
             </div>
-            <pre v-highlightjs="sourcecode"><code class="javascript"></code></pre>
+            <pre v-highlightjs="text_content"><code class="javascript"></code></pre>
         </div>
     </div>
 </template>
@@ -19,23 +20,17 @@
 import mixins from 'vue-typed-mixins';
 import BaseComponent from './BaseComponent.vue';
 import { isString } from 'lodash';
+import { read_text_file } from '@/tools';
 
 
 export default mixins(BaseComponent).extend({
-    name: 'AsciiGif',
+    name: 'Syntax',
     data() {
         return {
             copied_tooltip: false,
-            closing: false
-        }
-    },
-    computed: {
-        sourcecode(): string {
-            if (isString(this.code)) {
-                return this.code;
-            } else {
-                return JSON.stringify(this.code, null, 4);
-            }
+            closing: false,
+            text_content: "",
+            file_name: "unknown"
         }
     },
     props: {
@@ -46,18 +41,63 @@ export default mixins(BaseComponent).extend({
                 return `const example = "Hello, PrismJS!";`
             }
         },
+        file: {
+            type: String,
+            default: null
+        },
         popup: {
             type: Boolean,
             default: false
+        },
+        download_name: {
+            type: String,
+            default: ""
         }
     },
-    mounted() { },
+    mounted() {
+        this.update()
+    },
+    watch: {
+        code() {
+            this.update()
+        },
+        file() {
+            this.update()
+        }
+    },
     methods: {
+        async update() {
+            if (this.file) {
+                this.text_content = await read_text_file(this.file);
+                this.file_name = this.download_name.length ? this.download_name : this.file.split("/").pop();
+                console.log("update", this.file, this.text_content)
+            } else {
+                if (isString(this.code)) {
+                    this.text_content = this.code;
+                } else {
+                    this.text_content = JSON.stringify(this.code, null, 4);
+                }
+
+                this.file_name = this.download_name;
+            }
+        },
         show_copied_tooltip() {
             this.copied_tooltip = true;
             setTimeout(() => {
                 this.copied_tooltip = false;
             }, 1000);
+        },
+        download_as_file(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
         }
     }
 });
@@ -110,8 +150,6 @@ export default mixins(BaseComponent).extend({
                 }
 
             }
-
-
 
             .popup-controls {
                 position: absolute;
@@ -178,6 +216,18 @@ export default mixins(BaseComponent).extend({
                                 font-family: @font-family-monospace;
                                 z-index: 1;
                             }
+                        }
+                    }
+
+                    &.download {
+                        @button-color: rgb(255, 123, 0);
+
+                        border-top: none;
+                        position: relative;
+
+                        &:hover {
+                            color: @button-color;
+                            border-color: @button-color;
                         }
                     }
                 }

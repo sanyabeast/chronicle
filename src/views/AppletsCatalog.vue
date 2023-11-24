@@ -16,6 +16,8 @@
                     <ImageView v-if="need_show_preview(applet_item)" :src="applet_item.preview" />
                     <div class="fader"></div>
                     <h3 v-html="get_item_title(applet_item)"></h3>
+                    <i class="date" v-html="applet_item.date"
+                        :style="{ backgroundColor: get_date_color(applet_item.date) }"></i>
                 </router-link>
                 <div v-if="!category_item.fold" class="grid-dummy" v-for="index in grid_dummies_count"
                     :key="`dummy_${index}`"></div>
@@ -28,7 +30,7 @@
 
 import { EAppletCategory, applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
-import { get_dark_web_color, get_random_web_color } from "@/tools"
+import { get_dark_web_color, get_random_web_color, get_web_color } from "@/tools"
 import ImageView from '@/components/ImageView.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
@@ -289,6 +291,38 @@ export default mixins(BaseComponent).extend({
             this.category_view.categories.forEach((item) => {
                 item.fold = true;
             });
+        },
+        get_date_color(date: string) {
+            switch (date) {
+                case "2013":
+                    return "#f44336";
+                case "2014":
+                    return "#e91e63";
+                case "2015":
+                    return "#9c27b0";
+                case "2016":
+                    return "#673ab7";
+                case "2017":
+                    return "#3f51b5";
+                case "2018":
+                    return "#018881";
+                case "2019":
+                    return "#00bcd4";
+                case "2020":
+                    return "#009688";
+                case "2021":
+                    return "#834caf";
+                case "2022":
+                    return "#598401";
+                case "2023":
+                    return "#b84a00";
+                case "2024":
+                    return "#ff5722";
+                case "2025":
+                    return "#7e67a8";
+                default:
+                    return "#67a87f";
+            }
         }
     },
     components: { ImageView }
@@ -363,11 +397,26 @@ export default mixins(BaseComponent).extend({
                 max-width: 100%;
                 text-align: center;
             }
+
+
+            .date {
+                position: absolute;
+                bottom: 4px;
+                right: 4px;
+                font-family: @font-family-condensed;
+                font-style: normal;
+                font-size: 10px;
+                padding: 2px 4px;
+                border-bottom: 1px solid black;
+                border-left: 1px solid black;
+            }
+
         }
 
         .applet-thumb:nth-child(2n) {
             .image-view {
                 transform: translate(-50%, -50%) scale(1.5);
+
             }
         }
 
@@ -519,6 +568,10 @@ export default mixins(BaseComponent).extend({
                         height: 32px;
                         background-color: #4b4b4b;
                     }
+                }
+
+                .date {
+                    display: none;
                 }
 
                 &:hover {

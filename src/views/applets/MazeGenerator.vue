@@ -9,7 +9,8 @@
         <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="true"
             :allow_user_translate="true" :allow_context_menu="true">
         </Canvas2D>
-        <Syntax :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup" />
+        <Syntax :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup"
+            :download_name="`maze_${maze_generator.seed}.json`" />
     </div>
 </template>
 <script lang="ts">

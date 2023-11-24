@@ -83,6 +83,7 @@ route_presets:
 # applets
 applets:
   - route: *about_route
+    date: "2023"
     tags: []
     category: ["service"]
     summary: assets/docs/about.txt
@@ -96,12 +97,12 @@ applets:
     title: "About"
 
   - route: *webframe_route
+    date: "2023"
     tags: []
     title: "The Internet"
     category: ["service"]
     props:
       url: random_wikipedia
-
   - route:
       path: "/applets/:query?"
       name: "applets-catalog"
@@ -111,16 +112,19 @@ applets:
     summary: assets/docs/applets-catalog.txt
     category: ["service"]
     title: "Applets"
+    date: "2023"
 
   - route: *applet_launcher_route
     tags: []
     category: []
     title: "Applet Launcher"
+    date: "2023"
     props: {}
 
   - route: *webframe_route
     tags: ["extras", "experiment", "voxels", "procedural", "three"]
     title: "Brickscape [Demo]"
+    date: "2023"
     category: ["project", "demo"]
     document: "assets/docs/brickscape.md"
     preview: "assets/preview/hexworld_a1.png"
@@ -132,6 +136,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Match3"
+    date: "2014"
     category: ["project"]
     preview: "assets/preview/match3_a1.png"
     summary: "assets/docs/match3.txt"
@@ -144,6 +149,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Forest Lads [Demo]"
+    date: "2017"
     category: ["project", "demo"]
     preview: "assets/preview/forestlads_a1.png"
     props:
@@ -152,6 +158,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Telechart"
+    date: "2019"
     summary: "assets/docs/telechart.txt"
     preview: "assets/preview/telechart_a1.png"
     props:
@@ -160,6 +167,7 @@ applets:
   - route: *webframe_route
     tags: ["game", "old"]
     title: "Hill Rider [Demo]"
+    date: "2018"
     category: ["demo"]
     summary: "assets/docs/hillrider.txt"
     preview: "assets/preview/coderider_a1.png"
@@ -169,6 +177,7 @@ applets:
   - route: *webframe_route
     tags: ["extras", "game", "engine"]
     title: "Retro Engine [Demo]"
+    date: "2021"
     category: ["demo"]
     preview: "assets/preview/retro_engine_a1.png"
     props:
@@ -177,6 +186,7 @@ applets:
   - route: *webframe_route
     tags: ["extras", "experiment"]
     title: "Euphoria [Demo]"
+    date: "2017"
     category: ["lab"]
     preview: "assets/preview/euphoria_da1.png"
     props:
@@ -187,6 +197,7 @@ applets:
     tags: ["extras", "commercial", "chart", "plot", "three", "gl"]
     category: ["project"]
     title: "Plot3 [Demo]"
+    date: "2018"
     summary: "assets/docs/plot3.txt"
     document: "assets/docs/plot3.md"
     preview: "assets/preview/stonks_a1.png"
@@ -197,6 +208,7 @@ applets:
     tags: ["extras", "retro", "unity", "game"]
     category: ["project"]
     title: "Middlenight [Demo]"
+    date: "2021"
     summary: "assets/docs/middlenight.txt"
     preview: "assets/preview/middlenight_a1.png"
     props:
@@ -211,6 +223,7 @@ applets:
     tags: ["three", "gl", "tool", "shader", "utils", "image"]
     category: ["tool", "experiment"]
     title: "Polar Picture Tool"
+    date: "2023"
     preview: "assets/preview/polar_image_a1.png"
     props:
       image: "random"
@@ -219,6 +232,7 @@ applets:
     tags: ["service"]
     category: ["service"]
     title: "3D Model View"
+    date: "2023"
     summary: "assets/docs/model-viewer.txt"
     document: "assets/docs/model-viewer.md"
     props:
@@ -232,6 +246,7 @@ applets:
     summary: "assets/docs/model-viewer.txt"
     document: "assets/docs/model-viewer.md"
     title: "Packages Example"
+    date: "2023"
     package: sample
 
   - route:
@@ -242,6 +257,7 @@ applets:
     tags: ["service"]
     category: ["service"]
     title: "Shader View"
+    date: "2023"
     props:
       shader_id: starscape
 
@@ -259,6 +275,7 @@ applets:
       ]
     category: ["tool", "package"]
     title: "preview3d"
+    date: "2022"
     preview: "assets/preview/preview3d_01.png"
     summary: "assets/docs/preview3d.txt"
     package:
@@ -277,6 +294,7 @@ applets:
     tags: ["article", "psp2", "psvita", "playstation", "homebrew", "unity"]
     category: ["article"]
     title: "PSP2 Unity Homebrew Development"
+    date: "2021"
     document: "assets/articles/psp2dev.md"
     preview: "assets/preview/psp2dev.png"
     package:
@@ -300,6 +318,7 @@ applets:
     tags: ["experiment", "game", "three", "gl", "shader", "utils"]
     category: ["experiment"]
     title: "Retroid Maker"
+    date: "2023"
     preview: "assets/image/pattern.png"
 
   - route:
@@ -312,6 +331,9 @@ applets:
     summary: "assets/docs/maze_generator.txt"
     document: "assets/docs/maze_generator.md"
     title: "Maze Generator"
+    date: "2023"
     preview: "assets/preview/maze_generator.png"
-    props: 
+    package:
+      - [maze_generator.py, /assets/code/maze_generator/maze_generator.py]
+    props:
       seed: random

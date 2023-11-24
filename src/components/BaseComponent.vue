@@ -1,5 +1,6 @@
 
 <script lang="ts">
+import { get_bright_web_color, get_dark_web_color, get_web_color } from '@/tools';
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -66,7 +67,16 @@ export default Vue.extend({
                     (err) => console.error('Async: Could not copy text: ', err)
                 );
             }
-        }
+        },
+        get_web_color(color: string) {
+            return get_web_color(color);
+        },
+        get_bright_web_color(color: string) {
+            return get_bright_web_color(color);
+        },
+        get_dark_web_color(color: string) {
+            return get_dark_web_color(color);
+        },
     }
 })
 </script>

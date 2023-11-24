@@ -2,14 +2,16 @@
     <div class="package-explorer" ref="root">
         <div class="files" v-if="package_data">
             <a class="file" v-for="(item, index) in package_data" :key="`file_${index}`" :title="item[1]" target="_blank"
-                :data-file-type="detect_file_type(item[1])" :href="item[1]">
+                :data-file-type="detect_file_type(item[1])" :href="item[1]" @click="handle_link_pointerdown($event, item)">
                 <ImageView :src="get_file_type_icon(detect_file_type(item[1]))" />
                 <div class="data">
                     <p class="title" v-html="item[0]"></p>
                     <p class="path" v-html="item[1]"></p>
                 </div>
+
             </a>
         </div>
+        <Syntax ref="syntax" popup="true" :file="syntax_file" v-if="show_syntax" @close="show_syntax = false"/>
     </div>
 </template>
   
@@ -21,6 +23,7 @@ import BaseComponent from '@/components/BaseComponent.vue';
 import ImageView from '@/components/ImageView.vue';
 import { packages } from '@/router';
 import { get, isString } from 'lodash';
+import Syntax from './Syntax.vue';
 
 export enum EPackageExplorerMode {
     Default,
@@ -46,11 +49,20 @@ export enum EFileType {
     PythonScript = 'python-script',
 }
 
+const file_opened_in_syntax_highlighter = [
+    EFileType.Text,
+    EFileType.Markdown,
+    EFileType.PythonScript
+]
+
 export default mixins(BaseComponent).extend({
     name: "PackageExplorer",
-    components: { Showdown, ImageView },
+    components: { Showdown, ImageView, Syntax },
     data() {
-        return {};
+        return {
+            show_syntax: false,
+            syntax_file: null
+        };
     },
     mounted() {
 
@@ -73,6 +85,17 @@ export default mixins(BaseComponent).extend({
         }
     },
     methods: {
+        handle_link_pointerdown(evt, item) {
+            console.log('handle_link_pointerdown', evt, item)
+            if (this.should_file_should_be_opened_in_syntax_highlighter(this.detect_file_type(item[1]))) {
+                evt.preventDefault()
+                this.syntax_file = item[1];
+                this.show_syntax = true;
+            }
+        },
+        should_file_should_be_opened_in_syntax_highlighter(type: EFileType): boolean {
+            return file_opened_in_syntax_highlighter.includes(type)
+        },
         detect_file_type(url: string): EFileType {
             if (!isString(url)) {
                 throw new Error('url is not a string')
