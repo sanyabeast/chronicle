@@ -159,6 +159,7 @@ export default mixins(BaseComponent).extend({
         update_canvas() {
             this.canvas.viewport.width = this.maze_generator.grid_size;
             this.canvas.viewport.height = this.maze_generator.grid_size;
+            this.canvas.user.scale = 1;
             this.canvas.resize_canvas();
         },
         draw_cells() {
