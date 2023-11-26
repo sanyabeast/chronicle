@@ -26,6 +26,7 @@ const components = {
   ShaderView: () => import('../views/applets/ShaderView.vue'),
   RetroidMaker: () => import('../views/applets/RetroidMaker.vue'),
   MazeGenerator: () => import('../views/applets/MazeGenerator.vue'),
+  AStarPathfinder: () => import('../views/applets/AStarPathfinder.vue'),
 }
 
 Vue.use(VueRouter)

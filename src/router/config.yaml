@@ -321,6 +321,7 @@ applets:
     date: "2023"
     preview: "assets/image/pattern.png"
 
+# MAZE GENERATOR
   - route:
       name: "MazeGenerator"
       path: "/applet/maze-generator/:seed"
@@ -337,3 +338,17 @@ applets:
       - [maze_generator.py, /assets/code/maze_generator/maze_generator.py]
     props:
       seed: random
+
+# A-Star Pathfinder Demo
+  - route:
+      name: "AStarPathfinder"
+      path: "/applet/a-star"
+      component: AStarPathfinder
+      props: true
+    tags: ["experiment", "utils", "canvas2d", "algorithm"]
+    category: ["tool", "experiment"]
+    summary: "assets/docs/a_star_pathfinder.txt"
+    document: "assets/docs/a_star_pathfinder.md"
+    title: "A-Star Pathfinder"
+    date: "2023"
+    preview: "assets/preview/a_star_pathfinder.png"

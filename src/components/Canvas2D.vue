@@ -1,7 +1,11 @@
 <template>
-    <div class="canvas2d" @mousemove="handle_mousemove" @mousedown="user.pointer.is_down = true"
-        @mouseup="user.pointer.is_down = false" @contextmenu="handle_contextmenu">
+    <div class="canvas2d" :class="{ decoration: decoration }" @mousemove="handle_mousemove"
+        @mousedown="user.pointer.is_down = true" @mouseup="user.pointer.is_down = false" @contextmenu="handle_contextmenu">
         <canvas ref="canvas"></canvas>
+        <div v-if="decoration" class="decoration">
+            <i></i>
+            <p>Canvas 2D</p>
+        </div>
         <div v-if="show_debug" class="debug-layer">
             <div>
                 <p>frames rendered</p>
@@ -75,7 +79,8 @@ export default Vue.extend({
             },
             stats: {
                 frames_rendered: 0
-            }
+            },
+            render_loop: null,
         }
     },
     props: {
@@ -95,6 +100,10 @@ export default Vue.extend({
             type: Boolean,
             default: false
         },
+        decoration: {
+            type: Boolean,
+            default: true
+        }
     },
     mounted() {
         this.resolution = window.devicePixelRatio || 1;
@@ -119,6 +128,10 @@ export default Vue.extend({
         window.removeEventListener('keydown', this.handle_keypress);
     },
     methods: {
+        start_render_loop() {
+            this.render_loop = requestAnimationFrame(this.start_render_loop);
+            this.render();
+        },
         handle_contextmenu(event) {
             if (!this.allow_context_menu) {
                 event.preventDefault();
@@ -355,6 +368,8 @@ export default Vue.extend({
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style  lang="less">
+@import url('@/assets/index.less');
+
 .canvas2d {
     position: relative;
 
@@ -365,20 +380,21 @@ export default Vue.extend({
 
     .debug-layer {
         position: absolute;
-        bottom: 0;
-        right: 0;
+        top: 0;
+        left: 0;
         width: auto;
         max-width: 100%;
         height: auto;
         padding: 8px;
         background: rgba(0, 0, 0, 0.25);
+        display: flex;
         z-index: 1;
 
         &:hover {
             opacity: 0;
         }
 
-        div {
+        >div {
             pointer-events: none;
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -386,6 +402,7 @@ export default Vue.extend({
 
             display: flex;
             flex-direction: row;
+            margin-right: 16px;
 
             p {
                 line-height: 1em;
@@ -397,6 +414,37 @@ export default Vue.extend({
                     color: grey;
                     text-align: right;
                 }
+            }
+        }
+    }
+
+    &.decoration {
+        border: 1px dotted white;
+
+        .decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 16px;
+
+
+            i {
+                position: absolute;
+                height: 16px;
+                top: 8px;
+                width: 100%;
+                border-bottom: 1px dotted white;
+            }
+
+            p {
+                background-color: #000;
+                position: absolute;
+                top: 0px;
+                right: 32px;
+                font-family: @font-family-monospace;
+                font-size: 10px;
+                padding: 0 8px;
             }
         }
     }
