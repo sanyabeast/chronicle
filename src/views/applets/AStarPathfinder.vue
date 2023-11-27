@@ -1,5 +1,5 @@
 <template>
-    <div class="a-star-pathfinder" @mousemove="handle_mousemove" @mousedown="handle_mousedown" @contextmenu.prevent="">
+    <div class="a-star-pathfinder" @mousemove="handle_mousemove" @mouseup="handle_mouseup" @contextmenu.prevent="">
         <div class="control-panel">
             <Tweakpane ref="tweakpane"></Tweakpane>
             <ul class="info">
@@ -22,21 +22,22 @@ import Canvas2D from '@/components/Canvas2D.vue';
 import Tweakpane from '@/components/Tweakpane.vue';
 import mixins from 'vue-typed-mixins'
 import BaseComponent from '@/components/BaseComponent.vue';
-import { fill, map, throttle } from 'lodash';
+import { debounce, fill, map, throttle } from 'lodash';
 import Syntax from '@/components/Syntax.vue';
 import { AStarPathfinder } from './AStar/AStar';
 import Alea from 'alea'
 
 const color_scheme = {
-    background: "#2E2E3A",     // Dark Slate Gray for a modern, sleek background
-    free_cell: "#A3B1C6",      // Light Steel Blue for unoccupied cells, providing a soft contrast
-    blocked_cell: "#6A7485",   // Cadet Blue for blocked cells, blending well but distinguishable
-    start_cell: "#76B947",     // Olive Drab for the start cell, indicating 'go' or 'start'
-    finish_cell: "#D85E47",    // Sienna for the finish cell, signaling 'stop' or 'end'
-    cell_gap_color: "#404455", // Darker Gray for gaps between cells, for a subtle boundary
-    hovered_cell: "#31A2AC",   // Turquoise for hovered cells, standing out but not overpowering
-    path_color: "#FFAA22"      // Golden Rod for the path, bright and attention-grabbing
+    background: "#36454F",     // Charcoal for a modern, sleek background
+    free_cell: "#8BA8B7",      // Pewter Blue for unoccupied cells, providing a soft contrast
+    blocked_cell: "#353839",   // Onyx for blocked cells, blending well but distinguishable
+    start_cell: "#00A36C",     // Jade Green for the start cell, more visible against the background
+    finish_cell: "#960018",    // Carmine Red for the finish cell, signaling 'stop' or 'end'
+    cell_gap_color: "#2A3439", // Gunmetal for gaps between cells, for a subtle boundary
+    hovered_cell: "#87CEEB",   // Sky Blue for hovered cells, standing out but not overpowering
+    path_color: "#FFBF00"      // Amber for the path, bright and attention-grabbing
 };
+
 class Cell {
     x: number;
     y: number;
@@ -57,6 +58,9 @@ export default mixins(BaseComponent).extend({
     mounted() {
         this.canvas = this.$refs.canvas;
         this.pathfinder = new AStarPathfinder<Cell>(this.find_neighbors.bind(this))
+
+        this.update_path = debounce(this.update_path, 1000 / 30)
+
         this.setup_tweakpane()
         this.regenerate()
         this.render()
@@ -64,7 +68,6 @@ export default mixins(BaseComponent).extend({
     beforeMount() { },
     methods: {
         find_neighbors(cell: Cell, neighbors: Set<Cell>) {
-            console.log(cell, neighbors)
 
             let x = cell.x
             let y = cell.y
@@ -86,19 +89,19 @@ export default mixins(BaseComponent).extend({
             }
 
             if (this.allow_diagonal) {
-                if (x > 0 && y > 0 && !this.cells[y - 1][x - 1].blocked) {
+                if (x > 0 && y > 0 && !this.cells[y - 1][x - 1].blocked && !this.cells[y][x - 1].blocked && !this.cells[y - 1][x].blocked) {
                     neighbors.add(this.cells[y - 1][x - 1])
                 }
 
-                if (x < this.grid_size - 1 && y > 0 && !this.cells[y - 1][x + 1].blocked) {
+                if (x < this.grid_size - 1 && y > 0 && !this.cells[y - 1][x + 1].blocked && !this.cells[y][x + 1].blocked && !this.cells[y - 1][x].blocked) {
                     neighbors.add(this.cells[y - 1][x + 1])
                 }
 
-                if (x > 0 && y < this.grid_size - 1 && !this.cells[y + 1][x - 1].blocked) {
+                if (x > 0 && y < this.grid_size - 1 && !this.cells[y + 1][x - 1].blocked && !this.cells[y][x - 1].blocked && !this.cells[y + 1][x].blocked) {
                     neighbors.add(this.cells[y + 1][x - 1])
                 }
 
-                if (x < this.grid_size - 1 && y < this.grid_size - 1 && !this.cells[y + 1][x + 1].blocked) {
+                if (x < this.grid_size - 1 && y < this.grid_size - 1 && !this.cells[y + 1][x + 1].blocked && !this.cells[y][x + 1].blocked && !this.cells[y + 1][x].blocked) {
                     neighbors.add(this.cells[y + 1][x + 1])
                 }
             }
@@ -112,35 +115,37 @@ export default mixins(BaseComponent).extend({
         },
         render_scene() {
             // rendering cells
-            for (let y = 0; y < this.grid_size; y++) {
-                for (let x = 0; x < this.grid_size; x++) {
-                    let fill_color = color_scheme.free_cell
-                    if (this.cells[y][x].blocked) {
-                        fill_color = color_scheme.blocked_cell
-                    }
+            this.for_each_cell((cell) => {
+                let x = cell.x
+                let y = cell.y
 
-                    this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color, stroke_color: color_scheme.cell_gap_color })
-
-                    if (this.start_cell && this.start_cell.x == x && this.start_cell.y == y) {
-                        this.canvas.draw_rect({ x: x + 0.1, y: y + 0.1, width: 0.8, height: 0.8, fill_color: color_scheme.start_cell, alpha: 0.5 })
-                    }
-
-                    if (this.finish_cell && this.finish_cell.x == x && this.finish_cell.y == y) {
-                        this.canvas.draw_rect({ x: x + 0.1, y: y + 0.1, width: 0.8, height: 0.8, fill_color: color_scheme.finish_cell })
-                    }
-
-                    if (!this.cells[y][x].blocked && this.hovered_cell && this.hovered_cell.x == x && this.hovered_cell.y == y) {
-                        this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color: color_scheme.hovered_cell, alpha: 0.3 })
-                    }
+                let fill_color = color_scheme.free_cell
+                if (this.cells[y][x].blocked) {
+                    fill_color = color_scheme.blocked_cell
                 }
-            }
 
+                this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color, stroke_color: color_scheme.cell_gap_color })
+
+                if (this.start_cell && this.start_cell.x == x && this.start_cell.y == y) {
+                    this.canvas.draw_rect({ x: x + 0.1, y: y + 0.1, width: 0.8, height: 0.8, fill_color: color_scheme.start_cell, alpha: 0.5, rotation: Math.PI / 4 })
+                }
+
+                if (this.finish_cell && this.finish_cell.x == x && this.finish_cell.y == y) {
+                    this.canvas.draw_rect({ x: x + 0.1, y: y + 0.1, width: 0.8, height: 0.8, fill_color: color_scheme.finish_cell })
+                }
+
+                if (!this.cells[y][x].blocked && this.hovered_cell && this.hovered_cell.x == x && this.hovered_cell.y == y) {
+                    this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color: color_scheme.hovered_cell, alpha: 0.3 })
+                }
+            })
             //  rendering path
             if (this.path) {
+                let points = map(this.path, (cell) => {
+                    return { x: cell.x + 0.5, y: cell.y + 0.5 }
+                })
+
                 this.canvas.draw_line({
-                    points: map(this.path, (cell) => {
-                        return { x: cell.x + 0.5, y: cell.y + 0.5 }
-                    }), stroke_color: color_scheme.path_color, line_width: 0.03, alpha: 1
+                    points: points, stroke_color: color_scheme.path_color, line_width: 0.03, alpha: 1
                 })
             }
 
@@ -163,10 +168,62 @@ export default mixins(BaseComponent).extend({
                 }
             }
         },
+        set_random_start_finish_cells() {
+            this.for_each_cell((cell) => {
+                if (!cell.blocked) {
+                    if (this.seeded_random() < 0.25) {
+                        this.start_cell = cell
+                        return true
+                    }
+                }
+                return false
+            })
+
+            this.for_each_cell_reverse((cell) => {
+                if (!cell.blocked) {
+                    if (this.seeded_random() < 0.25) {
+                        this.finish_cell = cell
+                        return true
+                    }
+                }
+                return false
+            })
+
+            this.update_path()
+        },
+        for_each_cell(callback: (cell: Cell) => boolean) {
+            let _break = false
+            for (let y = 0; y < this.grid_size; y++) {
+                for (let x = 0; x < this.grid_size; x++) {
+                    if (callback(this.cells[y][x])) {
+                        _break = true
+                        break;
+                    }
+                }
+                if (_break) {
+                    break;
+                }
+            }
+        },
+        for_each_cell_reverse(callback: (cell: Cell) => boolean) {
+            let _break = false
+            for (let y = this.grid_size - 1; y >= 0; y--) {
+                for (let x = this.grid_size - 1; x >= 0; x--) {
+                    if (callback(this.cells[y][x])) {
+                        _break = true
+                        break;
+                    }
+                }
+                if (_break) {
+                    break;
+                }
+            }
+        },
         regenerate() {
             this.reset()
             this.update_random_generator()
             this.fill_random_cells()
+            this.set_random_start_finish_cells()
             this.canvas.reset_user_transform()
             this.update_canvas()
             this.canvas.centrize()
@@ -178,8 +235,11 @@ export default mixins(BaseComponent).extend({
             if (this.start_cell && this.finish_cell) {
                 let path = this.pathfinder.find_path(this.start_cell, this.finish_cell)
                 this.path = path
-                console.log(path)
+            } else {
+                this.path = null
             }
+
+            this.render()
         },
         handle_mousemove(e: MouseEvent) {
             if (this.canvas) {
@@ -187,13 +247,25 @@ export default mixins(BaseComponent).extend({
                 let x = Math.floor(coords.x)
                 let y = Math.floor(coords.y)
 
-                this.hovered_cell.x = x
-                this.hovered_cell.y = y
 
-                this.render()
+                if (this.cells[y]) {
+                    if (this.cells[y][x]) {
+                        let cell = this.cells[y][x]
+
+                        if (!cell.blocked) {
+                            this.hovered_cell = cell
+                        } else {
+                            this.hovered_cell = null
+                        }
+
+                        this.render()
+                    }
+
+                }
+
             }
         },
-        handle_mousedown(e: MouseEvent) {
+        handle_mouseup(e: MouseEvent) {
             let coords = this.canvas.screen_to_viewport({ x: e.offsetX, y: e.offsetY })
             let x = Math.floor(coords.x)
             let y = Math.floor(coords.y)
@@ -212,10 +284,13 @@ export default mixins(BaseComponent).extend({
                         break;
                 }
 
+                if (this.start_cell.is_same(this.finish_cell)) {
+                    this.finish_cell = null
+                }
+
                 this.update_path()
             }
 
-            console.log(e)
         },
         reset() {
             this.start_cell = null
@@ -267,9 +342,17 @@ export default mixins(BaseComponent).extend({
             }, 1000 / 15));
 
             pane.addButton({
+                title: 'Set Random Start/Finish',
+            }).on('click', () => {
+                this.set_random_start_finish_cells()
+                this.render()
+            });
+
+            pane.addButton({
                 title: 'Reset Viewport',
             }).on('click', () => {
                 this.canvas.reset_user_transform()
+                this.canvas.centrize()
             });
 
         }
@@ -283,8 +366,8 @@ export default mixins(BaseComponent).extend({
             grid_size: 10,
             blockiness: 0.25,
             cells: [],
-            seed: 404,
-            allow_diagonal: false,
+            seed: 671,
+            allow_diagonal: true,
             hovered_cell: {
                 x: -1,
                 y: -1

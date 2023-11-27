@@ -593,6 +593,7 @@ export default mixins(BaseComponent).extend({
                 title: 'Reset Viewport',
             }).on('click', () => {
                 this.canvas.reset_user_transform()
+                this.canvas.centrize()
             });
         }
     },

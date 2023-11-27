@@ -9,6 +9,11 @@
                 </p>
             </div>
             <div>
+                <p>items rendered/skipped</p>
+                <p v-html="`${this.stats.items_rendered}/${this.stats.items_skipped}`">
+                </p>
+            </div>
+            <div>
                 <p>canvas dimensions</p>
                 <p v-html="`[${this.width}x${this.height}] (dpi: ${this.resolution})`"></p>
             </div>
@@ -74,9 +79,13 @@ export default Vue.extend({
 
             },
             stats: {
-                frames_rendered: 0
+                frames_rendered: 0,
+                items_rendered: 0,
+                items_skipped: 0,
             },
             render_loop: null,
+            items_rendered: 0,
+            items_skipped: 0,
         }
     },
     props: {
@@ -243,35 +252,42 @@ export default Vue.extend({
             this.hidden_context.fillStyle = clear_color;
             this.hidden_context.fillRect(0, 0, this.canvas.width, this.canvas.height);
         },
-        draw_rect({ x, y, width, height, fill_color, stroke_color, line_width = 0, alpha = 1 }) {
+        draw_rect({ x, y, width, height, fill_color, stroke_color, line_width = 0, alpha = 1, rotation = 0 }) {
             if (x === undefined || y === undefined || width === undefined || height === undefined) {
                 throw new Error('x, y, width, height are required');
             }
 
-            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
-            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+            if (!this.should_skip_rendering(x, y, width, height)) {
+                let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+                let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+                x = x * this.viewport.computed.scale + v_dx;
+                y = y * this.viewport.computed.scale + v_dy;
+                width = width * this.viewport.computed.scale;
+                height = height * this.viewport.computed.scale;
 
-            x = x * this.viewport.computed.scale + v_dx;
-            y = y * this.viewport.computed.scale + v_dy;
-            width = width * this.viewport.computed.scale;
-            height = height * this.viewport.computed.scale;
+                this.set_canvas_settings({ fill_color, stroke_color, line_width, alpha });
 
-            this.set_canvas_settings({ fill_color, stroke_color, line_width, alpha });
+                if (fill_color) {
+                    this.hidden_context.fillRect(x, y, width, height);
+                }
 
-            if (fill_color) {
-                this.hidden_context.fillRect(x, y, width, height);
+                if (stroke_color) {
+                    this.hidden_context.strokeRect(x, y, width, height);
+                }
+
+                this.items_rendered++
+                this.reset_canvas_settings();
+            } else {
+                this.items_skipped++
             }
-
-            if (stroke_color) {
-                this.hidden_context.strokeRect(x, y, width, height);
-            }
-
-            this.reset_canvas_settings();
         },
         draw_text({ x, y, text, fill_color, stroke_color, font_family, font_size, font_weight, text_align, max_width, alpha = 1 }) {
             if (x === undefined || y === undefined || text === undefined) {
                 throw new Error('x, y, text are required');
             }
+
+            let x0 = x
+            let y0 = y
 
             let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
             let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
@@ -288,6 +304,11 @@ export default Vue.extend({
                 let font_scale = 1;
 
                 let text_measurement = this.measure_text({ text, font_family, font_size, font_weight });
+
+                if (this.should_skip_rendering_text(x0, y0, text_measurement.width, text_measurement.height)) {
+                    this.items_skipped++
+                    return;
+                }
 
                 if (max_width && text_measurement.width > max_width) {
                     font_scale = max_width / text_measurement.width;
@@ -310,6 +331,7 @@ export default Vue.extend({
                 this.hidden_context.strokeText(text, x, y);
             }
 
+            this.items_rendered++
             this.reset_canvas_settings();
         },
         measure_text({ text, font_family, font_size, font_weight }) {
@@ -329,33 +351,37 @@ export default Vue.extend({
                 throw new Error('points are required');
             }
 
-
-
             if (points.length < 2) {
                 throw new Error('at least 2 points are required');
             }
 
-            this.set_canvas_settings({ stroke_color, line_width, alpha });
+            if (!this.should_skip_rendering_line(line_width)) {
+                this.set_canvas_settings({ stroke_color, line_width, alpha });
 
-            this.hidden_context.beginPath();
+                this.hidden_context.beginPath();
 
-            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
-            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+                let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+                let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
 
-            this.hidden_context.moveTo(
-                points[0].x * this.viewport.computed.scale + v_dx,
-                points[0].y * this.viewport.computed.scale + v_dy
-            );
-
-            for (let i = 1; i < points.length; i++) {
-                this.hidden_context.lineTo(
-                    points[i].x * this.viewport.computed.scale + v_dx,
-                    points[i].y * this.viewport.computed.scale + v_dy
+                this.hidden_context.moveTo(
+                    points[0].x * this.viewport.computed.scale + v_dx,
+                    points[0].y * this.viewport.computed.scale + v_dy
                 );
-            }
 
-            this.hidden_context.stroke();
-            this.reset_canvas_settings();
+                for (let i = 1; i < points.length; i++) {
+                    this.hidden_context.lineTo(
+                        points[i].x * this.viewport.computed.scale + v_dx,
+                        points[i].y * this.viewport.computed.scale + v_dy
+                    );
+                }
+
+                this.hidden_context.stroke();
+
+                this.items_rendered++
+                this.reset_canvas_settings();
+            } else {
+                this.items_skipped++
+            }
         },
         resize_canvas(emit_event: boolean = true) {
             if (this.canvas) {
@@ -376,6 +402,10 @@ export default Vue.extend({
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.drawImage(this.hidden_canvas, 0, 0);
             this.stats.frames_rendered++;
+            this.stats.items_rendered = this.items_rendered;
+            this.stats.items_skipped = this.items_skipped;
+            this.items_rendered = 0;
+            this.items_skipped = 0;
         },
 
         // method computeds viewport.translate and viewport.scale properties so that the virtual viewport fits the real canvas
@@ -409,6 +439,30 @@ export default Vue.extend({
             this.user.offset.y = (this.height / this.viewport.computed.scale - this.viewport.height) / 2;
             this.compute_viewport();
             this.$emit('update');
+        },
+        should_skip_rendering(x, y, width, height) {
+            let v_dx = this.viewport.computed.offset.x * this.viewport.computed.scale;
+            let v_dy = this.viewport.computed.offset.y * this.viewport.computed.scale;
+            x = x * this.viewport.computed.scale + v_dx;
+            y = y * this.viewport.computed.scale + v_dy;
+            width = width * this.viewport.computed.scale;
+            height = height * this.viewport.computed.scale;
+
+            if (width < this.resolution / 2 || height < this.resolution / 2) {
+                return true;
+            }
+
+            return x > this.width || x + width < 0 || y > this.height || y + height < 0;
+        },
+        should_skip_rendering_line(line_width) {
+            return line_width * this.viewport.computed.scale < this.resolution / 2;
+        },
+        should_skip_rendering_text(x, y, width, height) {
+            if (height * this.viewport.computed.scale < 4 * this.resolution) {
+                return true;
+            }
+
+            return this.should_skip_rendering(x, y, width, height);
         }
     }
 });
