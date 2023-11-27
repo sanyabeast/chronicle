@@ -162,6 +162,7 @@ export default mixins(BaseComponent).extend({
             this.canvas.viewport.height = this.maze_generator.grid_size;
             this.canvas.user.scale = 1;
             this.canvas.resize_canvas();
+            this.canvas.centrize()
         },
         draw_cells() {
             this.maze_generator.for_each_cell((cell) => {
@@ -462,6 +463,7 @@ export default mixins(BaseComponent).extend({
                 this.set_random_seed()
                 this.generate();
                 this.$refs.tweakpane.pane.refresh();
+                this.update_canvas()
                 this.render()
             });
 

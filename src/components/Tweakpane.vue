@@ -101,6 +101,10 @@ export default Vue.extend({
         height: 32px;
     }
 
+    .tp-ckbv_w {
+        border: 1px solid #eee;
+    }
+
     option {
         color: #000000;
     }
@@ -129,5 +133,6 @@ export default Vue.extend({
     --tp-monitor-background-color: hsla(0, 0%, 0%, 0.3);
     --tp-monitor-foreground-color: hsla(0, 0%, 100%, 0.3);
 
-}</style>
+}
+</style>
   
