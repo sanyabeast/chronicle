@@ -139,10 +139,7 @@ export default Vue.extend({
             }
         },
         handle_keypress(event) {
-            // reset user scale and transforms on 'space' key press
-            if (event.code === 'Space') {
-                this.reset_user_transform();
-            }
+            
         },
         reset_user_transform() {
             this.user.scale = 1;

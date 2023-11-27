@@ -138,9 +138,9 @@ export default mixins(BaseComponent).extend({
                         order: true
                     },
                     {
-                        include: [EAppletCategory.Project, EAppletCategory.Demo, EAppletCategory.Package, EAppletCategory.Lab, EAppletCategory.Experiment, EAppletCategory.Service],
+                        include: [EAppletCategory.Project, EAppletCategory.Demo, EAppletCategory.Package, EAppletCategory.Lab, EAppletCategory.Experiment, EAppletCategory.Article, EAppletCategory.Tool, EAppletCategory.Service],
                         title: "everything",
-                        fold: true,
+                        fold: false,
                         filter: false,
                         if_search: false,
                         if_no_search: true,
@@ -558,6 +558,10 @@ export default mixins(BaseComponent).extend({
                     font-size: @font-size-l;
                     font-weight: 400;
                     font-family: @font-family-serif;
+                    word-wrap: break-word;
+                    text-overflow: clip;
+                    white-space: nowrap;
+                    overflow: hidden;
 
                 }
 

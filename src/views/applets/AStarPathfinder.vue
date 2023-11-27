@@ -5,6 +5,7 @@
             <ul class="info">
                 <li><i>Left</i> mouse button - set <b color="#">start</b></li>
                 <li><i>Right</i> mouse button - set finish</li>
+                <li><i>Middle</i> mouse button - toggle cell</li>
             </ul>
         </div>
         <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="true"
@@ -17,6 +18,7 @@
 </template>
 <script lang="ts">
 
+import * as THREE from 'three';
 import Vue from 'vue';
 import Canvas2D from '@/components/Canvas2D.vue';
 import Tweakpane from '@/components/Tweakpane.vue';
@@ -26,16 +28,18 @@ import { debounce, fill, map, throttle } from 'lodash';
 import Syntax from '@/components/Syntax.vue';
 import { AStarPathfinder } from './AStar/AStar';
 import Alea from 'alea'
+import { lerp_float } from '@/tools';
 
 const color_scheme = {
-    background: "#36454F",     // Charcoal for a modern, sleek background
+    background: "#111111",     // Charcoal for a modern, sleek background
     free_cell: "#8BA8B7",      // Pewter Blue for unoccupied cells, providing a soft contrast
     blocked_cell: "#353839",   // Onyx for blocked cells, blending well but distinguishable
     start_cell: "#00A36C",     // Jade Green for the start cell, more visible against the background
     finish_cell: "#960018",    // Carmine Red for the finish cell, signaling 'stop' or 'end'
     cell_gap_color: "#2A3439", // Gunmetal for gaps between cells, for a subtle boundary
     hovered_cell: "#87CEEB",   // Sky Blue for hovered cells, standing out but not overpowering
-    path_color: "#FFBF00"      // Amber for the path, bright and attention-grabbing
+    path_color: "#FFBF00",     // Amber for the path, bright and attention-grabbing
+    visited_color: "#ff1100"
 };
 
 class Cell {
@@ -55,12 +59,56 @@ class Cell {
 export default mixins(BaseComponent).extend({
     name: "AStarDemo",
     components: { Canvas2D, Tweakpane },
+    computed: {},
+    props: {
+        category: String
+    },
+    data() {
+        return {
+            grid_size: 10,
+            blockiness: 0.25,
+            directional_bias: 0.5,
+            cells: [],
+            seed: 671,
+            allow_diagonal: true,
+            visited_cells: [],
+            hovered_cell: {
+                x: -1,
+                y: -1
+            },
+            start_cell: {
+                x: -1,
+                y: -1
+            },
+            finish_cell: {
+                x: -1,
+                y: -1
+            },
+        }
+    },
     mounted() {
         this.canvas = this.$refs.canvas;
-        this.pathfinder = new AStarPathfinder<Cell>(this.find_neighbors.bind(this))
+        this.pathfinder = new AStarPathfinder<Cell>({
+            find_neighbors: this.find_neighbors.bind(this),
+            get_distance: (cell1, cell2) => {
+                let distance = Math.abs(cell1.x - cell2.x) + Math.abs(cell1.y - cell2.y)
+
+                // directional bias
+                let global_direction = new THREE.Vector2(this.finish_cell.x - this.start_cell.x, this.finish_cell.y - this.start_cell.y).normalize()
+
+                let local_direction = new THREE.Vector2(cell2.x - cell1.x, cell2.y - cell1.y).normalize()
+
+                let direction_delta = Math.abs(global_direction.x - local_direction.x) + Math.abs(global_direction.y - local_direction.y)
+                direction_delta = Math.pow(direction_delta, 2)
+
+                let bias = lerp_float(1, direction_delta, this.directional_bias);
+                distance *= bias
+
+                return distance;
+            },
+        })
 
         this.update_path = debounce(this.update_path, 1000 / 30)
-
         this.setup_tweakpane()
         this.regenerate()
         this.render()
@@ -105,6 +153,8 @@ export default mixins(BaseComponent).extend({
                     neighbors.add(this.cells[y + 1][x + 1])
                 }
             }
+
+            this.visited_cells = [...this.visited_cells, ...neighbors]
         },
         render() {
             if (this.canvas) {
@@ -138,6 +188,16 @@ export default mixins(BaseComponent).extend({
                     this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color: color_scheme.hovered_cell, alpha: 0.3 })
                 }
             })
+
+            // rndering visited cells
+            this.visited_cells.forEach((cell) => {
+                let x = cell.x
+                let y = cell.y
+
+                this.canvas.draw_rect({ x, y, width: 1, height: 1, fill_color: color_scheme.visited_color, alpha: 0.05 })
+            });
+
+
             //  rendering path
             if (this.path) {
                 let points = map(this.path, (cell) => {
@@ -148,7 +208,6 @@ export default mixins(BaseComponent).extend({
                     points: points, stroke_color: color_scheme.path_color, line_width: 0.03, alpha: 1
                 })
             }
-
         },
         update_canvas() {
             this.canvas.viewport.width = this.grid_size;
@@ -232,6 +291,8 @@ export default mixins(BaseComponent).extend({
             this.seeded_random = Alea(this.seed.toString())
         },
         update_path() {
+            this.visited_cells = []
+
             if (this.start_cell && this.finish_cell) {
                 let path = this.pathfinder.find_path(this.start_cell, this.finish_cell)
                 this.path = path
@@ -274,22 +335,27 @@ export default mixins(BaseComponent).extend({
                 return
             }
 
-            if (!this.cells[y][x].blocked) {
-                switch (e.button) {
-                    case 0:
+            switch (e.button) {
+                case 0:
+                    if (!this.cells[y][x].blocked) {
                         this.start_cell = this.cells[y][x]
-                        break;
-                    case 2:
+                    }
+                    break;
+                case 1:
+                    this.cells[y][x].blocked = !this.cells[y][x].blocked
+                    break;
+                case 2:
+                    if (!this.cells[y][x].blocked) {
                         this.finish_cell = this.cells[y][x]
-                        break;
-                }
-
-                if (this.start_cell.is_same(this.finish_cell)) {
-                    this.finish_cell = null
-                }
-
-                this.update_path()
+                    }
+                    break;
             }
+
+            if (this.start_cell && this.start_cell.is_same(this.finish_cell)) {
+                this.finish_cell = null
+            }
+
+            this.update_path()
 
         },
         reset() {
@@ -324,12 +390,47 @@ export default mixins(BaseComponent).extend({
                 this.render()
             }, 1000 / 60));
 
+            pane.addBinding(this, 'directional_bias', {
+                label: 'Directional Bias',
+                min: 0,
+                max: 1,
+                step: 0.01,
+            }).on('change', throttle(() => {
+                // this.regenerate()
+                this.update_path()
+                this.render()
+            }, 1000 / 60));
+
+            // max_complexity prop of pathfinder
+            pane.addBinding(this.pathfinder, 'max_complexity', {
+                label: 'Max Complexity',
+                min: 0,
+                max: 512,
+                step: 0.01,
+            }).on('change', throttle(() => {
+                this.update_path()
+                this.render()
+            }, 1000 / 60));
+
+
             pane.addBinding(this, 'allow_diagonal', {
                 label: 'Allow Diagonal',
             }).on('change', throttle(() => {
                 this.update_path()
                 this.render()
             }, 1000 / 60));
+
+
+            pane.addButton({
+                title: 'Set Random Start/Finish',
+            }).on('click', () => {
+                this.set_random_start_finish_cells()
+                this.render()
+            });
+
+            pane.addBlade({
+                view: 'separator',
+            });
 
             pane.addBinding(this, 'seed', {
                 label: 'Seed',
@@ -342,11 +443,17 @@ export default mixins(BaseComponent).extend({
             }, 1000 / 15));
 
             pane.addButton({
-                title: 'Set Random Start/Finish',
+                title: 'Random Seed',
             }).on('click', () => {
-                this.set_random_start_finish_cells()
-                this.render()
+                this.seed = Math.floor(Math.random() * 10000)
+                this.regenerate()
+                this.canvas.render()
             });
+
+            pane.addBlade({
+                view: 'separator',
+            });
+
 
             pane.addButton({
                 title: 'Reset Viewport',
@@ -355,33 +462,12 @@ export default mixins(BaseComponent).extend({
                 this.canvas.centrize()
             });
 
+            pane.addBinding(this.pathfinder, 'last_complexity', {
+                readonly: true,
+            });
+
         }
     },
-    computed: {},
-    props: {
-        category: String
-    },
-    data() {
-        return {
-            grid_size: 10,
-            blockiness: 0.25,
-            cells: [],
-            seed: 671,
-            allow_diagonal: true,
-            hovered_cell: {
-                x: -1,
-                y: -1
-            },
-            start_cell: {
-                x: -1,
-                y: -1
-            },
-            finish_cell: {
-                x: -1,
-                y: -1
-            },
-        }
-    }
 })
 </script>
 <style lang="less">

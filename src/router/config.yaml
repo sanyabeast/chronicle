@@ -234,7 +234,6 @@ applets:
     title: "3D Model View"
     date: "2023"
     summary: "assets/docs/model-viewer.txt"
-    document: "assets/docs/model-viewer.md"
     props:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"
@@ -347,8 +346,8 @@ applets:
       props: true
     tags: ["experiment", "utils", "canvas2d", "algorithm"]
     category: ["experiment"]
-    # summary: "assets/docs/a_star_pathfinder.txt"
-    # document: "assets/docs/a_star_pathfinder.md"
+    summary: "assets/docs/a_star_pathfinder.txt"
+    document: "assets/docs/a_star_pathfinder.md"
     title: "A-Star Pathfinder"
     date: "2023"
     preview: "assets/preview/a_star_pathfinder.png"

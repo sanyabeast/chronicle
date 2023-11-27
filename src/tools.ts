@@ -214,3 +214,23 @@ export function file_to_blob_url(file: File) {
         reader.readAsDataURL(file);
     });
 }
+
+export function get_direction_v3(from: THREE.Vector3, to: THREE.Vector3): THREE.Vector3 {
+    return to.clone().sub(from).normalize();
+}
+
+export function get_direction_v2(from: THREE.Vector2, to: THREE.Vector2): THREE.Vector2 {
+    return to.clone().sub(from).normalize();
+}
+
+export function direction_to_angle_v2(direction: THREE.Vector2): number {
+    return Math.atan2(direction.x, direction.y);
+}
+
+export function direction_to_angle_v3(direction: THREE.Vector3): number {
+    return Math.atan2(direction.x, direction.z);
+}
+
+export function lerp_float(a: number, b: number, t: number): number {
+    return a + (b - a) * t;
+}
