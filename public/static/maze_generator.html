@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/css/fonts.css">
+    <title>Welcome to @sanyabeast's Digital Abode [Web 1.0] - Maze Generator</title>
+    <style>
+        html {
+            background-color: black;
+            color: #fff;
+            font-family: 'IBM Plex Serif', sans-serif;
+            line-height: 2em;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            padding-top: 48px;
+            padding-bottom: 48px;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        h2 {
+            margin-top: 32px;
+            display: inline-block;
+            color: #fff;
+            background-color: #000;
+            font-weight: bold;
+        }
+
+        a {
+            display: inline-block;
+            color: red;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        p {
+
+            margin-top: 0;
+            margin-bottom: 1em;
+        }
+
+        a#download {
+            display: none;
+        }
+
+        a:hover {
+            background-color: red;
+            color: #000;
+        }
+
+        #about p {
+            border: none;
+        }
+
+        .emoji {
+            font-family: 'Noto Sans';
+        }
+
+        .back-button {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 0 16px;
+            height: 48px;
+            background: #000;
+            border-bottom: 1px solid red;
+            width: 100%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: flex-start;
+            z-index: 1;
+        }
+
+        .back-button.bottom {
+            top: auto;
+            bottom: 0;
+            border-bottom: none;
+            border-top: 2px solid red;
+        }
+
+        .back-button a {
+            color: #ff0000;
+        }
+
+        .back-button:hover a {
+            color: #fff;
+        }
+
+        .applet {
+            border-bottom: 1px solid #ffffff40;
+            margin-bottom: 16px;
+            background: #0a0a0a;
+            padding: 8px 16px;
+        }
+
+        .applet>a {
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .applet>p {
+            color: #b4b4b4;
+        }
+
+        .applet:hover {
+            background: #0e0e0e;
+
+        }
+
+        .applet-details-main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .applet-details {
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            background-color: #0f0f0f;
+            border-bottom: 1px solid #ffffff40;
+        }
+
+        .applet-details-main {
+            padding: 16px;
+        }
+
+        .applet-document {
+            align-self: stretch;
+            padding: 16px;
+            background-color: #000;
+            border-top: 1px solid #ffffff40;
+        }
+
+        .applet-details-content {
+            align-items: stretch;
+            width: 100%;
+            justify-content: space-between;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .applet-launch,
+        .applet-all {
+            font-size: 24px;
+            background: #fff;
+            margin: 16px 0;
+            color: #000;
+        }
+
+        .applet-all {
+            font-size: 18px;
+        }
+
+        .applet-files {
+            padding: 16px;
+        }
+
+        .applet-files h2 {
+            margin-top: 0;
+        }
+
+        .applet-files a {
+            display: block;
+            color: #fff;
+        }
+
+        .applet-launch:hover,
+        .applet-all:hover {
+            background: #ff0000;
+            color: #000;
+        }
+
+        .no-content {
+            opacity: 0.5;
+        }
+
+        img {
+            width: max-content;
+            /* height: max-content; */
+            max-width: 100%;
+            max-width: 256px;
+            border: 1px solid #fff;
+            margin: 16px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="back-button">
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
+    </div>
+    <div class="back-button bottom">
+        <a href="/chronicle/dist/static/index.html">&#x25c0; Back</a>
+    </div>
+    <script>
+        function adjustLinksAndImages() {
+            console.log('adjusting links and images...');
+            if (location.hostname === 'localhost') {
+                console.log('Running locally, adjusting links.');
+                let links = document.querySelectorAll('a');
+                links.forEach(element => {
+                    element.href = element.href.replace('chronicle/dist/', '');
+                    element.href = element.href.replace('static/assets/', 'assets/');
+                });
+
+                let imgs = document.querySelectorAll('img');
+                imgs.forEach(element => {
+                    element.src = element.src.replace('chronicle/dist/', '');
+                    element.src = element.src.replace('static/assets/', 'assets/');
+                });
+            } else {
+                console.log('Running on server, adjusting links.');
+                let applet_document = document.querySelector('.applet-document');
+                let applet_document_images = applet_document.querySelectorAll('img');
+                applet_document_images.forEach((img) => {
+                    img.src = img.src.replace('static/assets/', 'assets/');
+                    // img.src = img.src.replace('/assets/', 'chronicle/dist/assets/')
+                })
+            }
+
+        }
+
+        // Call once initially to adjust links and images.
+        adjustLinksAndImages();
+        window.adjustLinksAndImages = adjustLinksAndImages;
+    </script>
+
+    <div class="applet-details"><div class="applet-details-content"><div class="applet-details-main"><h1>Maze Generator</h1><img src="/chronicle/dist/assets/preview/maze_generator.png" alt="Maze Generator"></img><a class="applet-launch" href="/chronicle/dist/#/applet/maze-generator/random">Launch</a><p>Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.</p></div><div class="applet-files"><h2>Links</h2><a href="/assets/code/maze_generator/maze_generator.py" target="_blank">maze_generator.py</a></div><div class="applet-document"><h1 id="mazegeneration">Maze Generation</h1>
+<p>This module implements a maze generation algorithm in TypeScript. It consists of several classes and enums which work together to create and manage a maze.</p>
+<p><img src="assets/docs/image/mazegen/mazegen2.gif" alt="User navigation" title="User navigation" /></p>
+<h1 id="mazegeneratorusermanual">Maze Generator User Manual</h1>
+<p>Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.</p>
+<h2 id="gettingstarted">Getting Started</h2>
+<p>To begin generating your maze, adjust the following parameters according to your needs:</p>
+<h3 id="parameterspanel">Parameters Panel</h3>
+<ul>
+<li><strong>Walls Padding</strong>: Controls the space between the walls of the maze.</li>
+<li><strong>Walls Width</strong>: Sets the thickness of the walls.</li>
+<li><strong>Path Width</strong>: Adjusts the width of the paths within the maze.</li>
+<li><strong>Grid Size</strong>: Determines the complexity of the maze by setting the number of cells.</li>
+<li><strong>Sparseness</strong>: Controls how sparse the maze is; a higher value means fewer walls.</li>
+<li><strong>Dead-Ends Ratio</strong>: Sets the frequency of dead-ends in the maze.</li>
+<li><strong>Shortcuts Ratio</strong>: Adjusts the likelihood of shortcuts appearing in the maze.</li>
+</ul>
+<p><img src="assets/docs/image/mazegen/mazegen_gui_1.jpg" alt="Parameter Panel" title="Parameter Panel" /></p>
+<h3 id="generationoptions">Generation Options</h3>
+<ul>
+<li><strong>Generation Order</strong>: Choose the algorithm for maze generation from the dropdown (e.g., <code>Shift</code>, <code>Pop</code>).</li>
+<li><strong>Generation Seed</strong>: Enter a number to use as a seed for the maze generation. This allows for reproducible results.</li>
+</ul>
+<h2 id="usingtheapplet">Using the Applet</h2>
+<p>After setting your desired parameters:</p>
+<ol>
+<li>Click on <code>Generate maze</code> to create a new maze.</li>
+<li>The maze will be rendered in the main viewport.</li>
+</ol>
+<h3 id="understandingthemaze">Understanding the Maze</h3>
+<p>The maze is comprised of different elements:</p>
+<ul>
+<li><strong>Start</strong>: Marked with a <code>START</code> label, this is the entry point of the maze.</li>
+<li><strong>Finish</strong>: Marked with a <code>FINISH</code> label, this is the goal or exit point of the maze.</li>
+<li><strong>Walls</strong>: Indicated by colored lines, these are the barriers that form the paths of the maze.</li>
+<li><strong>Paths</strong>: The open spaces between walls where movement is possible.</li>
+<li><strong>Dead-Ends</strong>: Paths that lead to a closed end.</li>
+<li><strong>Forks</strong>: Points where the path splits into two or more directions.</li>
+<li><strong>Shortcuts</strong>: Direct paths that provide a quicker route through the maze.</li>
+<li><strong>Crossroads</strong>: Points where multiple paths intersect.</li>
+</ul>
+<p><img src="assets/docs/image/mazegen/mazegen_main_1.jpg" alt="Viewport" title="Viewport" /></p>
+<h2 id="tipsandtricks">Tips and Tricks</h2>
+<ul>
+<li>Experiment with different <code>Generation Seed</code> values to create unique mazes.</li>
+<li>Use the <code>Shortcuts Ratio</code> sparingly to maintain the challenge of the maze.</li>
+<li>Adjust the <code>Walls Width</code> and <code>Path Width</code> for a more intricate or more navigable maze, depending on your preference.</li>
+</ul>
+<hr />
+<p>Enjoy creating your mazes with the Maze Generator!</p>
+<h1 id="apireference">API Reference</h1>
+<h2 id="enums">Enums</h2>
+<h3 id="ecellcategory">ECellCategory</h3>
+<p>Defines categories for maze cells:</p>
+<ul>
+<li><code>Empty</code></li>
+<li><code>Default</code></li>
+<li><code>Shortcut</code></li>
+<li><code>Loop</code></li>
+<li><code>Start</code></li>
+<li><code>End</code></li>
+</ul>
+<h3 id="ecellaccessibilitylevel">ECellAccessibilityLevel</h3>
+<p>Describes the accessibility level of a cell within the maze:</p>
+<ul>
+<li><code>Crossroad</code></li>
+<li><code>Fork</code></li>
+<li><code>Transitive</code></li>
+<li><code>DeadEnd</code></li>
+<li><code>Isolated</code></li>
+</ul>
+<h3 id="egenerationorder">EGenerationOrder</h3>
+<p>Specifies the order in which cells are processed during generation:</p>
+<ul>
+<li><code>Pop</code></li>
+<li><code>Shift</code></li>
+</ul>
+<h2 id="classes">Classes</h2>
+<h3 id="mazecell">MazeCell</h3>
+<p>Represents a single cell within the maze.</p>
+<h4 id="properties">Properties</h4>
+<ul>
+<li><code>index</code>: Optional index of the cell.</li>
+<li><code>x, y</code>: Coordinates of the cell in the maze.</li>
+<li><code>walls</code>: Object defining the presence of walls around the cell.</li>
+<li><code>hovered</code>: Boolean indicating if the cell is currently hovered over.</li>
+<li><code>category</code>: Category of the cell from ECellCategory.</li>
+<li><code>visited</code>: Boolean indicating if the cell has been visited during generation or traversal.</li>
+</ul>
+<h4 id="methods">Methods</h4>
+<ul>
+<li><code>get_closed_neighbours()</code>: Returns a list of adjacent cells that are separated by walls.</li>
+<li><code>get_open_neighbours()</code>: Returns a list of adjacent cells that are not separated by walls.</li>
+<li><code>get_all_neighbours()</code>: Returns all adjacent cells regardless of walls.</li>
+<li><code>remove_wall_between()</code>, <code>add_wall_between()</code>, <code>set_wall_between()</code>: Manage walls between cells.</li>
+<li><code>get_wall_between()</code>: Determines if there is a wall between the current cell and another cell.</li>
+</ul>
+<h3 id="mazegenerator">MazeGenerator</h3>
+<p>Responsible for generating and managing the maze structure.</p>
+<h4 id="properties-1">Properties</h4>
+<ul>
+<li><code>cells</code>: Two-dimensional array of MazeCell.</li>
+<li><code>start_cell</code>, <code>end_cell</code>: MazeCell instances marking the start and end of the maze.</li>
+</ul>
+<p>Configuration parameters like seed, <code>grid_size</code>, <code>sparseness</code>, <code>dead_ends_ratio</code>, <code>shortcuts_ratio</code>, and <code>generation_order</code>.</p>
+<h4 id="methods-1">Methods</h4>
+<ul>
+<li><code>generate()</code>: Initializes and generates the maze.</li>
+<li><code>find_cells_with_accessibility()</code>: Finds cells with a specific accessibility level.</li>
+<li><code>reset_visited()</code>: Resets the visited property of all cells.</li>
+<li><code>for_each_cell()</code>: Executes a callback function on each cell in the maze.</li>
+</ul>
+<h2 id="functionalityoverview">Functionality Overview</h2>
+<p>The MazeGenerator class initializes a grid of MazeCell objects based on the specified grid size.
+Maze generation is based on random selection of cells and walls, controlled by the seed property for reproducible results.</p>
+<p>The algorithm creates paths by removing walls between cells and marks special cells as start, end, loops, shortcuts, etc., based on the generation logic.
+The module allows for customization of the maze's complexity and structure through various parameters like sparseness and dead ends ratio.</p>
+<p><img src="assets/docs/image/mazegen/mazegen.gif" alt="User navigation" title="User navigation" /></p>
+<h2 id="usageexample">Usage Example</h2>
+<p>To use this module, you would typically create an instance of MazeGenerator, configure the desired properties, and call the generate() method to create a maze. You can then interact with the maze through the MazeCell objects, examining their properties and relationships to navigate or modify the maze.</p>
+<p><img src="assets/question_mark_01.png" alt="User navigation" title="User navigation" /> </p>
+<p>Got a Question? <a href="mailto:a.gvrnsk@gmail.com?subject=chronicle">@sanyabeast</a></p></div></div><script type="text/javascript">window.adjustLinksAndImages();</script></div>
+</body>
+
+</html>

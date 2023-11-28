@@ -179,9 +179,9 @@ export class AStarPathfinder<T> {
         }
 
         if (this.open.has(neighbor) && new_score < this.open.get(neighbor)!.score) {
-            const updatingNode = this.open.get(neighbor)!;
-            updatingNode.path = new_path;
-            updatingNode.score = new_score;
+            const updating_node = this.open.get(neighbor)!;
+            updating_node.path = new_path;
+            updating_node.score = new_score;
             return;
         }
 
