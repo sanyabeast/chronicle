@@ -345,7 +345,7 @@ applets:
       component: AStarPathfinder
       props: true
     tags: ["experiment", "utils", "canvas2d", "algorithm"]
-    category: ["experiment"]
+    category: ["experiment", "tool"]
     summary: "assets/docs/a_star_pathfinder.txt"
     document: "assets/docs/a_star_pathfinder.md"
     title: "A-Star Pathfinder"

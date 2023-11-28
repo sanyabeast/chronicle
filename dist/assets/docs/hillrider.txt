@@ -1,2 +1,0 @@
-
-This project seamlessly combines Three.js for rendering and Matter.js for 2D physics to create a side-view driving experience. It features an infinite, procedurally generated road and allows users to navigate a basic vehicle along this path. This technical achievement showcases the integration of graphics and physics for an engaging, interactive, and dynamic experience.

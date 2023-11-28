@@ -1,2 +1,0 @@
-
-The Unity project is a retro-style top-down game that combines classic gameplay elements with modern features. Players can move, shoot, and collect perks and loot in an immersive environment. The game employs enemy AI with visibility checks and pathfinding using the A-star algorithm, adding depth to the gameplay. The project also showcases advanced GUI development with complex nested mechanisms for an engaging and user-friendly experience.
