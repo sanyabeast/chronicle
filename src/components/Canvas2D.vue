@@ -2,27 +2,31 @@
     <div class="canvas2d" :class="{ decoration: decoration }" @mousemove="handle_mousemove"
         @mousedown="user.pointer.is_down = true" @mouseup="user.pointer.is_down = false" @contextmenu="handle_contextmenu">
         <canvas ref="canvas"></canvas>
+        <div v-if="decoration" class="label">
+            <p>Canvas 2D</p>
+        </div>
         <div v-if="show_debug" class="debug-layer">
+
             <div>
-                <p>frames rendered</p>
+                <p>frames</p>
                 <p v-html="`${this.stats.frames_rendered}`">
                 </p>
             </div>
             <div>
-                <p>items rendered/skipped</p>
+                <p>items r/s</p>
                 <p v-html="`${this.stats.items_rendered}/${this.stats.items_skipped}`">
                 </p>
             </div>
             <div>
-                <p>canvas dimensions</p>
-                <p v-html="`[${this.width}x${this.height}] (dpi: ${this.resolution})`"></p>
+                <p>canvas</p>
+                <p v-html="`[${this.width}x${this.height}] (${this.resolution}x)`"></p>
             </div>
             <div>
-                <p>viewport dimensions</p>
+                <p>viewport</p>
                 <p v-html="`${this.viewport.width}x${this.viewport.height}`"></p>
             </div>
             <div>
-                <p>viewport transform</p>
+                <p>user</p>
                 <p
                     v-html="`${this.viewport.computed.scale.toFixed(2)}% [x+${this.viewport.computed.offset.x.toFixed(2)}, y+${this.viewport.computed.offset.y.toFixed(2)}]`">
                 </p>
@@ -139,7 +143,7 @@ export default Vue.extend({
             }
         },
         handle_keypress(event) {
-            
+
         },
         reset_user_transform() {
             this.user.scale = 1;
@@ -477,15 +481,39 @@ export default Vue.extend({
         height: 100%;
     }
 
+    >.label {
+        position: absolute;
+        top: 0;
+        left: 8px;
+        width: auto;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 16px;
+        z-index: 1;
+
+        p {
+            color: rgba(255, 255, 255, 0.425);
+            margin: 0;
+            font-family: @font-family-monospace;
+            font-size: 8px;
+        }
+    }
+
     .debug-layer {
         position: absolute;
         bottom: 0;
         right: 0;
-        width: auto;
-        max-width: 100%;
-        height: auto;
-        padding: 8px;
-        background: rgba(0, 0, 0, 0.25);
+        width: 100%;
+        height: 16px;
+        background: rgba(0, 0, 0, 0.5);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
         z-index: 1;
 
         &:hover {
@@ -494,13 +522,12 @@ export default Vue.extend({
 
         >div {
             pointer-events: none;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            grid-gap: 8px;
-
             display: flex;
             flex-direction: row;
             margin-right: 16px;
+            align-items: center;
+            justify-content: center;
+            grid-gap: 8px;
 
             p {
                 line-height: 1em;
@@ -509,10 +536,29 @@ export default Vue.extend({
                 font-family: monospace;
 
                 &:first-child {
-                    color: grey;
-                    text-align: right;
+                    color: rgb(171, 171, 171);
                 }
             }
+        }
+    }
+}
+
+@media screen and (max-width: 1400px) {
+
+    .canvas2d {
+        .debug-layer {
+            height: 32px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 1fr 1fr;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .canvas2d {
+        .debug-layer {
+            display: none;
         }
     }
 }

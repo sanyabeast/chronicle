@@ -154,6 +154,7 @@ export default mixins(BaseComponent).extend({
 * {
   scrollbar-width: auto;
   scrollbar-color: @color-accent @color-background;
+  touch-action: manipulation;
 }
 
 /* Chrome, Edge, and Safari */
