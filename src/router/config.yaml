@@ -233,7 +233,7 @@ applets:
     category: ["service"]
     title: "3D Model View"
     date: "2023"
-    summary: "assets/docs/model-viewer.txt"
+    summary: "assets/docs/model-viewer.txt" 
     props:
       model_src: "assets/models/suzanne/Suzanne.gltf"
       info: "assets/models/suzanne/README.md"
@@ -341,7 +341,7 @@ applets:
   # A-Star Pathfinder Demo
   - route:
       name: "AStarPathfinder"
-      path: "/applet/a-star"
+      path: "/applet/a-star/:seed"
       component: AStarPathfinder
       props: true
     tags: ["experiment", "utils", "canvas2d", "algorithm"]
@@ -351,5 +351,7 @@ applets:
     title: "A-Star Pathfinder"
     date: "2023"
     preview: "assets/preview/a_star_pathfinder.png"
+    props:
+      seed: random
     package:
-      - [astar.ts, /assets/code/astar/astar.ts]
+      - [AStarPathfnider.ts, /assets/code/astar/AStarPathfnider.ts]

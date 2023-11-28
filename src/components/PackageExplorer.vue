@@ -11,7 +11,7 @@
 
             </a>
         </div>
-        <Syntax ref="syntax" popup="true" :file="syntax_file" v-if="show_syntax" @close="show_syntax = false"/>
+        <CodePreview ref="syntax" popup="true" :file="syntax_file" v-if="show_syntax" @close="show_syntax = false" />
     </div>
 </template>
   
@@ -23,7 +23,7 @@ import BaseComponent from '@/components/BaseComponent.vue';
 import ImageView from '@/components/ImageView.vue';
 import { packages } from '@/router';
 import { get, isString } from 'lodash';
-import Syntax from './Syntax.vue';
+import CodePreview from './CodePreview.vue';
 
 export enum EPackageExplorerMode {
     Default,
@@ -47,17 +47,19 @@ export enum EFileType {
     MacosDMG = 'macos-dmg',
     LocalFile = 'local-file',
     PythonScript = 'python-script',
+    TypescriptFile = 'typescript-file'
 }
 
 const file_opened_in_syntax_highlighter = [
     EFileType.Text,
     EFileType.Markdown,
-    EFileType.PythonScript
+    EFileType.PythonScript,
+    EFileType.TypescriptFile
 ]
 
 export default mixins(BaseComponent).extend({
     name: "PackageExplorer",
-    components: { Showdown, ImageView, Syntax },
+    components: { Showdown, ImageView, CodePreview },
     data() {
         return {
             show_syntax: false,
@@ -158,6 +160,10 @@ export default mixins(BaseComponent).extend({
 
             if (url.endsWith('.py')) {
                 return EFileType.PythonScript;
+            }
+
+            if (url.endsWith('.ts')) {
+                return EFileType.TypescriptFile;
             }
 
             if (url.startsWith('assets/')) {

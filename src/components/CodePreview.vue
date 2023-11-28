@@ -1,5 +1,5 @@
 <template>
-    <div class="syntax" :class="{ popup: popup, closing: closing }" @click.self="$emit('close')"
+    <div class="code-preview" :class="{ popup: popup, closing: closing }" @click.self="$emit('close')" :title="language"
         @mouseover.self="closing = true" @mouseout.self="closing = false">
         <!-- If your source-code lives in a variable called 'sourcecode' -->
         <div class="content">
@@ -10,7 +10,7 @@
                 <button class="close" :class="{ closing: closing }" @click="$emit('close')" @mouseover.self="closing = true"
                     @mouseout.self="closing = false">close</button>
             </div>
-            <pre v-highlightjs="text_content"><code class="javascript"></code></pre>
+            <pre v-highlightjs="text_content"><code :class="language"></code></pre>
         </div>
     </div>
 </template>
@@ -24,13 +24,14 @@ import { read_text_file } from '@/tools';
 
 
 export default mixins(BaseComponent).extend({
-    name: 'Syntax',
+    name: 'CodePreview',
     data() {
         return {
             copied_tooltip: false,
             closing: false,
             text_content: "",
-            file_name: "unknown"
+            file_name: "unknown",
+            language: "json"
         }
     },
     props: {
@@ -70,12 +71,15 @@ export default mixins(BaseComponent).extend({
             if (this.file) {
                 this.text_content = await read_text_file(this.file);
                 this.file_name = this.download_name.length ? this.download_name : this.file.split("/").pop();
+                this.language = this.detect_laguage(this.file);
                 console.log("update", this.file, this.text_content)
             } else {
                 if (isString(this.code)) {
                     this.text_content = this.code;
+                    this.language = "text"
                 } else {
                     this.text_content = JSON.stringify(this.code, null, 4);
+                    this.language = "json"
                 }
 
                 this.file_name = this.download_name;
@@ -98,7 +102,38 @@ export default mixins(BaseComponent).extend({
             element.click();
 
             document.body.removeChild(element);
-        }
+        },
+        detect_laguage(filename: String): String {
+            if (filename.endsWith(".js")) {
+                return "javascript"
+            }
+
+            if (filename.endsWith(".py")) {
+                return "python"
+            }
+
+            if (filename.endsWith(".ts")) {
+                return "typescript"
+            }
+
+            if (filename.endsWith(".json")) {
+                return "json"
+            }
+
+            if (filename.endsWith(".html")) {
+                return "html"
+            }
+
+            if (filename.endsWith(".css")) {
+                return "css"
+            }
+
+            if (filename.endsWith(".md")) {
+                return "markdown"
+            }
+
+            return "json"
+        },
     }
 });
 </script>
@@ -106,7 +141,7 @@ export default mixins(BaseComponent).extend({
 @import url('@/assets/index.less');
 @import url('@/assets/base16-macintosh.css');
 
-.syntax {
+.code-preview {
     font-family: @font-family-monospace;
 
     &.popup {
@@ -243,7 +278,7 @@ export default mixins(BaseComponent).extend({
 @media screen and (max-width: 600px) {
 
     .maze-generator {
-        .syntax {
+        .code-preview {
 
             &.popup {
                 background: rgb(45, 45, 45);

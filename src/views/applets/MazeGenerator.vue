@@ -9,7 +9,7 @@
         <Canvas2D ref="canvas" @update="render" :show_debug="!is_mobile" :allow_user_scale="true"
             :allow_user_translate="true" :allow_context_menu="true">
         </Canvas2D>
-        <Syntax :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup"
+        <CodePreview :code="json_data" :popup="true" @close="show_json_data_popup = false" v-if="show_json_data_popup"
             :download_name="`maze_${maze_generator.seed}.json`" />
     </div>
 </template>
@@ -22,7 +22,7 @@ import Canvas2D from '@/components/Canvas2D.vue';
 import mixins from 'vue-typed-mixins'
 import BaseComponent from '@/components/BaseComponent.vue';
 import { map, throttle } from 'lodash';
-import Syntax from '@/components/Syntax.vue';
+import CodePreview from '@/components/CodePreview.vue';
 
 export enum EColorScheme {
     ProgrammerView,
@@ -106,7 +106,7 @@ export default mixins(BaseComponent).extend({
             default: 0
         }
     },
-    components: { Tweakpane, Canvas2D, Syntax },
+    components: { Tweakpane, Canvas2D, CodePreview },
     data() {
         return {
             wall_width: 0.015,
