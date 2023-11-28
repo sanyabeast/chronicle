@@ -132,6 +132,10 @@ export default mixins(BaseComponent).extend({
                 return "markdown"
             }
 
+            if (filename.endsWith(".gd")) {
+                return "gdscript"
+            }
+
             return "json"
         },
     }

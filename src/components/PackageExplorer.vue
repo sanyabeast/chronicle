@@ -47,14 +47,16 @@ export enum EFileType {
     MacosDMG = 'macos-dmg',
     LocalFile = 'local-file',
     PythonScript = 'python-script',
-    TypescriptFile = 'typescript-file'
+    TypescriptFile = 'typescript-file',
+    GodotScript = 'godot-script',
 }
 
 const file_opened_in_syntax_highlighter = [
     EFileType.Text,
     EFileType.Markdown,
     EFileType.PythonScript,
-    EFileType.TypescriptFile
+    EFileType.TypescriptFile,
+    EFileType.GodotScript
 ]
 
 export default mixins(BaseComponent).extend({
@@ -166,6 +168,10 @@ export default mixins(BaseComponent).extend({
                 return EFileType.TypescriptFile;
             }
 
+            if (url.endsWith('.gd')) {
+                return EFileType.GodotScript;
+            }
+
             if (url.startsWith('assets/')) {
                 return EFileType.LocalFile;
             }
@@ -194,6 +200,12 @@ export default mixins(BaseComponent).extend({
                 }
                 case EFileType.PythonScript: {
                     return 'assets/icons/file_python_01.png'
+                }
+                case EFileType.TypescriptFile: {
+                    return 'assets/icons/file_typescript_01.png'
+                }
+                case EFileType.GodotScript: {
+                    return 'assets/icons/file_godot_01.png'
                 }
                 case EFileType.GoogleLink: {
                     return 'assets/icons/file_google_01.png'

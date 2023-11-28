@@ -335,6 +335,8 @@ applets:
     preview: "assets/preview/maze_generator.png"
     package:
       - [maze_generator.py, assets/code/maze_generator/maze_generator.py]
+      - [maze_generator.gd, assets/code/maze_generator/maze_generator.gd]
+      - [maze_generator.ts, assets/code/maze_generator/maze_generator.ts]
     props:
       seed: random
 
