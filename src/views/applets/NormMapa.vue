@@ -41,10 +41,10 @@ export default mixins(BaseComponent).extend({
     data() {
         return {
             EMimeTypes,
-            step_scale: 2,
-            iterations: 1,
-            heightmap_contrast: 1,
-            heightmap_brightness: 4,
+            step_scale: 1.5,
+            iterations: 2,
+            heightmap_contrast: 2,
+            heightmap_brightness: 6,
             dragging: false,
             invert_heightmap: false,
             use_directx_format: false,
@@ -54,7 +54,8 @@ export default mixins(BaseComponent).extend({
             texture_offset: new THREE.Vector2(0, 0),
             texture_scale: new THREE.Vector2(1, 1),
             renderer_width: 100,
-            renderer_height: 100
+            renderer_height: 100,
+            preview_mode: false,
         };
     },
     computed: {
@@ -88,15 +89,17 @@ export default mixins(BaseComponent).extend({
         },
         set_texture(texture) {
             this.texture = texture;
-            // tiling
-            this.texture.wrapS = THREE.RepeatWrapping;
-            this.texture.wrapT = THREE.RepeatWrapping;
+            // tiling mirrored
+            this.texture.wrapS = THREE.MirroredRepeatWrapping;
+            this.texture.wrapT = THREE.MirroredRepeatWrapping;
 
             this.renderer_width = texture.image.width;
             this.renderer_height = texture.image.height;
             this.update_route({
                 image: texture.image.src
             })
+
+            this.preview_mode = false
             this.update()
         },
         update() {
@@ -112,6 +115,7 @@ export default mixins(BaseComponent).extend({
                 this.$refs.shader_view.material.uniforms.u_iterations.value = this.iterations
                 this.$refs.shader_view.material.uniforms.u_contrast.value = this.heightmap_contrast
                 this.$refs.shader_view.material.uniforms.u_brightness.value = this.heightmap_brightness
+                this.$refs.shader_view.material.uniforms.u_preview.value = this.preview_mode ? 1 : 0
             }
         },
         async load_texture(src) {
@@ -148,6 +152,14 @@ export default mixins(BaseComponent).extend({
         setup_tweakpane() {
             let pane = this.$refs.tweakpane.pane;
 
+            pane.addButton({
+                title: 'Toggle View',
+            }).on('click', () => {
+                this.preview_mode = !this.preview_mode
+                this.update()
+            });
+
+
             pane.addBlade({
                 view: 'separator',
             });
@@ -173,7 +185,7 @@ export default mixins(BaseComponent).extend({
             pane.addBinding(this, 'heightmap_contrast', {
                 label: 'Contrast',
                 min: 0.1,
-                max: 4,
+                max: 8,
                 step: 0.1,
             }).on('change', () => {
                 this.update()
@@ -182,7 +194,7 @@ export default mixins(BaseComponent).extend({
             pane.addBinding(this, 'heightmap_brightness', {
                 label: 'Brightness',
                 min: 0.1,
-                max: 4,
+                max: 8,
                 step: 0.1,
             }).on('change', () => {
                 this.update()
@@ -219,7 +231,11 @@ export default mixins(BaseComponent).extend({
             pane.addButton({
                 title: 'Download as Image',
             }).on('click', () => {
-                this.$refs.shader_view.renderer.save_as_image(this.download_image_name)
+                this.preview_mode = false
+                this.update()
+                setTimeout(() => {
+                    this.$refs.shader_view.renderer.save_as_image(this.download_image_name)
+                }, 200);
             });
 
             pane.addBinding(this, 'download_image_name', {

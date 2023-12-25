@@ -24,6 +24,7 @@ shaders:
       u_brightness: 1
       u_iterations: 1
       u_directx: 0
+      u_preview: 0
 
   seamless_texture_gen:
     fragment: assets/shader/seamless_texture_gen.frag
