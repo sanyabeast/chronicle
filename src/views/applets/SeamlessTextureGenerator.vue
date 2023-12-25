@@ -1,11 +1,11 @@
 <template>
-    <div :class="{ mobile: is_mobile }" class="norm-mapa">
+    <div :class="{ mobile: is_mobile }" class="seamless-texture-generator">
         <div class="control-panel">
             <Tweakpane ref="tweakpane"></Tweakpane>
         </div>
         <div class="rendering-area">
             <ShaderView :force_width="renderer_width" :force_height="renderer_height" ref="shader_view"
-                shader_id="norm_mapa" :show_controls="false" @ready="update" />
+                shader_id="seamless_texture_gen" :show_controls="false" @ready="update" />
             <DragAndDropManager :mime="EMimeTypes.Image" :on_file="_handle_file_upload" />
             <input type="file" accept="image/*" @change="handle_open_file" style="display: none" ref="fileInput" />
         </div>
@@ -41,23 +41,36 @@ export default mixins(BaseComponent).extend({
     data() {
         return {
             EMimeTypes,
-            step_scale: 2,
-            iterations: 1,
-            heightmap_contrast: 1,
-            heightmap_brightness: 4,
             dragging: false,
-            invert_heightmap: false,
-            use_directx_format: false,
+            offset: new THREE.Vector2(0, 0),
+            contrast: new THREE.Vector2(3, 3),
+            rotation: 0,
+            crop: 0.8,
             download_image_name: 'rendered_frame',
             prev_pointer_position: { x: 0, y: 0 },
             grid: true,
             texture_offset: new THREE.Vector2(0, 0),
             texture_scale: new THREE.Vector2(1, 1),
+            tiling: 1,
             renderer_width: 100,
-            renderer_height: 100
+            renderer_height: 100,
+            preview_mode: false
         };
     },
     computed: {
+        tiling_label() {
+            switch (this.tiling) {
+                case 0: {
+                    return 'tiling [disabled]';
+                }
+                case 1: {
+                    return 'tiling [repeated]';
+                }
+                case 2: {
+                    return 'tiling [mirrored]';
+                }
+            }
+        },
         image_size_formatted() {
             return `${this.renderer_width}x${this.renderer_height}`
         }
@@ -92,6 +105,7 @@ export default mixins(BaseComponent).extend({
             this.texture.wrapS = THREE.RepeatWrapping;
             this.texture.wrapT = THREE.RepeatWrapping;
 
+
             this.renderer_width = texture.image.width;
             this.renderer_height = texture.image.height;
             this.update_route({
@@ -106,12 +120,12 @@ export default mixins(BaseComponent).extend({
                     this.$refs.shader_view.material.uniforms.u_map.needsUpdate = true;
                 }
 
-                this.$refs.shader_view.material.uniforms.u_directx.value = this.use_directx_format ? 1 : 0
-                this.$refs.shader_view.material.uniforms.u_scale.value = this.step_scale
-                this.$refs.shader_view.material.uniforms.u_invert_height.value = this.invert_heightmap
-                this.$refs.shader_view.material.uniforms.u_iterations.value = this.iterations
-                this.$refs.shader_view.material.uniforms.u_contrast.value = this.heightmap_contrast
-                this.$refs.shader_view.material.uniforms.u_brightness.value = this.heightmap_brightness
+                this.$refs.shader_view.material.uniforms.u_contrast.value = this.contrast
+                this.$refs.shader_view.material.uniforms.u_contrast.needsUpdate = true;
+
+                this.$refs.shader_view.material.uniforms.u_viewscale.value = this.preview_mode ? 3 : 1
+                this.$refs.shader_view.material.uniforms.u_rotation.value = this.rotation
+                this.$refs.shader_view.material.uniforms.u_crop.value = this.crop
             }
         },
         async load_texture(src) {
@@ -148,57 +162,43 @@ export default mixins(BaseComponent).extend({
         setup_tweakpane() {
             let pane = this.$refs.tweakpane.pane;
 
+            pane.addButton({
+                title: 'Preview',
+            }).on('click', () => {
+                this.preview_mode = !this.preview_mode
+                this.update()
+            });
+
             pane.addBlade({
                 view: 'separator',
             });
 
-            pane.addBinding(this, 'step_scale', {
-                label: 'Step Scale',
-                min: 0.01,
-                max: 10,
-                step: 0.001,
+            pane.addBinding(this.contrast, 'x', {
+                label: 'Contrast X',
+                min: 0.05,
+                max: 32,
+                step: 0.05,
             }).on('change', () => {
                 this.update()
             })
 
-            pane.addBinding(this, 'iterations', {
-                label: 'Iterations',
-                min: 1,
-                max: 5,
-                step: 1,
+            pane.addBinding(this.contrast, 'y', {
+                label: 'Contrast Y',
+                min: 0.05,
+                max: 32,
+                step: 0.05,
             }).on('change', () => {
                 this.update()
             })
 
-            pane.addBinding(this, 'heightmap_contrast', {
-                label: 'Contrast',
-                min: 0.1,
-                max: 4,
-                step: 0.1,
-            }).on('change', () => {
-                this.update()
-            })
-
-            pane.addBinding(this, 'heightmap_brightness', {
-                label: 'Brightness',
-                min: 0.1,
-                max: 4,
-                step: 0.1,
-            }).on('change', () => {
-                this.update()
-            })
-
-            pane.addBinding(this, 'invert_heightmap', {
-                label: 'Invert Heightmap',
-            }).on('change', () => {
-                this.update()
-            })
-
-            pane.addBinding(this, 'use_directx_format', {
-                label: 'DirectX Format',
-            }).on('change', ({ value }) => {
-                this.update()
-            })
+            // pane.addBinding(this, 'crop', {
+            //     label: 'Crop',
+            //     min: 0.01,
+            //     max: 1,
+            //     step: 0.01,
+            // }).on('change', () => {
+            //     this.update()
+            // })
 
             pane.addBlade({
                 view: 'separator',
@@ -214,7 +214,6 @@ export default mixins(BaseComponent).extend({
             pane.addBlade({
                 view: 'separator',
             });
-
 
             pane.addButton({
                 title: 'Download as Image',
@@ -243,7 +242,7 @@ export default mixins(BaseComponent).extend({
 <style lang="less">
 @import url('@/assets/index.less');
 
-.norm-mapa {
+.seamless-texture-generator {
     padding: 0;
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -274,7 +273,7 @@ export default mixins(BaseComponent).extend({
 }
 
 @media screen and (max-width: 600px) {
-    .norm-mapa {
+    .seamless-texture-generator {
         grid-template-rows: 1fr 1fr;
         grid-template-columns: 1fr;
         height: 100%;

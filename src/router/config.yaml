@@ -25,6 +25,17 @@ shaders:
       u_iterations: 1
       u_directx: 0
 
+  seamless_texture_gen:
+    fragment: assets/shader/seamless_texture_gen.frag
+    vertex: assets/shader/fullscreen_plane.vert
+    uniforms:
+      u_map: null
+      u_offset: [0, 0]
+      u_contrast: [2, 2]
+      u_rotation: 0
+      u_viewscale: 3
+      u_crop: 0.8
+
   starscape:
     fragment: assets/shader/starscape.frag
     vertex: assets/shader/fullscreen_plane.vert
@@ -382,5 +393,17 @@ applets:
     title: "Norm Mapa Tool"
     date: "2023"
     preview: "assets/preview/norm_mapa.png"
+    props:
+      image: "sample"
+
+  - route:
+      name: "SeamlessTextureGenerator"
+      path: "/applet/seamless-texture-generator/:image"
+      component: SeamlessTextureGenerator
+      props: true
+    tags: ["experiment", "utils", "three", "gl", "shader", "image", "mapping"]
+    category: ["experiment"]
+    title: "Seamless Texture Generator"
+    date: "2023"
     props:
       image: "sample"

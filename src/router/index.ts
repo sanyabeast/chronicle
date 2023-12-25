@@ -28,6 +28,7 @@ const components = {
   MazeGenerator: () => import('../views/applets/MazeGenerator.vue'),
   AStarPathfinder: () => import('../views/applets/AStarPathfinder.vue'),
   NormMapa: () => import('../views/applets/NormMapa.vue'),
+  SeamlessTextureGenerator: () => import('../views/applets/SeamlessTextureGenerator.vue')
 }
 
 Vue.use(VueRouter)
