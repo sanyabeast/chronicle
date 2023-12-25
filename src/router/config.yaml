@@ -12,6 +12,19 @@ shaders:
       u_mode: 0
       u_offset: [0, 0]
       u_scale: [1, 1]
+
+  norm_mapa:
+    fragment: assets/shader/norm_mapa.frag
+    vertex: assets/shader/fullscreen_plane.vert
+    uniforms:
+      u_map: null
+      u_scale: 1
+      u_invert_height: 1
+      u_contrast: 1
+      u_brightness: 1
+      u_iterations: 1
+      u_directx: 0
+
   starscape:
     fragment: assets/shader/starscape.frag
     vertex: assets/shader/fullscreen_plane.vert
@@ -357,3 +370,17 @@ applets:
       seed: random
     package:
       - [AStarPathfnider.ts, assets/code/astar/AStarPathfnider.ts]
+
+  - route:
+      name: "NormMapa"
+      path: "/applet/norm-mapa/:image"
+      component: NormMapa
+      props: true
+    tags: ["experiment", "utils", "three", "gl", "shader", "image", "mapping"]
+    category: ["experiment", "tool"]
+    summary: "assets/docs/norm_mapa.txt"
+    title: "Norm Mapa Tool"
+    date: "2023"
+    preview: "assets/preview/norm_mapa.png"
+    props:
+      image: "sample"

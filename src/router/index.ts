@@ -27,6 +27,7 @@ const components = {
   RetroidMaker: () => import('../views/applets/RetroidMaker.vue'),
   MazeGenerator: () => import('../views/applets/MazeGenerator.vue'),
   AStarPathfinder: () => import('../views/applets/AStarPathfinder.vue'),
+  NormMapa: () => import('../views/applets/NormMapa.vue'),
 }
 
 Vue.use(VueRouter)

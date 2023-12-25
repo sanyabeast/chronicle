@@ -1,7 +1,7 @@
 <template>
     <div :class="{ mobile: is_mobile }" class="shader-view" @mousemove="handle_mousemove">
         <ThreeRenderer :force_width="force_width" :force_height="force_height" ref="three_renderer"
-            :download_image_name="download_image_name">
+            :download_image_name="download_image_name" :show_controls="show_controls">
         </ThreeRenderer>
     </div>
     <!-- Other components and UI elements -->
@@ -33,7 +33,11 @@ export default mixins(BaseComponent).extend({
             },
         };
     },
-    computed: {},
+    computed: {
+        renderer(){
+            return this.$refs.three_renderer
+        }
+    },
     props: {
         shader_id: {
             type: String,
@@ -46,6 +50,10 @@ export default mixins(BaseComponent).extend({
         force_height: {
             type: Number,
             default: 0,
+        },
+        show_controls: {
+            type: Boolean,
+            default: true,
         },
     },
     mounted() {
@@ -76,6 +84,8 @@ export default mixins(BaseComponent).extend({
             let plane = this.plane = new THREE.Mesh(geometry, material);
             this.$refs.three_renderer.scene.add(plane);
             this.$refs.three_renderer.on_render = this.on_render
+
+            this.$emit('ready', this)
         },
         handle_mousemove(event) {
             this.mouse_pos.x = event.clientX / this.$refs.three_renderer.width;

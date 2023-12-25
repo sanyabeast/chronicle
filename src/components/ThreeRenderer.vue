@@ -255,14 +255,16 @@ export default mixins(BaseComponent).extend({
 
             animate();
         },
-        save_as_image() {
+        save_as_image(image_name_override?: string) {
             // Create a data URL representing the rendered frame
             const dataURL = this.renderer.domElement.toDataURL('image/png');
+
+            let file_name = image_name_override || this.download_image_name
 
             // Create an anchor element to trigger the download
             const a = document.createElement('a');
             a.href = dataURL;
-            a.download = `${this.download_image_name}.png`;
+            a.download = `${file_name}.png`;
 
             // Programmatically trigger a click event on the anchor element
             const event = new MouseEvent('click');
