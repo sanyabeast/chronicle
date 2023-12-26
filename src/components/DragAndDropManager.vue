@@ -50,6 +50,13 @@ export default mixins(BaseComponent).extend({
         }
 
     },
+    mounted() {
+        this._handle_paste = this._handle_paste.bind(this);
+        document.addEventListener('paste', this._handle_paste);
+    },
+    beforeDestroy() {
+        document.removeEventListener('paste', this._handle_paste);
+    },
     methods: {
         _handle_files(files: File[]) {
             if (files.length > 0) {
@@ -70,7 +77,17 @@ export default mixins(BaseComponent).extend({
             this.dragging = false;
             this._handle_files(event.dataTransfer.files)
         },
-
+        _handle_paste(event) {
+            let items = (event.clipboardData).items;
+            for (let index in items) {
+                let item = items[index];
+                
+                if (item.kind === 'file') {
+                    let blob = item.getAsFile();
+                    this.on_file(blob)
+                }
+            }
+        },
         // New method to handle dragenter event
         _handle_dragenter(event) {
             this.dragging = true;
@@ -80,8 +97,7 @@ export default mixins(BaseComponent).extend({
         // New method to handle dragover event
         _handle_dragover(event) {
             event.preventDefault();
-        },
-
+        }
 
     }
 });
@@ -97,7 +113,7 @@ export default mixins(BaseComponent).extend({
     left: 0;
     width: 100%;
     height: 100%;
-    
+
     .drag-and-drop-tooltop {
         position: absolute;
         right: 16px;
