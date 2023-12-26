@@ -45,8 +45,12 @@ export default mixins(BaseComponent).extend({
             iterations: 2,
             heightmap_contrast: 2,
             heightmap_brightness: 6,
+            alpha_level: 0,
+            use_radial_kernel: true,
+            apply_transformations_to_alpha: false,
             dragging: false,
             invert_heightmap: false,
+            invert_alpha: false,
             use_directx_format: false,
             download_image_name: 'rendered_frame',
             prev_pointer_position: { x: 0, y: 0 },
@@ -116,6 +120,10 @@ export default mixins(BaseComponent).extend({
                 this.$refs.shader_view.material.uniforms.u_contrast.value = this.heightmap_contrast
                 this.$refs.shader_view.material.uniforms.u_brightness.value = this.heightmap_brightness
                 this.$refs.shader_view.material.uniforms.u_preview.value = this.preview_mode ? 1 : 0
+                this.$refs.shader_view.material.uniforms.u_alpha_level.value = this.alpha_level
+                this.$refs.shader_view.material.uniforms.u_invert_alpha.value = this.invert_alpha
+                this.$refs.shader_view.material.uniforms.u_alpha_apply.value = this.apply_transformations_to_alpha
+                this.$refs.shader_view.material.uniforms.u_radial_kernel.value = this.use_radial_kernel ? 1 : 0
             }
         },
         async load_texture(src) {
@@ -182,10 +190,20 @@ export default mixins(BaseComponent).extend({
                 this.update()
             })
 
+            pane.addBinding(this, 'use_radial_kernel', {
+                label: 'Radial Kernel',
+            }).on('change', () => {
+                this.update()
+            })
+
+            pane.addBlade({
+                view: 'separator',
+            });
+
             pane.addBinding(this, 'heightmap_contrast', {
                 label: 'Contrast',
-                min: 0.1,
-                max: 8,
+                min: 0.01,
+                max: 4,
                 step: 0.1,
             }).on('change', () => {
                 this.update()
@@ -194,17 +212,46 @@ export default mixins(BaseComponent).extend({
             pane.addBinding(this, 'heightmap_brightness', {
                 label: 'Brightness',
                 min: 0.1,
-                max: 8,
+                max: 32,
                 step: 0.1,
             }).on('change', () => {
                 this.update()
             })
 
+          
             pane.addBinding(this, 'invert_heightmap', {
                 label: 'Invert Heightmap',
             }).on('change', () => {
                 this.update()
             })
+
+            let alpha_settings = pane.addFolder({
+                title: 'Alpha Control',
+                expanded: false,
+            });
+
+            alpha_settings.addBinding(this, 'alpha_level', {
+                label: 'Alpha Level',
+                min: 0,
+                max: 1,
+                step: 1,
+            }).on('change', () => {
+                this.update()
+            })
+
+            alpha_settings.addBinding(this, 'invert_alpha', {
+                label: 'Invert Alpha',
+            }).on('change', () => {
+                this.update()
+            })
+            
+            alpha_settings.addBinding(this, 'apply_transformations_to_alpha', {
+                label: 'Apply Transformations to Alpha',
+            }).on('change', () => {
+                this.update()
+            })
+
+
 
             pane.addBinding(this, 'use_directx_format', {
                 label: 'DirectX Format',
