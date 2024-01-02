@@ -395,6 +395,7 @@ applets:
     tags: ["experiment", "utils", "three", "gl", "shader", "image", "mapping"]
     category: ["experiment", "tool"]
     summary: "assets/docs/norm_mapa.txt"
+    document: "assets/docs/norm_mapa.md"
     title: "Norm Mapa Tool"
     date: "2023"
     preview: "assets/preview/norm_mapa.png"
