@@ -5,6 +5,10 @@ This module implements a maze generation algorithm in TypeScript. It consists of
 
 ![User navigation](assets/docs/image/mazegen/mazegen2.gif "User navigation")
 
+![  ](assets/docs/image/mazegen/maze_generator_td_roguelike_poc_a1-ezgif.com-optimize.gif "Example of using a maze generator to create a level map in the early prototype of a top-down roguelike game.")
+
+![  ](assets/docs/image/mazegen/maze_generator_parkour_game_poc_a1-ezgif.com-optimize.gif "Example of using a maze generator for procedural generation of a room system in the early prototype of a parkour action roguelike game.")
+
 # Maze Generator User Manual
 
 Welcome to the Maze Generator! This tool allows you to create custom mazes that you can use for games, puzzles, or any other project. Below is a guide to help you navigate through the features and settings.
@@ -150,7 +154,15 @@ The module allows for customization of the maze's complexity and structure throu
 
 To use this module, you would typically create an instance of MazeGenerator, configure the desired properties, and call the generate() method to create a maze. You can then interact with the maze through the MazeCell objects, examining their properties and relationships to navigate or modify the maze.
 
+### Example of using a maze generator to create a level map in the early prototype of a top-down roguelike game.
 
-![User navigation](assets/question_mark_01.png "User navigation") 
+![  ](assets/docs/image/mazegen/maze_generator_td_roguelike_poc_a1-ezgif.com-optimize.gif "")
 
-Got a Question? [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
+### Example of using a maze generator for procedural generation of a room system in the early prototype of a parkour action roguelike game.
+
+![  ](assets/docs/image/mazegen/maze_generator_parkour_game_poc_a1-ezgif.com-optimize.gif "")
+
+
+# Got a Question?
+
+Write an email: [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
