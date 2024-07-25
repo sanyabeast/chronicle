@@ -71,7 +71,7 @@ urls:
   plot3: projects/plot/index.html
   middlenight: projects/middlenight/index.html
   random_wikipedia: https://en.wikipedia.org/wiki/Special:Random
-  mailto: mailto:a.gvrnsk@gmail.com?subject=chronicle
+  mailto: mailto:purpltie@outlook.com?subject=chronicle
 
 packages:
   sample:
@@ -84,7 +84,7 @@ packages:
     - ["Personal Audio 5", "pic05.mp3"]
     - ["Some File", "pic02"]
     - [github, https://github.com/sanyabeast/brickscape]
-    - [mail, mailto:a.gvrnsk@gmail.com?subject=chronicle]
+    - [mail, mailto:purpltie@outlook.com?subject=chronicle]
   brickscape:
     - [source code, https://github.com/sanyabeast/brickscape]
 
@@ -116,10 +116,11 @@ applets:
     tags: []
     category: ["service"]
     summary: assets/docs/about.txt
+    document: "assets/docs/about.md"
     preview: assets/pimp_002.png
     package:
       - [github profile, https://github.com/sanyabeast]
-      - [e-mail, mailto:a.gvrnsk@gmail.com?subject=chronicle]
+      - [e-mail, mailto:purpltie@outlook.com?subject=chronicle]
       - [linkedin, https://www.linkedin.com/in/sanyabeast/]
       - [sketchfab, https://sketchfab.com/sanchibbo/models]
       - [source code of this site, https://github.com/sanyabeast/chronicle]

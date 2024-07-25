@@ -30,4 +30,4 @@ Next, add PSP2 support: "UnitySetup-Playstation-Vita-Support-for-Editor-2018.2.1
 2. Build the project for PSP2 using Unity's build menu.
 3. Convert the Unity build to a .vpk file using the **SilicaVPK.py** tool.
 
-*Have any questions? [Email me](mailto:a.gvrnsk@gmail.com?subject=psp2)*
+*Have any questions? [Email me](mailto:purpltie@outlook.com?subject=psp2)*

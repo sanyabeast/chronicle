@@ -44,4 +44,4 @@ Experience the ease of creating high-quality normal maps with the Normal Map Gen
 
 ![User navigation](assets/gifs/question_mark_a.gif "User navigation") 
 
-Got a Question? [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
+Got a Question? [@sanyabeast](mailto:purpltie@outlook.com?subject=chronicle)

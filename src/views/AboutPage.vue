@@ -1,7 +1,7 @@
 <template>
   <div class="about-page">
     <div class="content">
-      <TextView src="assets/docs/about.txt">
+      <TextView src="assets/docs/greet.txt">
         <div class="avatars">
           <ImageView src="assets/foamy.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 0" />
           <ImageView src="assets/sanya.png" class="avatar" @click="toggle_avatar" v-if="avatar_index === 1" />

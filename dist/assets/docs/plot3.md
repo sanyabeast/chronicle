@@ -49,4 +49,4 @@ The chart also allows for the visualization of various secondary elements in eit
 - Experimental rendering in a worker via OffscreenCanvas
 
 
-*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*
+*Prototyped and implemented by [@sanyabeast](mailto:purpltie@outlook.com?subject=chronicle)*

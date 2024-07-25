@@ -165,4 +165,4 @@ To use this module, you would typically create an instance of MazeGenerator, con
 
 # Got a Question?
 
-Write an email: [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
+Write an email: [@sanyabeast](mailto:purpltie@outlook.com?subject=chronicle)

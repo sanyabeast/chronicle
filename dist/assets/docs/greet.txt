@@ -1,0 +1,5 @@
+Welcome to my site!<br>
+<p>Hi there! I'm Oleksander, and I'm thrilled to have you here. Explore the links below to learn more about me and my projects.<br>
+You can also use the navigation bar at the top of the site.</p>
+<a href="#/applet-info/about">About me</a><br>
+<a href="#/applets">Projects playground</a>

@@ -42,4 +42,4 @@ The `AStarPathfinder` module is a versatile and powerful tool for implementing t
 
 ![User navigation](assets/question_mark_01.png "User navigation") 
 
-Got a Question? [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)
+Got a Question? [@sanyabeast](mailto:purpltie@outlook.com?subject=chronicle)

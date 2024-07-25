@@ -40,4 +40,4 @@ Bird's-Eye View (MapControls): An aerial perspective of the voxel world.
 First-Person View: Features basic character-block collision and allows activities like walking, running, and jumping.
 
 
-*Prototyped and implemented by [@sanyabeast](mailto:a.gvrnsk@gmail.com?subject=chronicle)*
+*Prototyped and implemented by [@sanyabeast](mailto:purpltie@outlook.com?subject=chronicle)*
