@@ -1,8 +1,10 @@
 
+import axios from 'axios';
 import { isArray, isNil, isNumber, isString, isUndefined, map } from 'lodash';
 import * as THREE from 'three';
 
 const mock_texture = new THREE.Texture();
+
 
 export function get_random_web_color(seed: String) {
     // Array of web colors
@@ -234,3 +236,65 @@ export function direction_to_angle_v3(direction: THREE.Vector3): number {
 export function lerp_float(a: number, b: number, t: number): number {
     return a + (b - a) * t;
 }
+
+// API
+export enum EAPIKeys {
+    IWASHERE = 'iwashere',
+    VIEWS = 'views'
+}
+
+export async function get_data(key: string) {
+    try {
+        // Define the URL and parameters
+        const url = 'https://chronicle.alwaysdata.net/get_data.php';
+        const params = { key };
+
+        // Perform the GET request using Axios
+        const response = await axios.get(url, { params });
+
+        // Log the response data
+        return response.data
+    } catch (error) {
+        // Handle errors
+        console.error('Error:', error);
+    }
+}
+
+export async function set_data(key: string, value: string) {
+    try {
+        // Define the URL and parameters
+        const url = 'https://chronicle.alwaysdata.net/set_data.php';
+        const params = { key, value };
+
+        // Perform the GET request using Axios
+        const response = await axios.get(url, { params });
+
+    } catch (error) {
+        // Handle errors
+        console.error('Error:', error);
+    }
+}
+
+export async function get_iwashere_counter() {
+    let current_value = 0
+
+    try {
+        let response = await get_data(EAPIKeys.IWASHERE)
+        if (isNumber(response)) {
+            current_value = response
+        }
+    } catch (err) {
+        console.error(err)
+    }
+
+    return current_value
+}
+
+export async function set_iwashere_counter(value: number) {
+    await set_data(EAPIKeys.IWASHERE, value.toString())
+}
+
+(window as any).get_data = get_data;
+(window as any).set_data = set_data;
+(window as any).get_iwashere_counter = get_iwashere_counter;
+(window as any).set_iwashere_counter = set_iwashere_counter;
