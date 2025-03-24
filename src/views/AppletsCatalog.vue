@@ -13,7 +13,7 @@
                     :class="{ no_preview: !applet_item.preview }"
                     v-for="(applet_item, index) in get_category_applets(category_item)" :key="`cat_${index}`"
                     :to="get_route_link(applet_item)">
-                    <ImageView v-if="need_show_preview(applet_item)" :src="applet_item.preview" />
+                    <ImageSlidesView v-if="need_show_preview(applet_item)" :srcs="get_preview_images(applet_item)" :src="applet_item.preview" :duration="get_duration(applet_item)"/>
                     <div class="fader"></div>
                     <h3 v-html="get_item_title(applet_item)"></h3>
                     <i class="date" v-html="applet_item.date"
@@ -31,7 +31,7 @@
 import { EAppletCategory, applets } from '@/router';
 import FuzzySearch from 'fuzzy-search';
 import { get_dark_web_color, get_random_web_color, get_web_color } from "@/tools"
-import ImageView from '@/components/ImageView.vue';
+import ImageSlidesView from '@/components/ImageSlidesView.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import mixins from 'vue-typed-mixins';
 import { filter, orderBy } from 'lodash';
@@ -199,12 +199,25 @@ export default mixins(BaseComponent).extend({
         }
     },
     methods: {
+        get_duration(applet_data: IAppletData): number {
+            return 2000 + Math.random() * 2000;
+        },
         get_random_web_color: get_random_web_color,
         need_show_preview(applet_data: IAppletData): boolean {
-            if (applet_data.category.length === 0 || applet_data.category.indexOf(EAppletCategory.Service) > -1) {
-                return false;
+            console.log(applet_data.preview !== undefined || (applet_data.preview_images && applet_data.preview_images.length > 0))
+            return applet_data.preview !== undefined || (applet_data.preview_images && applet_data.preview_images.length > 0);
+        },
+        get_preview_images(applet_data: IAppletData): string[] {
+            // If preview_images exists and has items, return it
+            if (applet_data.preview_images && applet_data.preview_images.length > 0) {
+                return applet_data.preview_images;
             }
-            return applet_data.preview && applet_data.preview.length > 0;
+            // Otherwise, if there's a single preview, return it as an array
+            else if (applet_data.preview) {
+                return [applet_data.preview];
+            }
+            // Fallback to empty array
+            return [];
         },
         get_thumb_bg_color(item: IAppletData) {
             if (!this.is_mobile) {
@@ -325,7 +338,7 @@ export default mixins(BaseComponent).extend({
             }
         }
     },
-    components: { ImageView }
+    components: { ImageSlidesView }
 })
 </script>
 <style lang="less">
@@ -414,7 +427,7 @@ export default mixins(BaseComponent).extend({
         }
 
         .applet-thumb:nth-child(2n) {
-            .image-view {
+            .image-view, .image-slides-view {
                 transform: translate(-50%, -50%) scale(1.5);
 
             }
@@ -542,7 +555,7 @@ export default mixins(BaseComponent).extend({
                 padding: 0;
                 border: none;
 
-                .image-view {
+                .image-view, .image-slides-view {
                     position: relative;
                     grid-column: 1;
                 }

@@ -27,6 +27,7 @@ declare interface IAppletData {
     title?: string
     package?: string
     preview?: string
+    preview_images?: string[]
     launcher: boolean
     props: {
         [x: string]: any

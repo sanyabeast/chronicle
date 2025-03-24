@@ -157,6 +157,11 @@ applets:
     date: "2023"
     category: ["project", "demo"]
     document: "assets/docs/brickscape.md"
+    preview_images: 
+      - "assets/preview/bs_3.png"
+      - "assets/preview/bs_2.png"
+      - "assets/preview/bs_1.png"
+      - "assets/preview/bs_0.png"
     preview: "assets/preview/hexworld_a1.png"
     summary: "assets/docs/brickscape.txt"
     package: brickscape
@@ -168,7 +173,11 @@ applets:
     title: "Match3"
     date: "2014"
     category: ["project"]
-    preview: "assets/preview/match3_a1.png"
+    preview_images:
+      - "assets/preview/m3_0.png"
+      - "assets/preview/m3_1.png"
+      - "assets/preview/m3_2.png"
+    preview: "assets/preview/m3_0.png"
     summary: "assets/docs/match3.txt"
     document: "assets/docs/match3.md"
     package:
@@ -181,6 +190,8 @@ applets:
     title: "Forest Lads [Demo]"
     date: "2017"
     category: ["project", "demo"]
+    preview_images:
+      - "assets/preview/forestlads_a1.png"
     preview: "assets/preview/forestlads_a1.png"
     props:
       url: forestlads

@@ -8,7 +8,8 @@
                     <PackageExplorer :package="applet_data.package" v-if="applet_data.package" />
                 </div>
                 <div class="avatar">
-                    <ImageView v-if="applet_data.preview" :src="applet_data.preview" />
+                    <ImageSlidesView v-if="need_show_preview()" 
+                        :srcs="get_preview_images()" :src="applet_data.preview" />
                     <router-link v-if="applet_data.route.name !== 'about'" class="button launch" :to="applet_route_link">
                         <p>Launch</p>
                     </router-link>
@@ -37,9 +38,8 @@ import { applets } from '../router/index'
 import Showdown from '@/components/Showdown.vue';
 import BaseComponent from '@/components/BaseComponent.vue';
 import { get_random_web_color, get_bright_web_color, to_snake_case, read_text_file } from '@/tools';
-import ImageView from '@/components/ImageView.vue';
+import ImageSlidesView from '@/components/ImageSlidesView.vue';
 import { find } from 'lodash';
-
 
 interface IAppletLauncherData {
     applet_data?: IAppletData,
@@ -50,7 +50,7 @@ interface IAppletLauncherData {
 
 export default mixins(BaseComponent).extend({
     name: "AppletLauncher",
-    components: { Showdown, ImageView },
+    components: { Showdown, ImageSlidesView },
     mixins: [BaseComponent],
     data(): IAppletLauncherData {
         return {
@@ -72,6 +72,23 @@ export default mixins(BaseComponent).extend({
     methods: {
         get_random_web_color: get_random_web_color,
         get_bright_web_color: get_bright_web_color,
+        get_preview_images(): string[] {
+            // If preview_images exists and has items, return it
+            if (this.applet_data && this.applet_data.preview_images && this.applet_data.preview_images.length > 0) {
+                return this.applet_data.preview_images;
+            }
+            // Otherwise, if there's a single preview, return it as an array
+            else if (this.applet_data && this.applet_data.preview) {
+                return [this.applet_data.preview];
+            }
+            // Fallback to empty array
+            return [];
+        },
+        need_show_preview(): boolean {
+            let result = this.get_preview_images().length > 0;
+            console.log(result);
+            return result;
+        },
         async update_summary() {
             this.summary = await read_text_file(this.applet_data!.summary!)
         },
