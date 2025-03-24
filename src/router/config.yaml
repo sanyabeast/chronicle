@@ -62,7 +62,7 @@ shaders:
 # web-frame urls
 urls:
   brickscape: https://sanyabeast.github.io/brickscape/dist/index.html
-  match3: https://sanyabeast.github.io/match3/
+  match3: https://sanyabeast.github.io/match3/dist/index.html
   forestlads: https://sanyabeast.github.io/forestlads/dist/index.html
   telechart: https://sanyabeast.github.io/telechart/
   coderider: https://sanyabeast.github.io/coderider/dist/index.html
