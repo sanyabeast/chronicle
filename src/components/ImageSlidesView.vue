@@ -96,7 +96,6 @@ export default mixins(BaseComponent).extend({
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        opacity: 0;
         transition: opacity 0.5s ease-in;
 
 
