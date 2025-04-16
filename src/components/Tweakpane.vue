@@ -48,7 +48,7 @@ export default Vue.extend({
     .tp-fldv_c,
     .tp-rotv {
         font-family: @font-family-monospace !important;
-        font-size: 10px;
+        font-size:  @font-size-s;
         border-radius: 0;
     }
 
@@ -69,7 +69,7 @@ export default Vue.extend({
     .tp-lstv_s {
         background-color: transparent;
         border-radius: 0;
-        border: 1px solid #ffffff;
+        border: 4px solid #ffffff;
 
     }
 
@@ -80,20 +80,20 @@ export default Vue.extend({
     .tp-p2dv_b:hover,
     .tp-btnv_b:hover,
     .tp-lstv_s:hover {
-        border: 1px solid #ff0000;
+        border: 4px solid #ff0000;
     }
 
     .tp-p2dv_b:active,
     .tp-btnv_b:active,
     .tp-lstv_s:active {
-        border: 1px solid #ff0000;
+        border: 4px solid #ff0000;
         background-color: transparent !important;
     }
 
     .tp-p2dv_b:focus,
     .tp-btnv_b:focus,
     .tp-lstv_s:focus {
-        border: 1px solid #ff0000;
+        border: 4px solid #ff0000;
         background-color: transparent !important;
     }
 
@@ -102,7 +102,7 @@ export default Vue.extend({
     }
 
     .tp-ckbv_w {
-        border: 1px solid #eee;
+        border: 4px solid #eee;
     }
 
     option {

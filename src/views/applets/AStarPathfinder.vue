@@ -508,7 +508,7 @@ export default mixins(BaseComponent).extend({
         display: flex;
         flex-direction: column;
         overflow: auto;
-        border: 1px dotted #1d1d1d;
+        border: 4px dotted #1d1d1d;
 
         .info {
             color: @color-accent;
@@ -518,7 +518,7 @@ export default mixins(BaseComponent).extend({
 
             li {
                 margin: 0;
-                font-size: 10px;
+                font-size:  @font-size-s;
                 font-family: @font-family-monospace;
 
                 i {
@@ -532,7 +532,7 @@ export default mixins(BaseComponent).extend({
     .canvas2d {
         display: flex;
         overflow: hidden;
-        border: 1px dotted #1d1d1d;
+        border: 4px dotted #1d1d1d;
 
         canvas {
             width: 100%;

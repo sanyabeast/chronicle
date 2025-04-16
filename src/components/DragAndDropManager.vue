@@ -120,7 +120,7 @@ export default mixins(BaseComponent).extend({
         top: 16px;
         color: #ffffff38;
         font-weight: 100;
-        font-size: @font-size-xs;
+        font-size: @font-size-s;
         z-index: 1;
     }
 
@@ -164,7 +164,7 @@ export default mixins(BaseComponent).extend({
         }
 
         p {
-            font-size: 20px;
+            font-size:  @font-size-l;
             color: white;
             z-index: 1;
         }

@@ -532,7 +532,7 @@ export default Vue.extend({
             p {
                 line-height: 1em;
                 margin: 0;
-                font-size: 10px;
+                font-size:  @font-size-s;
                 font-family: monospace;
 
                 &:first-child {

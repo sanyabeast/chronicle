@@ -90,7 +90,7 @@ export default Vue.extend({
 
         &.oldbook {
           font-style: normal;
-          font-size: 48px;
+          font-size:  @font-size-l;
         }
       }
     }

@@ -92,7 +92,7 @@ export default mixins(BaseComponent).extend({
         margin-left: 16px;
         padding: 16px;
         background: #33333338;
-        font-size: @font-size-s;
+        font-size: @font-size-m;
 
         li {
             color: #eee;
@@ -156,12 +156,11 @@ export default mixins(BaseComponent).extend({
         text-decoration: none;
         background-color: @color-background;
         font-family: @font-family-sans;
-        font-weight: bold;
     }
 
     pre {
         background-color: @color-background;
-        border: 1px dotted @color-accent;
+        border: 4px dotted @color-accent;
         margin-bottom: 16px;
         padding: 16px;
         white-space: pre-wrap;

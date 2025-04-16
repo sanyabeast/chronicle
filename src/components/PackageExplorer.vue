@@ -261,7 +261,7 @@ export default mixins(BaseComponent).extend({
             color: #fff;
             padding: 0 16px;
             background: rgb(13, 13, 13);
-            border: 1px solid #262626;
+            border: 4px solid #262626;
             overflow: hidden;
             position: relative;
             text-decoration: none;
@@ -283,7 +283,6 @@ export default mixins(BaseComponent).extend({
                 overflow: hidden;
 
                 .title {
-                    font-weight: bold;
                     margin: 0;
                     overflow: hidden;
                     max-width: 80%;
@@ -301,7 +300,7 @@ export default mixins(BaseComponent).extend({
                     max-width: 80%;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                    font-size: @font-size-xs;
+                    font-size: @font-size-s;
                     flex-shrink: 1;
                     text-decoration: none;
                 }

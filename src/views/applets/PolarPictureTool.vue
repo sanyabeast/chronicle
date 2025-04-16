@@ -376,7 +376,7 @@ export default mixins(BaseComponent).extend({
         }
 
         p {
-            font-size: 20px;
+            font-size:  @font-size-l;
             color: white;
             z-index: 1;
         }
@@ -389,14 +389,14 @@ export default mixins(BaseComponent).extend({
         .controls {
             .separator {
                 height: 16px;
-                border-bottom: 1px solid @color-text;
+                border-bottom: 4px solid @color-text;
             }
 
             .button {
                 box-sizing: border-box;
 
                 &.open-file {
-                    font-size: 24px;
+                    font-size:  @font-size-l;
                 }
 
                 &.toggle-grid,
@@ -429,7 +429,7 @@ export default mixins(BaseComponent).extend({
 
         p {
             margin: 0;
-            font-size: 12px;
+            font-size:  @font-size-s;
 
             width: auto;
             display: table;
@@ -477,14 +477,14 @@ export default mixins(BaseComponent).extend({
 
         div:nth-child(1) {
             position: absolute;
-            border-top: 1px dashed #eeeeee51;
+            border-top: 4px dashed #eeeeee51;
             top: 50%;
             width: 100%;
         }
 
         div:nth-child(2) {
             position: absolute;
-            border-left: 1px dashed #eeeeee51;
+            border-left: 4px dashed #eeeeee51;
             left: 50%;
             height: 100%;
         }

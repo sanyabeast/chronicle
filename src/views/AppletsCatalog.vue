@@ -367,7 +367,7 @@ export default mixins(BaseComponent).extend({
             height: 120px;
             overflow: hidden;
             background-color: @color-background;
-            border: 1px solid @color-text;
+            border: 4px solid #474747;
             padding: 8px;
             display: flex;
             align-items: center;
@@ -418,10 +418,10 @@ export default mixins(BaseComponent).extend({
                 right: 4px;
                 font-family: @font-family-condensed;
                 font-style: normal;
-                font-size: 10px;
+                font-size:  @font-size-s;
                 padding: 2px 4px;
-                border-bottom: 1px solid black;
-                border-left: 1px solid black;
+                border-bottom: 4px solid black;
+                border-left: 4px solid black;
             }
 
         }

@@ -175,7 +175,7 @@ export default mixins(BaseComponent).extend({
                 height: 100%;
                 overflow: auto;
                 padding: 1rem;
-                font-size: 12px;
+                font-size:  @font-size-s;
                 line-height: 1.5em;
                 font-family: @font-family-monospace;
                 background: #000000;
@@ -202,13 +202,12 @@ export default mixins(BaseComponent).extend({
                     -moz-user-select: none;
                     user-select: none;
                     color: #d6d6d6;
-                    font-size: 1rem;
+                    font-size:  @font-size-m;
                     padding: 0 8px 4px;
                     cursor: pointer;
                     border: 2px solid #8f8f8f;
                     margin-left: 8px;
-                    font-family: 'IBM Plex Mono', sans-serif;
-                    font-weight: bold;
+                    font-family: 'bescii', sans-serif;
 
                     &:hover {
                         color: @color-accent;
@@ -251,7 +250,7 @@ export default mixins(BaseComponent).extend({
                                 background: #000000;
                                 color: @button-color;
                                 padding: 4px;
-                                font-size: 10px;
+                                font-size:  @font-size-s;
                                 font-family: @font-family-monospace;
                                 z-index: 1;
                             }

@@ -107,14 +107,14 @@ export default mixins(BaseComponent).extend({
         .controls {
             .separator {
                 height: 16px;
-                border-bottom: 1px solid @color-text;
+                border-bottom: 4px solid @color-text;
             }
 
             .button {
                 box-sizing: border-box;
 
                 &.open-file {
-                    font-size: 24px;
+                    font-size:  @font-size-l;
                 }
 
                 &.toggle-grid,

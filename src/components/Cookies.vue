@@ -56,7 +56,7 @@ export default Vue.extend({
             }
         }
 
-        font-size: 36px;
+        font-size:  @font-size-l;
         color: @color-background;
         margin: 12px;
 
@@ -70,7 +70,7 @@ export default Vue.extend({
         border: 2px solid @color-accent;
         color: @color-background;
         padding: 12px;
-        font-size: 36px;
+        font-size:  @font-size-l;
         margin: 12px;
         cursor: cell;
 

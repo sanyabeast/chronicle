@@ -160,10 +160,12 @@ export default mixins(BaseComponent).extend({
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 2px;
+  border-radius: 0px;
 }
 
 *::-webkit-scrollbar-track {
   background: @color-background;
+  border-radius: 0px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -205,7 +207,6 @@ h3,
 h5,
 h6 {
   font-family: @font-family-serif;
-  font-weight: bold;
 }
 
 
@@ -230,8 +231,16 @@ code {
 }
 
 a {
-  color: @color-accent;
+  color: magenta;
   cursor: cell;
+  text-decoration: none;
+  border-bottom: 4px solid magenta;
+  color: @color-text;
+
+  &:hover {
+    background: #ffffff;
+    color: #000000;
+  }
 
   &[title="github"] {
     color: #999999;
@@ -258,7 +267,7 @@ input[type="search"] {
   max-width: 100%;
   text-align: center;
   font-family: @font-family-serif;
-  font-size: @font-size-header-item;
+  font-size: @font-size-l;
   font-style: italic;
   align-self: flex-end;
   height: 100%;
@@ -272,7 +281,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 h1 {
-  font-size: @font-size-header-item;
+  font-size: @font-size-l;
 }
 
 #homepage,
@@ -342,7 +351,7 @@ header {
   left: 0;
   z-index: 999;
   background: @color-background;
-  border-bottom: 1px solid #333;
+  border-bottom: 4px solid #333;
   line-height: 0;
   height: 48px;
   display: grid;
@@ -360,6 +369,11 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: none;
+
+    &:hover {
+      background: transparent;
+    }
   }
 
   .menu {
@@ -453,6 +467,8 @@ nav {
     width: 128px;
     height: 64px;
   }
+
+
 }
 
 .view {
@@ -468,7 +484,7 @@ nav {
 footer {
   color: #5c5c5c;
   line-height: 0;
-  border-top: 1px solid #333;
+  border-top: 4px solid #333;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -484,7 +500,7 @@ footer {
     color: #666;
     margin: 0;
     font-family: @font-family-condensed;
-    font-size: @font-size-xs;
+    font-size: @font-size-s;
 
     &:after,
     &:first-child:before {
@@ -498,6 +514,7 @@ footer {
   a {
     color: @color-text;
     text-decoration: none;
+    border: none;
 
     &:hover {
       color: @color-accent;
@@ -519,7 +536,7 @@ footer {
     right: 8px;
     bottom: 50%;
     transform: translateY(50%);
-    font-size: 12px;
+    font-size: @font-size-s;
     color: #2f2f2f;
   }
 }
@@ -542,6 +559,7 @@ footer {
   header {
     padding: 0 16px;
     grid-template-columns: 1fr 64px;
+
 
     a#quit-link {
       display: none;
@@ -598,15 +616,16 @@ footer {
   }
 
   footer {
-    font-size: 12px;
+    font-size: @font-size-s;
     padding-bottom: 8px;
+
     i {
       display: none;
     }
   }
 
   h2 {
-    font-size: 16px;
+    font-size: @font-size-m;
   }
 }
 </style>
