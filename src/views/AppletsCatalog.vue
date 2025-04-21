@@ -406,7 +406,7 @@ export default mixins(BaseComponent).extend({
                 z-index: 2;
                 background: @color-background;
                 text-transform: capitalize;
-                font-family: @font-family-condensed;
+                font-family: @font-family-default;
                 max-width: 100%;
                 text-align: center;
             }
@@ -416,7 +416,7 @@ export default mixins(BaseComponent).extend({
                 position: absolute;
                 bottom: 4px;
                 right: 4px;
-                font-family: @font-family-condensed;
+                font-family: @font-family-default;
                 font-style: normal;
                 font-size:  @font-size-s;
                 padding: 2px 4px;
@@ -570,7 +570,7 @@ export default mixins(BaseComponent).extend({
                     height: 100%;
                     font-size: @font-size-l;
                     font-weight: 400;
-                    font-family: @font-family-serif;
+                    font-family: @font-family-default;
                     word-wrap: break-word;
                     text-overflow: clip;
                     white-space: nowrap;

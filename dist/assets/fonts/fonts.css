@@ -6,3 +6,10 @@
     font-weight: 500;
     src: url('../fonts/bescii.otf') format('opentype');
 }
+
+@font-face {
+    font-family: 'jersey15';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/jersey15.ttf') format('truetype');
+}

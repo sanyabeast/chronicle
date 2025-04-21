@@ -222,7 +222,7 @@ export default mixins(BaseComponent).extend({
                 display: flex;
                 text-align: left;
                 flex-direction: column;
-                line-height: 1.5em;
+                line-height: @line-height-default;
             }
 
             .avatar {
@@ -427,7 +427,7 @@ export default mixins(BaseComponent).extend({
         grid-row: 1;
         grid-column: 1;
         font-size: @font-size-l;
-        // font-family: @font-family-sans;
+        // font-family: @font-family-default;
     }
 
     .applet-launcher .launcher .brief .placeholder {

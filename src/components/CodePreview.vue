@@ -146,7 +146,7 @@ export default mixins(BaseComponent).extend({
 @import url('@/assets/base16-macintosh.css');
 
 .code-preview {
-    font-family: @font-family-monospace;
+    font-family: @font-family-default;
 
     &.popup {
         position: fixed;
@@ -176,8 +176,8 @@ export default mixins(BaseComponent).extend({
                 overflow: auto;
                 padding: 1rem;
                 font-size:  @font-size-s;
-                line-height: 1.5em;
-                font-family: @font-family-monospace;
+                line-height: @line-height-default;
+                font-family: @font-family-default;
                 background: #000000;
                 color: white;
                 border: none;
@@ -207,7 +207,7 @@ export default mixins(BaseComponent).extend({
                     cursor: pointer;
                     border: 2px solid #8f8f8f;
                     margin-left: 8px;
-                    font-family: 'bescii', sans-serif;
+                    font-family: @font-family-default;
 
                     &:hover {
                         color: @color-accent;
@@ -251,7 +251,7 @@ export default mixins(BaseComponent).extend({
                                 color: @button-color;
                                 padding: 4px;
                                 font-size:  @font-size-s;
-                                font-family: @font-family-monospace;
+                                font-family: @font-family-default;
                                 z-index: 1;
                             }
                         }

@@ -69,10 +69,12 @@ export default mixins(BaseComponent).extend({
   
   <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+
+@import url('@/assets/index.less');
 .text-view {
     overflow: hidden;
     position: relative;
-    line-height: 2em;
+    line-height: @line-height-default;
 
     p {
         margin: 0;

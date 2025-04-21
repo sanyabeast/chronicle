@@ -496,7 +496,7 @@ export default Vue.extend({
         p {
             color: rgba(255, 255, 255, 0.425);
             margin: 0;
-            font-family: @font-family-monospace;
+            font-family: @font-family-default;
             font-size: 8px;
         }
     }
@@ -530,7 +530,7 @@ export default Vue.extend({
             grid-gap: 8px;
 
             p {
-                line-height: 1em;
+                line-height: @line-height-default;
                 margin: 0;
                 font-size:  @font-size-s;
                 font-family: monospace;

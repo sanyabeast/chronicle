@@ -72,7 +72,7 @@ export default mixins(BaseComponent).extend({
 .showdown-viewer {
     background-color: #b5b5b51f;
     padding-bottom: 32px;
-    line-height: 1.5em;
+    line-height: @line-height-default;
 
     * {
         display: block;
@@ -155,7 +155,7 @@ export default mixins(BaseComponent).extend({
         color: @color-text;
         text-decoration: none;
         background-color: @color-background;
-        font-family: @font-family-sans;
+        font-family: @font-family-default;
     }
 
     pre {

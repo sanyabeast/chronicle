@@ -187,7 +187,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 
-  font-size: @font-size-base;
+  font-size: @font-size-m;
   font-weight: 100;
   /* Console-like font */
   background-color: @color-background;
@@ -197,7 +197,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: @font-family-condensed;
+  font-family: @font-family-default;
 }
 
 h1,
@@ -206,20 +206,20 @@ h3,
 h3,
 h5,
 h6 {
-  font-family: @font-family-serif;
+  font-family: @font-family-default;
 }
 
 
 p,
 li {
-  font-family: @font-family-serif;
+  font-family: @font-family-default;
   font-size: @font-size-m;
-  line-height: 2em;
+  line-height: @line-height-default;
 }
 
 pre,
 code {
-  font-family: @font-family-monospace;
+  font-family: @font-family-default;
 }
 
 * {
@@ -266,7 +266,7 @@ input[type="search"] {
   color: @color-text;
   max-width: 100%;
   text-align: center;
-  font-family: @font-family-serif;
+  font-family: @font-family-default;
   font-size: @font-size-l;
   font-style: italic;
   align-self: flex-end;
@@ -492,14 +492,14 @@ footer {
   width: 100%;
   align-items: center;
   justify-content: center;
-  line-height: 1em;
-  font-family: @font-family-condensed;
+  line-height: @line-height-default;
+  font-family: @font-family-default;
   color: @color-text;
 
   >* {
     color: #666;
     margin: 0;
-    font-family: @font-family-condensed;
+    font-family: @font-family-default;
     font-size: @font-size-s;
 
     &:after,
@@ -517,6 +517,7 @@ footer {
     border: none;
 
     &:hover {
+      background: transparent;
       color: @color-accent;
     }
   }

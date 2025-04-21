@@ -1,22 +1,25 @@
+
+// colors
 @color-accent: magenta;
 @color-background: #000;
 @color-text: #fff;
 @color-deco-1: #c2c2c2;
-@font-family-sans: 'bescii', sans-serif;
-@font-family-serif: 'bescii', sans-serif;
-@font-family-condensed: 'bescii', sans-serif;
-@font-family-monospace: 'bescii', sans-serif;
-@font-size-base: 14px;
 
-@font-size-s: 8px;
-@font-size-m: 12px;
-@font-size-l: 18px;
+// fonts
+@font-family-default: 'jersey15', sans-serif;
+@font-scale: 2;
+@font-size-s: calc(@font-scale * 8px);
+@font-size-m: calc(@font-scale * 12px);
+@font-size-l: calc(@font-scale * 18px);
+
+@line-height-default: 1.25em;
 
 @clear-search-icon-el-width: 2px;
 @clear-search-icon-el-height: 18px;
 
 * {
-    font-family: 'bescii', monospace;
+    font-family: @font-family-default;
+    font-weight: 100;
     image-rendering: pixelated;
     -webkit-font-smoothing: none;
     -moz-osx-font-smoothing: grayscale;

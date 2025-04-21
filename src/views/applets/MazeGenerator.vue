@@ -625,7 +625,7 @@ export default mixins(BaseComponent).extend({
             li {
                 margin: 0;
                 font-size:  @font-size-s;
-                font-family: @font-family-monospace;
+                font-family: @font-family-default;
 
                 i {
                     color: red;

@@ -47,7 +47,7 @@ export default Vue.extend({
     .tp-rotv_c,
     .tp-fldv_c,
     .tp-rotv {
-        font-family: @font-family-monospace !important;
+        font-family: @font-family-default !important;
         font-size:  @font-size-s;
         border-radius: 0;
     }

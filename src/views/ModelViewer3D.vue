@@ -586,7 +586,7 @@ export default mixins(BaseComponent).extend({
         opacity: 0.25;
         pointer-events: all;
         z-index: 1;
-        line-height: 1.5em;
+        line-height: @line-height-default;
         font-size:  @font-size-s;
 
         p,
