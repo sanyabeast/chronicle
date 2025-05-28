@@ -2,6 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-blue)](https://sanyabeast.github.io/chronicle/dist/index.html)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-green)](https://github.com/sanyabeast/chronicle)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
@@ -101,6 +102,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
+
+## Author
+
+Developed by [sanyabeast](https://github.com/sanyabeast) (Alexander Khokhlov).
 
 ## Contact
 
