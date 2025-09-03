@@ -1,33 +1,79 @@
-## Professional Experience
+# Software Developer | Game Engine Architect | Data Visualization Specialist
 
-### 2014 - 2016
-**Project:** Developed a minimalistic game engine and ported several gambling games to it, ensuring smooth performance on both mobile and desktop platforms.  
-**Tech Stack:** PIXI.JS, Howler, Game Loop pattern, Event Bus pattern, OOP.
+Passionate software developer with 8+ years of experience building high-performance applications, game engines, and interactive visualizations across web, mobile, and desktop platforms.
 
-### 2016 - Present
-**Project:** Created a flexible, high-performance data visualization tool for a trading application. This tool supports infinite navigation, zooming, variable detail scales, multiple rendering options, and various visualization combinations. It can handle data from network sources or perform mathematical calculations and includes features such as user annotations and random data display.  
-**Tech Stack:** THREE.JS, Custom shaders, Custom camera projection, Procedural meshes. Maintained a seamless user experience across diverse devices.
+---
 
-### 2018 - Present
-**Project:** Developed and maintained a hybrid WebView application for both Android and iOS platforms.  
-**Tech Stack:** WebView, Java, Swift, THREE.JS-based embedded application.
+## Core Expertise
 
-### 2019
-**Project:** Implemented the client for a collectible card game with online PVP capabilities using UE4.  
-**Tech Stack:** UE4 (Blueprints and C++), UE4’s ECS pattern, OOP, WebSocket networking. Developed the battlefield (main game screen) within six months before transitioning off the project.
+- **Flutter Development**: Lead developer with expertise in complex fintech applications, clean architecture, and custom widget development.  
+- **Real-Time Data Visualization**: Custom charting libraries and high-performance rendering solutions.  
+- **Game Development**: Proficient in Unity and Godot for creating engaging interactive experiences.  
+- **3D Graphics & Visualization**: Advanced THREE.JS development with custom shaders and rendering pipelines.  
+- **Full-Stack Development**: End-to-end application development from concept to deployment.  
 
-### 2020
-**Project:** Developed an interactive, infinite game map for a browser-based turn-based strategy game.  
-**Tech Stack:** THREE.JS, Custom ECS game engine, PBR rendering pipeline, Custom shaders. Ensured smooth performance on both mobile and desktop devices.
+---
 
-## Additional Projects
+## Featured Projects & Experience
 
-### 2014
-Developed my first game, a Match-3 game, using JavaScript and DOM manipulations. *(Available in Applets Menu)*
+### Lead Flutter Developer | 2023 - Present  
+**Complex Fintech Mobile Application**  
+- Leading development of a sophisticated financial technology application with clean architecture principles.  
+- Architected scalable Flutter solutions following SOLID principles and dependency injection patterns.  
+- Developed a custom real-time charting library optimized for financial data visualization.  
+- Implemented advanced state management solutions and modular architecture for a large-scale application.  
+- **Tech Stack**: Flutter, Dart, Clean Architecture, Custom Charts, Real-time Data Processing.  
 
-### 2020 - Present
-Currently learning Godot (formerly Unity).
+---
 
-## Contact
+### Interactive Map Developer | 2020  
+**Browser-Based Strategy Game**  
+- Created an infinite, interactive game world with advanced rendering capabilities.  
+- Implemented a custom ECS architecture and PBR rendering pipeline.  
+- **Tech Stack**: THREE.JS, Custom ECS Engine, PBR Shaders, WebGL.  
+
+---
+
+### Game Client Developer | 2019  
+**Collectible Card Game with Online PVP**  
+- Built a complete game client using Unreal Engine 4 with multiplayer networking.  
+- Implemented complex game logic using both Blueprints and C++.  
+- Delivered a fully functional battlefield system in a 6-month timeline.  
+- **Tech Stack**: UE4, C++, Blueprints, WebSocket Networking, ECS Architecture.  
+
+---
+
+### Mobile Application Developer | 2018 - Present  
+**Cross-Platform Hybrid Applications**  
+- Developed and maintained WebView-based applications for Android and iOS.  
+- Integrated complex THREE.JS visualizations within native mobile frameworks.  
+- **Tech Stack**: Java, Swift, WebView Architecture, THREE.JS.  
+
+---
+
+### Senior Software Engineer | 2016 - Present  
+**High-Performance Trading Visualization Platform**  
+- Architected and developed a flexible data visualization engine supporting infinite navigation, multi-scale zooming, and real-time data processing.  
+- Built custom THREE.JS solutions with procedural mesh generation and advanced shader programming.  
+- Delivered seamless performance across desktop and mobile platforms.  
+- **Tech Stack**: THREE.JS, Custom Shaders, WebGL, Advanced Camera Systems.  
+
+---
+
+### Game Engine Developer | 2014 - 2016  
+**Custom Game Engine & Mobile Gaming Solutions**  
+- Designed and implemented a lightweight game engine optimized for gambling applications.  
+- Successfully ported multiple games, ensuring consistent performance across platforms.  
+- **Tech Stack**: PIXI.JS, Howler.js, Custom Game Loop Architecture, Event-Driven Systems.  
+
+---
+
+## Recent Focus
+
+Currently expanding expertise in modern game development frameworks, with active projects in Unity and Godot for next-generation interactive experiences.  
+
+---
+
+💼 **Available for freelance projects and full-time opportunities** in software development, game development, and data visualization.
 
 Email: [purpltie@outlook.com](mailto:purpltie@outlook.com?subject=chronicle)  
