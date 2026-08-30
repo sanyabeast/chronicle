@@ -105,7 +105,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## Author
 
-Developed by [sanyabeast](https://github.com/sanyabeast) (Alexander Khokhlov).
+Developed by [sanyabeast](https://github.com/sanyabeast).
 
 ## Contact
 
